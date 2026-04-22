@@ -1,0 +1,31 @@
+# Proof-subset selection policy.
+#
+# Mirrors `docs/proof_subset_policy.md` section 8.1. Every obligation landed
+# in `datasets/derived/proof_subset/manifest.jsonl` must be justifiable on
+# each of these dimensions.
+
+name = "default_proof_subset_selection_policy"
+
+# The five selection criteria. All must hold for every obligation.
+require_one_or_two_sentence_property = true
+require_local_scope = true
+require_matters_to_issue = true
+require_strictly_stronger_than_tests = true
+require_bounded_effort = true
+
+# Preferred categories (ordered by priority).
+preferred_categories = [
+    "parser_serializer_consistency",
+    "state_machine_safety",
+    "preservation_invariant",
+    "numeric_bound_or_monotonicity",
+    "no_panic_or_invalid_state",
+]
+
+# Maximum reviewer-hours per obligation. Obligations that exceed this bound
+# require an explicit rationale and a PR review from two reviewers.
+max_reviewer_hours = 16
+
+# Governance.
+requires_changelog_entry = true
+requires_two_reviewers_for_modification = true

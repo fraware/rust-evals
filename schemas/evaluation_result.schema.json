@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eval-ladder.dev/schemas/evaluation_result.schema.json",
+  "title": "EvaluationResult",
+  "description": "Verdict for a single (candidate, level) pair. Multiple results per candidate, one per evaluated level.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "candidate_id",
+    "task_id",
+    "level",
+    "status",
+    "primary_reason",
+    "secondary_reasons",
+    "artifacts",
+    "metrics",
+    "started_at",
+    "finished_at",
+    "evaluator_version"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "candidate_id": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+    },
+    "task_id": { "type": "string", "minLength": 1 },
+    "level": {
+      "type": "string",
+      "enum": ["L0", "L1", "L2", "L3", "L4"]
+    },
+    "status": {
+      "type": "string",
+      "enum": ["pass", "fail", "invalid", "not_applicable"]
+    },
+    "primary_reason": {
+      "type": "string",
+      "description": "Stable machine code. For passes use PASS or a level-specific pass code. Documented in docs/evaluation_ladder.md.",
+      "pattern": "^[A-Z][A-Z0-9_]*$"
+    },
+    "secondary_reasons": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[A-Z][A-Z0-9_]*$"
+      },
+      "uniqueItems": true
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["kind", "path"],
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "stdout", "stderr", "diff", "report", "trace",
+              "lean_log", "discrepancy", "metric_dump"
+            ]
+          },
+          "path": { "type": "string" },
+          "sha256": {
+            "type": ["string", "null"],
+            "pattern": "^sha256:[0-9a-f]{64}$"
+          }
+        }
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "started_at": { "type": "string", "format": "date-time" },
+    "finished_at": { "type": "string", "format": "date-time" },
+    "evaluator_version": { "type": "string", "minLength": 1 }
+  }
+}

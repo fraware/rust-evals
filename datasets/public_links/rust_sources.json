@@ -1,0 +1,13 @@
+{
+  "$comment": "Public source links for Rust-SWE-bench. This file is audited at release time; see docs/submission_checklist.md.",
+  "benchmark_id": "rust_swe_bench",
+  "release": "rust-v1",
+  "sources": [
+    {
+      "kind": "dataset_release",
+      "name": "Rust-SWE-bench",
+      "url": "https://github.com/aliyun/rust-swe-bench",
+      "access": "public"
+    }
+  ]
+}

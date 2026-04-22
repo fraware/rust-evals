@@ -1,0 +1,118 @@
+[workspace]
+resolver = "2"
+members = [
+    "packages/rust/core",
+    "packages/rust/cli",
+    "packages/rust/runner",
+    "packages/rust/policy",
+    "packages/rust/traces",
+    "packages/rust/evidence",
+    "packages/rust/benchmarks",
+    "packages/rust/strengthening",
+    "packages/rust/lean",
+    "packages/rust/analysis",
+    "tests/integration",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.75"
+license = "Apache-2.0 OR MIT"
+repository = "https://github.com/fraware/rust-evals"
+homepage = "https://github.com/fraware/rust-evals"
+authors = ["eval-ladder contributors"]
+readme = "README.md"
+keywords = ["evaluation", "benchmark", "swe-bench", "audit", "rust"]
+categories = ["science", "development-tools"]
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+missing_docs = "warn"
+unused_must_use = "deny"
+unreachable_pub = "warn"
+rust_2018_idioms = { level = "warn", priority = -1 }
+
+[workspace.lints.clippy]
+pedantic = { level = "warn", priority = -1 }
+nursery = { level = "warn", priority = -1 }
+cargo = { level = "warn", priority = -1 }
+# Pedantic lints that are either stylistic, conflict with clean domain
+# modelling, or are better fixed incrementally as the code lands.
+module_name_repetitions = "allow"
+must_use_candidate = "allow"
+missing_errors_doc = "allow"
+missing_panics_doc = "allow"
+multiple_crate_versions = "allow"
+items_after_statements = "allow"
+too_many_lines = "allow"
+many_single_char_names = "allow"
+needless_pass_by_value = "allow"
+struct_excessive_bools = "allow"
+redundant_closure_for_method_calls = "allow"
+# Nursery lints that flag idioms the repo uses deliberately.
+missing_const_for_fn = "allow"
+redundant_clone = "allow"
+iter_on_single_items = "allow"
+# Cargo lints: metadata-style complaints are addressed at release time
+# through a dedicated cargo-deny pass.
+cargo_common_metadata = "allow"
+
+[workspace.dependencies]
+# Core domain
+serde = { version = "1.0.219", features = ["derive"] }
+serde_json = { version = "1.0.140", features = ["preserve_order"] }
+serde_with = "3.12"
+thiserror = "1.0"
+anyhow = "1.0"
+
+# IDs and time
+uuid = { version = "1.17", features = ["v4", "v5", "v7", "serde"] }
+chrono = { version = "0.4.40", default-features = false, features = ["serde", "clock", "std"] }
+time = { version = "0.3.41", features = ["serde", "formatting", "parsing", "macros"] }
+
+# Hashing / integrity
+sha2 = "0.10"
+hex = "0.4"
+blake3 = "1.8"
+
+# Config
+toml = "0.8.20"
+figment = { version = "0.10", features = ["toml", "json", "env"] }
+
+# CLI and observability
+clap = { version = "4.5", features = ["derive", "env", "wrap_help"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json", "fmt"] }
+
+# IO
+jsonschema = { version = "0.30", default-features = false }
+walkdir = "2.5"
+globset = "0.4"
+tempfile = "3.20"
+bollard = "0.19" # OCI/Docker client for the runner
+which = "7.0"
+
+# Internal crates
+eval-ladder-core = { path = "packages/rust/core", version = "0.1.0" }
+eval-ladder-traces = { path = "packages/rust/traces", version = "0.1.0" }
+eval-ladder-policy = { path = "packages/rust/policy", version = "0.1.0" }
+eval-ladder-evidence = { path = "packages/rust/evidence", version = "0.1.0" }
+eval-ladder-benchmarks = { path = "packages/rust/benchmarks", version = "0.1.0" }
+eval-ladder-strengthening = { path = "packages/rust/strengthening", version = "0.1.0" }
+eval-ladder-analysis = { path = "packages/rust/analysis", version = "0.1.0" }
+eval-ladder-runner = { path = "packages/rust/runner", version = "0.1.0" }
+eval-ladder-lean = { path = "packages/rust/lean", version = "0.1.0" }
+
+[profile.release]
+lto = "thin"
+codegen-units = 1
+strip = "debuginfo"
+opt-level = 3
+
+[profile.release-lto]
+inherits = "release"
+lto = "fat"
+
+[profile.dev]
+debug = 1

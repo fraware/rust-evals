@@ -1,0 +1,30 @@
+[package]
+name = "eval-ladder-policy"
+description = "L3 process-validity policy engine (commands, edits, network, determinism, trace completeness)."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+readme.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+eval-ladder-core = { workspace = true }
+eval-ladder-runner = { workspace = true }
+eval-ladder-traces = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+toml = { workspace = true }
+globset = { workspace = true }
+
+[dev-dependencies]
+eval-ladder-evidence = { workspace = true }
+eval-ladder-strengthening = { workspace = true }
+chrono = { workspace = true }
+tempfile = { workspace = true }
+uuid = { workspace = true }

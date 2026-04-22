@@ -1,0 +1,64 @@
+# Rust
+/target/
+**/*.rs.bk
+Cargo.lock.bak
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.venv/
+venv/
+env/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.tox/
+.coverage
+htmlcov/
+.hypothesis/
+dist/
+build/
+wheels/
+
+# Lean
+**/.lake/
+**/build/
+**/lake-packages/
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Local run artifacts (released runs live in runs/released and MAY be committed)
+runs/local/**
+!runs/local/.gitkeep
+runs/ci/**
+!runs/ci/.gitkeep
+
+# Large benchmark assets pulled from public sources
+datasets/cache/
+benchmarks/**/workdir/
+
+# Secrets
+.env
+.env.*
+!.env.example
+secrets/
+*.pem
+*.key
+
+# Paper build artifacts
+paper/build/
+paper/_minted-*
+paper/*.aux
+paper/*.log
+paper/*.out
+paper/*.bbl
+paper/*.blg

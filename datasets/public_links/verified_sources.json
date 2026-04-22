@@ -1,0 +1,18 @@
+{
+  "$comment": "Public source links for the SWE-Bench Verified benchmark. This file is audited at release time; see docs/submission_checklist.md.",
+  "benchmark_id": "swe_bench_verified",
+  "release": "verified-v1",
+  "sources": [
+    {
+      "kind": "dataset_release",
+      "name": "SWE-bench Verified (Hugging Face)",
+      "url": "https://huggingface.co/datasets/princeton-nlp/SWE-bench_Verified",
+      "access": "public"
+    },
+    {
+      "kind": "paper",
+      "name": "Jimenez et al., SWE-bench: Can Language Models Resolve Real-World GitHub Issues?",
+      "url": "https://arxiv.org/abs/2310.06770"
+    }
+  ]
+}

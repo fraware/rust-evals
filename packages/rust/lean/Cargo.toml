@@ -1,0 +1,27 @@
+[package]
+name = "eval-ladder-lean"
+description = "L4 semantic validator (Lean-checker integration for the curated proof-carrying subset)."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+readme.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+eval-ladder-core = { workspace = true }
+eval-ladder-runner = { workspace = true }
+eval-ladder-traces = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+chrono = { workspace = true }
+
+[dev-dependencies]
+eval-ladder-evidence = { workspace = true }
+tempfile = { workspace = true }
+uuid = { workspace = true }

@@ -1,0 +1,4 @@
+# Minimal Rust-SWE-bench fixture. `docker_image` is optional for Rust tasks;
+# the second record exercises the synthesized `cargo://` environment ref.
+{"instance_id":"tokio-rs__tokio-6789","repo":"tokio-rs/tokio","base_commit":"abcdef0123456789abcdef0123456789abcdef01","patch":"","test_patch":"","problem_statement":"Deadlock in select! expansion when awaiting more than 32 branches.\n","hints_text":"","created_at":"2024-05-04T12:00:00Z","docker_image":"ghcr.io/fraware/rust-swebench:tokio-6789"}
+{"instance_id":"serde-rs__serde-1234","repo":"serde-rs/serde","base_commit":"0011223344556677889900aabbccddeeff0011223","patch":"","test_patch":"","problem_statement":"Incorrect handling of borrowed byte slices in Deserialize derive.\n","hints_text":"","created_at":"2024-07-15T08:00:00Z"}

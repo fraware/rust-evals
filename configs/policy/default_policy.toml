@@ -1,0 +1,38 @@
+# Default L3 policy for eval-ladder.
+#
+# This file is consumed by `eval-ladder-policy::Policy::from_path`. See
+# `docs/evaluation_ladder.md` for rule semantics and `schemas/` for all
+# related stable codes.
+
+name = "default_verified_policy"
+network_mode = "disabled"
+requires_reproducible_seed = true
+max_modified_files = 8
+allow_generated_tests = false
+allow_dependency_lockfile_edits = false
+
+allowed_commands = ["python", "pytest", "bash", "sh", "git", "pip", "cargo", "rustc"]
+forbidden_commands = ["curl", "wget", "ssh", "scp", "sudo"]
+
+allowed_edit_globs = [
+    "src/**",
+    "lib/**",
+    "tests/**",
+    "Cargo.toml",
+    "pyproject.toml",
+]
+
+forbidden_edit_globs = [
+    ".github/**",
+    "docs/**",
+    "ci/**",
+    "secrets/**",
+]
+
+required_trace_events = [
+    "RunStarted",
+    "PatchApplied",
+    "OfficialEvalStarted",
+    "OfficialEvalFinished",
+    "RunFinished",
+]

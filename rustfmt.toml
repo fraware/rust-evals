@@ -1,0 +1,16 @@
+edition = "2021"
+max_width = 100
+use_field_init_shorthand = true
+use_try_shorthand = true
+newline_style = "Unix"
+reorder_imports = true
+reorder_modules = true
+
+# The following options are unstable and only take effect on nightly rustfmt;
+# they are kept commented out so contributors can apply them locally with a
+# nightly toolchain without diverging from stable CI.
+#
+# imports_granularity = "Crate"
+# group_imports       = "StdExternalCrate"
+# wrap_comments       = true
+# comment_width       = 100

@@ -1,0 +1,10 @@
+# SWE-bench-Live evaluator profile.
+#
+# Live tasks keep their freshness metadata separate from Verified. The
+# strengthening mode defaults to `tests_plus_regression` because Live tasks
+# include targeted regression candidates.
+name = "live"
+policy_path = "configs/policy/default_policy.toml"
+strengthening_mode = "tests_plus_regression"
+manifest_dir = "benchmarks/live/manifests"
+output_dir = "runs/local/live"

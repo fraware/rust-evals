@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eval-ladder.dev/schemas/proof_obligation.schema.json",
+  "title": "ProofObligation",
+  "description": "Curated semantic obligation for a task in the proof-carrying subset. See docs/proof_subset_policy.md.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "obligation_id",
+    "task_id",
+    "property_name",
+    "property_type",
+    "target_files",
+    "informal_statement",
+    "formal_statement_ref",
+    "proof_checker",
+    "pass_criterion",
+    "difficulty",
+    "selection_rationale"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "obligation_id": { "type": "string", "minLength": 1 },
+    "task_id": { "type": "string", "minLength": 1 },
+    "property_name": { "type": "string", "minLength": 1 },
+    "property_type": {
+      "type": "string",
+      "enum": [
+        "parser_serializer_consistency",
+        "state_machine_safety",
+        "preservation_invariant",
+        "numeric_bound_or_monotonicity",
+        "no_panic_or_invalid_state"
+      ]
+    },
+    "target_files": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string" }
+    },
+    "informal_statement": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 600
+    },
+    "formal_statement_ref": {
+      "type": "string",
+      "description": "Path to a Lean declaration under packages/lean/EvalLadder/Obligations/."
+    },
+    "proof_checker": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["command", "args"],
+      "properties": {
+        "command": { "type": "string", "minLength": 1 },
+        "args": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "pass_criterion": {
+      "type": "string",
+      "pattern": "^[A-Z][A-Z0-9_]*$",
+      "description": "Stable code returned by the checker that counts as pass."
+    },
+    "difficulty": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["reviewer_hours"],
+      "properties": {
+        "reviewer_hours": {
+          "type": "number",
+          "minimum": 0
+        }
+      }
+    },
+    "selection_rationale": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "one_or_two_sentence_property",
+        "local_scope",
+        "matters_to_issue",
+        "strictly_stronger_than_tests",
+        "bounded_effort"
+      ],
+      "properties": {
+        "one_or_two_sentence_property": { "type": "boolean" },
+        "local_scope": { "type": "boolean" },
+        "matters_to_issue": { "type": "boolean" },
+        "strictly_stronger_than_tests": { "type": "boolean" },
+        "bounded_effort": { "type": "boolean" }
+      }
+    },
+    "witness_inputs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "path"],
+        "properties": {
+          "name": { "type": "string" },
+          "path": { "type": "string" },
+          "sha256": {
+            "type": ["string", "null"],
+            "pattern": "^sha256:[0-9a-f]{64}$"
+          }
+        }
+      }
+    },
+    "expected_touched_symbols": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}

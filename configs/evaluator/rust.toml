@@ -1,0 +1,10 @@
+# Rust-SWE-bench evaluator profile.
+#
+# Rust tasks are first-class: Cargo workspace handling, cargo test / check /
+# reproduction hooks, and lockfile policy are enforced through the policy
+# file referenced below.
+name = "rust"
+policy_path = "configs/policy/default_policy.toml"
+strengthening_mode = "full_l2"
+manifest_dir = "benchmarks/rust/manifests"
+output_dir = "runs/local/rust"

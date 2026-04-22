@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eval-ladder.dev/schemas/candidate_resolution.schema.json",
+  "title": "CandidateResolution",
+  "description": "The canonical evaluation unit. Links a benchmark task, an agent identity, a generated patch, and generation metadata.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "candidate_id",
+    "benchmark_id",
+    "task_id",
+    "agent_id",
+    "model_id",
+    "generation_mode",
+    "patch_format",
+    "patch_ref",
+    "generation_metadata",
+    "submitted_at"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "candidate_id": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+    },
+    "benchmark_id": {
+      "type": "string",
+      "enum": ["swe_bench_verified", "swe_bench_live", "rust_swe_bench"]
+    },
+    "task_id": { "type": "string", "minLength": 1 },
+    "agent_id": { "type": "string", "minLength": 1 },
+    "model_id": { "type": "string", "minLength": 1 },
+    "generation_mode": {
+      "type": "string",
+      "enum": ["agent_loop", "single_shot", "rerank", "human_assisted", "other"]
+    },
+    "patch_format": {
+      "type": "string",
+      "enum": ["unified_diff", "git_patch", "json_edits"]
+    },
+    "patch_ref": {
+      "type": "string",
+      "description": "POSIX path relative to the workspace root or a content-addressed reference prefixed with sha256:."
+    },
+    "trajectory_ref": {
+      "type": ["string", "null"],
+      "description": "Optional reference to an execution trajectory file."
+    },
+    "generation_metadata": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "temperature",
+        "tool_configuration",
+        "context_mode",
+        "repo_reproduction_used"
+      ],
+      "properties": {
+        "temperature": {
+          "type": ["number", "null"],
+          "minimum": 0
+        },
+        "tool_configuration": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "context_mode": {
+          "type": "string",
+          "enum": ["full_repo", "retrieval", "file_level", "window", "other"]
+        },
+        "repo_reproduction_used": { "type": "boolean" },
+        "random_seed": {
+          "type": ["integer", "null"]
+        }
+      }
+    },
+    "submitted_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

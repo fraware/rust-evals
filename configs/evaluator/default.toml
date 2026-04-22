@@ -1,0 +1,11 @@
+# Default evaluator configuration.
+#
+# This profile is the fallback for `eval-ladder evaluate` when no
+# benchmark-specific config is supplied. It points the evaluator at the
+# default policy and the `full_l2` strengthening mode.
+
+name = "default"
+policy_path = "configs/policy/default_policy.toml"
+strengthening_mode = "full_l2"
+manifest_dir = "benchmarks/verified/manifests"
+output_dir = "runs/local"

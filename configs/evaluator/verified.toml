@@ -1,0 +1,6 @@
+# SWE-Bench Verified evaluator profile.
+name = "verified"
+policy_path = "configs/policy/default_policy.toml"
+strengthening_mode = "tests_plus_diff"
+manifest_dir = "benchmarks/verified/manifests"
+output_dir = "runs/local/verified"

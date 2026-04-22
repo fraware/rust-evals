@@ -1,0 +1,29 @@
+[package]
+name = "eval-ladder-benchmarks"
+description = "Benchmark adapters: SWE-Bench Verified, SWE-bench-Live, Rust-SWE-bench."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+readme.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+eval-ladder-core = { workspace = true }
+eval-ladder-runner = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+chrono = { workspace = true }
+toml = { workspace = true }
+walkdir = { workspace = true }
+jsonschema = { workspace = true }
+tracing = { workspace = true }
+
+[dev-dependencies]
+tempfile = { workspace = true }
+serde_json = { workspace = true }

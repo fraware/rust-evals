@@ -1,0 +1,18 @@
+{
+  "$comment": "Public source links for the SWE-bench-Live benchmark. This file is audited at release time; see docs/submission_checklist.md.",
+  "benchmark_id": "swe_bench_live",
+  "release": "live-v1",
+  "sources": [
+    {
+      "kind": "dataset_release",
+      "name": "SWE-bench-Live",
+      "url": "https://swe-bench-live.github.io/",
+      "access": "public"
+    },
+    {
+      "kind": "paper",
+      "name": "SWE-bench-Live: A Live Benchmark for Real-World Software Engineering Tasks",
+      "url": "https://arxiv.org/abs/2505.23419"
+    }
+  ]
+}

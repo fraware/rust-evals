@@ -1,0 +1,8 @@
+[toolchain]
+# Pinned Rust toolchain. This version must be kept >= the `rust-version`
+# declared in Cargo.toml and recent enough to support edition-2024-gated
+# dependencies (indexmap 2.x, etc.). Bumps MUST go through the CI tier-1
+# workflow.
+channel = "1.86.0"
+components = ["rustfmt", "clippy"]
+profile = "minimal"

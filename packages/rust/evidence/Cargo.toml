@@ -1,0 +1,25 @@
+[package]
+name = "eval-ladder-evidence"
+description = "Reproducible evidence-bundle builder with SHA-256 canonical hashing."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+readme.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+eval-ladder-core = { workspace = true }
+eval-ladder-traces = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+chrono = { workspace = true }
+walkdir = { workspace = true }
+
+[dev-dependencies]
+tempfile = { workspace = true }

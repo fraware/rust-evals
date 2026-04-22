@@ -1,0 +1,11 @@
+# Default strengthening rules.
+#
+# Fields match `eval_ladder_runner::StrengtheningRules`. The `mode` field is
+# the short code; the booleans are redundant with the mode but made explicit
+# here so reviewers can audit without cross-referencing code.
+
+mode = "full_l2"
+run_augmented_unit_tests = true
+run_differential_behavior = true
+run_targeted_regression = true
+run_property_fuzz = true

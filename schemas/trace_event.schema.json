@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eval-ladder.dev/schemas/trace_event.schema.json",
+  "title": "TraceEvent",
+  "description": "Single append-only trace event. Events are serialized one per line as JSONL and form a SHA-256 hash chain.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "run_id",
+    "candidate_id",
+    "task_id",
+    "timestamp_utc",
+    "event_type",
+    "payload",
+    "prev_event_hash",
+    "event_hash"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "run_id": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+    },
+    "candidate_id": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+    },
+    "task_id": { "type": "string", "minLength": 1 },
+    "timestamp_utc": { "type": "string", "format": "date-time" },
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "RunStarted",
+        "ContainerPrepared",
+        "PatchApplied",
+        "OfficialEvalStarted",
+        "OfficialEvalFinished",
+        "StrengthenedEvalStarted",
+        "StrengthenedEvalFinished",
+        "PolicyCheckStarted",
+        "PolicyViolationDetected",
+        "ProofCheckStarted",
+        "ProofCheckFinished",
+        "RunFinished"
+      ]
+    },
+    "payload": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Event-specific payload. Schema per event type is documented in packages/rust/traces."
+    },
+    "prev_event_hash": {
+      "type": ["string", "null"],
+      "description": "sha256 hash of the canonical JSON of the previous event in this run, or null for RunStarted.",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "event_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "description": "sha256 hash of the canonical JSON of this event excluding the event_hash field itself."
+    }
+  }
+}

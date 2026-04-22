@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "benchmark_id": "swe_bench_verified",
+  "task_id": "django__django-12345",
+  "repo_name": "django/django",
+  "issue_id": "12345",
+  "issue_title": "Fixture task for eval-ladder bootstrap",
+  "issue_text": "This is a fixture used by repository-level integration tests. It is not a real issue and MUST NOT be used to draw empirical conclusions.",
+  "base_commit": "0000000000000000000000000000000000000000",
+  "environment_ref": "oci://example.invalid/env:fixture",
+  "official_test_entrypoint": "pytest tests/fixture_test.py",
+  "language": "python",
+  "labels": ["fixture"],
+  "created_at": "2026-01-01T00:00:00Z",
+  "source_url": "https://example.invalid/fixture"
+}

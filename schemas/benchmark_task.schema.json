@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eval-ladder.dev/schemas/benchmark_task.schema.json",
+  "title": "BenchmarkTask",
+  "description": "Normalized benchmark task emitted by a benchmark adapter. The canonical task identity for eval-ladder.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "benchmark_id",
+    "task_id",
+    "repo_name",
+    "issue_id",
+    "issue_title",
+    "issue_text",
+    "base_commit",
+    "environment_ref",
+    "official_test_entrypoint",
+    "language",
+    "labels",
+    "created_at",
+    "source_url"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "benchmark_id": {
+      "type": "string",
+      "enum": ["swe_bench_verified", "swe_bench_live", "rust_swe_bench"]
+    },
+    "task_id": { "type": "string", "minLength": 1 },
+    "repo_name": { "type": "string", "minLength": 1 },
+    "issue_id": { "type": "string", "minLength": 1 },
+    "issue_title": { "type": "string" },
+    "issue_text": { "type": "string" },
+    "base_commit": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{7,64}$"
+    },
+    "gold_patch_ref": {
+      "type": ["string", "null"],
+      "description": "POSIX-style path relative to the repo root, or a content-addressed reference prefixed with sha256:."
+    },
+    "environment_ref": {
+      "type": "string",
+      "description": "Image reference or environment descriptor pinned to this task."
+    },
+    "official_test_entrypoint": {
+      "type": "string",
+      "description": "Command invoked by the official benchmark scorer."
+    },
+    "language": {
+      "type": "string",
+      "enum": ["python", "rust", "mixed"]
+    },
+    "labels": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "source_url": {
+      "type": "string",
+      "format": "uri"
+    }
+  }
+}

@@ -1,0 +1,37 @@
+[package]
+name = "eval-ladder-runner"
+description = "Container-backed execution engine. OCI orchestration, patch application, telemetry, trace emission."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+readme.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+eval-ladder-core = { workspace = true }
+eval-ladder-traces = { workspace = true }
+eval-ladder-evidence = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+chrono = { workspace = true }
+tracing = { workspace = true }
+uuid = { workspace = true }
+which = { workspace = true }
+walkdir = { workspace = true }
+
+[dev-dependencies]
+tempfile = { workspace = true }
+
+# Container backends are gated behind feature flags so this crate compiles
+# on machines without a Docker client. Milestone C wires the docker backend
+# through `bollard`; until then the trait-based interface below is the stable
+# contract.
+[features]
+default = []
+docker = []
