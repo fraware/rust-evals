@@ -46,6 +46,27 @@ ci/                  # GitHub Actions workflows and helper scripts.
 paper/               # Tables, figures, and exports for the submission.
 ```
 
+## CI status and workflows
+
+GitHub Actions workflows are defined in `.github/workflows/` and appear in the
+repository Actions tab:
+
+- `ci-tier1-fast` (`push`, `pull_request` on `main`): Rust `fmt`, `clippy`,
+  workspace tests, schema validation.
+- `ci-tier2-medium` (`push`, `pull_request` on `main`): Python lint/type/test
+  plus Rust integration tests.
+- `ci-tier3-heavy` (`workflow_dispatch`, weekly `schedule`): heavy fixture
+  replay and proof-subset smoke.
+
+Workflow entry points:
+
+- [`ci-tier1-fast.yml`](.github/workflows/ci-tier1-fast.yml)
+- [`ci-tier2-medium.yml`](.github/workflows/ci-tier2-medium.yml)
+- [`ci-tier3-heavy.yml`](.github/workflows/ci-tier3-heavy.yml)
+
+Status badges can be enabled by adding the repository-specific badge URLs for
+these three workflow names once the default branch path is finalized.
+
 ## Quick start
 
 Prerequisites: the Rust toolchain pinned by `rust-toolchain.toml`
@@ -118,17 +139,30 @@ eval-ladder demo run --out runs/demo --tasks 2
 
 ## Released run status
 
-The repository currently ships two release-track run directories:
+The repository ships several release-track run directories under
+`runs/released/`:
 
 - `runs/released/agent_panel_v1/`: panel artifacts (candidates, patches,
-  panel metadata) for 3 agents x 5 Verified tasks. This release is
-  intentionally metadata-only until a Docker-backed reviewer run is
-  executed.
-- `runs/released/rust_pilot_v1/`: completed Rust-native pilot run for
-  `clap-rs__clap_5873` with:
-  - `evaluate batch` levels `L0,L1,L3,L4`,
-  - `analyze paper-export` output in `paper/exports/rust_pilot_v1/`,
-  - `verify run-dir` passing with `1 ok / 0 invalid`.
+  panel metadata, per-task workspaces) and a completed Docker-backed
+  evaluator run for 3 agents x 5 Verified tasks:
+  - `evaluate batch` levels `L0,L1,L3` (`15 total / 15 ok / 0 invalid`),
+  - `verify run-dir` passing with `15 ok / 0 invalid`,
+  - `analyze paper-export` output in `paper/exports/agent_panel_v1/`.
+- `runs/released/l2_verified_v1/`: five-task L2 strengthening decomposition
+  slice (see `runs/released/l2_verified_v1/README.md`).
+- `runs/released/l2_verified_v2/`: two-task Docker-backed run with **L0/L1
+  pass and L2 fail** on golden candidates; sealed `results/`, `verify_report`,
+  and `paper/exports/l2_verified_v2/` (see `runs/released/l2_verified_v2/README.md`).
+- `runs/released/live_panel_v1/`: 39-entry static-vs-live panel (8 Live + 5
+  Verified anchors, 3 agents), `L0,L1` batch, `verify run-dir`, and paper
+  exports including `static_vs_live` (see `runs/released/live_panel_v1/README.md`).
+- `runs/released/rust_pilot_v1/`: Rust-native pilot run for
+  `clap-rs__clap_5873` (`LocalProcessEngine`, no Docker) with
+  `evaluate batch` levels `L0,L1,L3,L4`. The frozen `batch_summary`
+  records L0/L1 harness timeouts on this host-sized run while L3/L4
+  still pass; see `runs/released/rust_pilot_v1/README.md` for scope,
+  policy, and reproduction. `paper/exports/rust_pilot_v1/` and
+  `verify run-dir` complete the audit trail.
 
 ## Scientific scope and related work
 
