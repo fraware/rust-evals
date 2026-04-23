@@ -7,20 +7,22 @@ semantic validator. Manifest entries in `../manifest.jsonl` MUST conform to
 See `docs/proof_subset_policy.md` for the selection rubric, eligible task
 categories, and the obligation template.
 
-The production `manifest.jsonl` currently holds **one** curated
-obligation:
+The production `manifest.jsonl` currently holds **eight** curated
+obligations over distinct `task_id` values (one row per task; see
+`eval_ladder_lean::ObligationManifest`). The flagship entry is:
 
 * `obl.rust_swe_bench.clap_rs.clap_5873.ignore_errors_recovery_identity`
   - task: `clap-rs__clap_5873` (Rust-SWE-bench)
   - property: `state_machine_safety` on clap's did-you-mean recovery
-  - Lean proof: `packages/lean/EvalLadder/Obligations/ClapRs/Clap5873.lean`
+  - Lean proof:
+    `packages/lean/EvalLadder/EvalLadder/Obligations/ClapRs/Clap5873.lean`
   - seed script:
-    `packages/python/scripts/seed_proof_obligation.py` (run it to
-    idempotently re-insert the entry if the manifest is reset).
+    `packages/python/scripts/seed_proof_obligation.py` (idempotent helper for
+    the `clap-rs__clap_5873` row only).
 
 Milestone F shipped the full L4 plumbing; the Milestone F acceptance
 suite continues to exercise its own fixture under
-`packages/lean/EvalLadder/Obligations/Fixtures/` and loads it
+`packages/lean/EvalLadder/EvalLadder/Obligations/Fixtures/` and loads it
 programmatically so production and test obligations never cross
 streams.
 

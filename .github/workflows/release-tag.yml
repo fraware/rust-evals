@@ -1,0 +1,66 @@
+name: release-tag
+
+# Runs on SemVer tags (v*.*.*) to freeze fingerprints and exercise the same
+# Lean + schema gates expected before a NeurIPS-style submission tag.
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-tag-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  seal-manifest:
+    name: Schema, Lean, and release artifact manifest
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Rust toolchain (pinned)
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo
+        uses: Swatinem/rust-cache@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install elan / Lean
+        run: |
+          curl -sSf https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh \
+            | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> $GITHUB_PATH
+
+      - name: eval-ladder schema validate
+        run: cargo run -p eval-ladder-cli -- schema validate
+
+      - name: Lean lake build
+        run: (cd packages/lean/EvalLadder && lake build)
+
+      - name: eval-ladder-lean tests
+        run: cargo test -p eval-ladder-lean
+
+      - name: Write release artifact manifest
+        run: |
+          python ci/scripts/write_release_artifact_manifest.py \
+            --out paper/exports/release/${{ github.ref_name }}/artifact_manifest.json
+          cat paper/exports/release/${{ github.ref_name }}/artifact_manifest.json
+
+      - name: Upload artifact manifest
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-artifact-manifest-${{ github.ref_name }}
+          path: paper/exports/release/${{ github.ref_name }}/artifact_manifest.json

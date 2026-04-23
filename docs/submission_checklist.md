@@ -92,7 +92,9 @@ Choose one mode per submission.
       specification. Pinned by `just validate-schemas` /
       `eval-ladder schema validate`.
 - [ ] Tier 3 CI has passed on the tagged release commit. Release tag
-      still pending.
+      still pending. SemVer tags additionally run `.github/workflows/release-tag.yml`
+      (Lean `lake build`, `eval-ladder-lean` tests, schema validation, and a
+      `paper/exports/release/<tag>/artifact_manifest.json` upload).
 
 ## Reviewer ergonomics
 

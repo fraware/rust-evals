@@ -57,6 +57,9 @@ repository Actions tab:
   plus Rust integration tests.
 - `ci-tier3-heavy` (`workflow_dispatch`, weekly `schedule`): heavy fixture
   replay and proof-subset smoke.
+- `release-tag` (`push` on SemVer tags `v*.*.*`): schema validation, `lake build`
+  for the Lean obligations library, `eval-ladder-lean` tests, and an uploaded
+  `artifact_manifest.json` fingerprinting core evaluator inputs.
 
 Workflow entry points:
 
@@ -148,6 +151,10 @@ The repository ships several release-track run directories under
   - `evaluate batch` levels `L0,L1,L3` (`15 total / 15 ok / 0 invalid`),
   - `verify run-dir` passing with `15 ok / 0 invalid`,
   - `analyze paper-export` output in `paper/exports/agent_panel_v1/`.
+- `runs/released/agent_panel_v2/`: scaled panel builder (10 Verified tasks
+  x 3 agents; materialised via `packages/python/scripts/build_agent_panel_v2.py`).
+  Patches and `panel.jsonl` are committed when regenerated; see
+  `runs/released/agent_panel_v2/README.md` for Docker batch reproduction.
 - `runs/released/l2_verified_v1/`: five-task L2 strengthening decomposition
   slice (see `runs/released/l2_verified_v1/README.md`).
 - `runs/released/l2_verified_v2/`: two-task Docker-backed run with **L0/L1

@@ -3,7 +3,7 @@
 Rust-native pilot run for the eval-ladder. One curated
 Rust-SWE-bench task (`clap-rs__clap_5873`) evaluated end-to-end on a
 native cargo toolchain, with L4 semantic validation wired to a real
-Lean proof under `packages/lean/EvalLadder/Obligations/ClapRs/`.
+Lean proof under `packages/lean/EvalLadder/EvalLadder/Obligations/ClapRs/`.
 
 ## Scope and honest labels
 

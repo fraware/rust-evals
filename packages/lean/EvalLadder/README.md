@@ -7,9 +7,10 @@ Scope and selection policy live at the repository root in
 
 - `EvalLadder/Obligations/`: versioned problem statements, one module per
   obligation declared in `datasets/derived/proof_subset/manifest.jsonl`.
-- `EvalLadder/Theorems/`: accepted proofs.
-- `EvalLadder/Tactics/`: reusable helper tactics.
-- `EvalLadder/Fixtures/`: smoke-test fixtures. These are NOT part of the
+- `EvalLadder/Theorems.lean` (and future `EvalLadder/Theorems/` subtree):
+  accepted proofs.
+- `EvalLadder/Tactics.lean`: reusable helper tactics.
+- `EvalLadder/Fixtures.lean`: smoke-test fixtures. These are NOT part of the
   curated subset and MUST NOT be cited by any obligation.
 
 Build:
@@ -19,10 +20,10 @@ cd packages/lean/EvalLadder
 lake build
 ```
 
-Current production obligation set includes
-`Obligations/ClapRs/Clap5873.lean`, referenced by
-`datasets/derived/proof_subset/manifest.jsonl` as
-`obl.rust_swe_bench.clap_rs.clap_5873.ignore_errors_recovery_identity`.
+The curated proof subset currently lists **eight** Rust tasks in
+`datasets/derived/proof_subset/manifest.jsonl`; the flagship obligation remains
+`obl.rust_swe_bench.clap_rs.clap_5873.ignore_errors_recovery_identity` at
+`EvalLadder/Obligations/ClapRs/Clap5873.lean`.
 
 Lean toolchain is pinned by `lean-toolchain`. The Rust CLI invokes `lake`
 through `eval-ladder prove-subset --lean-root packages/lean/EvalLadder` once

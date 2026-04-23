@@ -53,7 +53,8 @@ specify:
 - `target_files`: list of files the obligation constrains.
 - `informal_statement`: one or two sentences.
 - `formal_statement_ref`: path to a Lean declaration in
-  `packages/lean/EvalLadder/Obligations/`.
+  `packages/lean/EvalLadder/EvalLadder/Obligations/` (relative to the Lean
+  project root passed as `--lean-root`, typically `packages/lean/EvalLadder`).
 - `proof_checker`: the Lean command to run (for example `lake env lean`).
 - `pass_criterion`: stable code returned by the checker that counts as pass
   (for example `L4_OBLIGATION_MET`).
@@ -97,8 +98,14 @@ Croissant metadata live under
 
 ## Changelog
 
+- 2026-04-23 (later): expanded the manifest to **eight** distinct Rust-SWE-bench
+  `task_id` rows (seven additional sketch obligations plus the original clap
+  `5873` entry), relocated the Lake-visible library under
+  `packages/lean/EvalLadder/EvalLadder/` so `import EvalLadder.*` resolves on
+  Windows CI, and pointed every `proof_checker` path at
+  `EvalLadder/Obligations/...` relative to the Lean root.
 - 2026-04-23: seeded first production obligation
   `obl.rust_swe_bench.clap_rs.clap_5873.ignore_errors_recovery_identity`
   for task `clap-rs__clap_5873` (`state_machine_safety`), with Lean module
-  `packages/lean/EvalLadder/Obligations/ClapRs/Clap5873.lean` and
+  `packages/lean/EvalLadder/EvalLadder/Obligations/ClapRs/Clap5873.lean` and
   pass criterion `L4_OBLIGATION_MET`.

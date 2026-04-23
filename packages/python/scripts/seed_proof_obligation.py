@@ -15,9 +15,9 @@ Usage (run from repository root):
 
     python packages/python/scripts/seed_proof_obligation.py [--dry-run]
 
-The payload is intentionally the only obligation seeded here; future
-obligations earn their own seed script or land via a direct
-`manifest.jsonl` edit with a corresponding Lean module.
+The payload seeds **only** the `clap-rs__clap_5873` obligation; the wider
+multi-task manifest is maintained as canonical JSONL in-tree. Future
+one-off seeds should follow the same idempotency pattern.
 """
 
 from __future__ import annotations
@@ -52,19 +52,15 @@ OBLIGATION: dict = {
         "remain DefaultValue, preventing the spurious CommandLine transition "
         "that caused the issue."
     ),
-    # Paths are resolved relative to `lean_root`, which the runner
-    # points at `packages/lean/EvalLadder/`. The Lake project uses
-    # srcDir = "." with root module `EvalLadder`, so obligation
-    # modules live directly under `Obligations/` (not under a nested
-    # `EvalLadder/Obligations/`). Using the flat layout keeps
-    # `lake env lean` consistent with the on-disk file layout across
-    # CI hosts.
-    "formal_statement_ref": "Obligations/ClapRs/Clap5873.lean",
+    # Paths are resolved relative to `lean_root` (`packages/lean/EvalLadder`).
+    # Obligation modules live under `EvalLadder/Obligations/...` so `lake build`
+    # can import them from the `EvalLadder` root module on all platforms.
+    "formal_statement_ref": "EvalLadder/Obligations/ClapRs/Clap5873.lean",
     "proof_checker": {
         "command": "python",
         "args": [
             "scripts/check_obligation.py",
-            "Obligations/ClapRs/Clap5873.lean",
+            "EvalLadder/Obligations/ClapRs/Clap5873.lean",
             "L4_OBLIGATION_MET",
         ],
     },
@@ -102,9 +98,17 @@ def main() -> int:
         MANIFEST.parent.mkdir(parents=True, exist_ok=True)
 
     existing = MANIFEST.read_text(encoding="utf-8") if MANIFEST.exists() else ""
-    if any(ln.strip() == line for ln in existing.splitlines()):
-        print(f"obligation already present: {OBLIGATION['obligation_id']}")
-        return 0
+    for ln in existing.splitlines():
+        t = ln.strip()
+        if not t or t.startswith("#"):
+            continue
+        try:
+            row = json.loads(t)
+        except json.JSONDecodeError:
+            continue
+        if row.get("obligation_id") == OBLIGATION["obligation_id"]:
+            print(f"obligation already present: {OBLIGATION['obligation_id']}")
+            return 0
 
     if args.dry_run:
         print("dry-run: schema OK; would append:")

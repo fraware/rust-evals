@@ -169,7 +169,7 @@ The Milestone F acceptance test in
 `Valid` / `Invalid` / `NotApplicable` matrix under the in-tree
 `ScriptedChecker` and verifies L4 rerun determinism. An opt-in
 integration test invokes `lake` against
-`packages/lean/EvalLadder/Obligations/Fixtures/MilestoneF.lean` and is
+`packages/lean/EvalLadder/EvalLadder/Obligations/Fixtures/MilestoneF.lean` and is
 marked `#[ignore]`, so it only runs when explicitly selected
 (`cargo test -p eval-ladder-lean -- --ignored`) or under the Tier 3
 heavy workflow that provisions a Lean toolchain.
@@ -209,7 +209,7 @@ JSON, plus a `manifest.json` that SHA-256s every sibling. Byte
 determinism across reruns is pinned by
 `packages/rust/analysis/tests/milestone_g_acceptance.rs` (Milestones G
 tables) and `packages/rust/analysis/tests/milestone_l_acceptance.rs`
-(Milestone L extension plus the `PAPER_EXPORT_SCHEMA_VERSION = 2`
+(Milestone L extension plus the `PAPER_EXPORT_SCHEMA_VERSION = 3`
 bump).
 
 ## Static-vs-live comparison (Milestone L)
@@ -246,7 +246,9 @@ Two shipping surfaces:
   CSV (and optional `--json-out`) for ad-hoc inspection.
 - `eval-ladder analyze paper-export --run-dir <dir> --out-dir <dir>` -
   emits `static_vs_live.{csv,json}` alongside the Milestone G
-  tables. `PAPER_EXPORT_SCHEMA_VERSION` is bumped from `1` to `2`
+  tables. `PAPER_EXPORT_SCHEMA_VERSION` is bumped from `1` to `2`,
+  then to `3` when `analysis_mode` is embedded in `manifest.json`
+  for raw-vs-cumulative headline semantics.
   so readers keyed on the manifest hash re-pin intentionally.
 
 ## Batch evaluation (Milestone H)
