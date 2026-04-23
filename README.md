@@ -163,6 +163,10 @@ The repository ships several release-track run directories under
 - `runs/released/live_panel_v1/`: 39-entry static-vs-live panel (8 Live + 5
   Verified anchors, 3 agents), `L0,L1` batch, `verify run-dir`, and paper
   exports including `static_vs_live` (see `runs/released/live_panel_v1/README.md`).
+- `runs/released/rust_proof_subset_v1/`: eight-task golden panel aligned with
+  `datasets/derived/proof_subset/manifest.jsonl` for end-to-end L0–L4 batch
+  design (`build_rust_proof_subset_panel.py`; see directory README and
+  `docs/proof_subset_sketches.md`).
 - `runs/released/rust_pilot_v1/`: Rust-native pilot run for
   `clap-rs__clap_5873` (`LocalProcessEngine`, no Docker) with
   `evaluate batch` levels `L0,L1,L3,L4`. The frozen `batch_summary`

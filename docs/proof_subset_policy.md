@@ -78,11 +78,19 @@ The schema is captured in `schemas/proof_obligation.schema.json`.
 - An obligation that cannot be checked (for example because extraction
   fails) yields `L4_EXTRACTION_FAILED`; it does not fall back to L2 tests.
 
+## Sketch obligations and fidelity
+
+Obligations that formalise only a **small discrete lemma** about an issue,
+rather than a faithful model of the full Rust program, are documented in
+[`docs/proof_subset_sketches.md`](proof_subset_sketches.md). Reviewers should
+read that table before interpreting L4 `PASS` on those rows as semantic parity
+with upstream tests.
+
 ## Governance
 
 - Adding an obligation requires a PR that touches `manifest.jsonl`,
-  `packages/lean/EvalLadder/Obligations/`, and this document's changelog
-  section.
+  `packages/lean/EvalLadder/EvalLadder/Obligations/`, and this document's changelog
+  section (plus `docs/proof_subset_sketches.md` when the entry is a sketch).
 - Removing or modifying an existing obligation requires the same PR surface
   plus a rationale field in `manifest.jsonl`.
 - A selection bias audit is run before any release and archived under
@@ -98,6 +106,10 @@ Croissant metadata live under
 
 ## Changelog
 
+- 2026-04-23 (panel): added `runs/released/rust_proof_subset_v1/` (golden workspaces
+  + PR diffs for all eight manifest tasks) via
+  `packages/python/scripts/build_rust_proof_subset_panel.py`, plus reviewer table
+  `docs/proof_subset_sketches.md` and in-Lean fidelity notes on sketch modules.
 - 2026-04-23 (later): expanded the manifest to **eight** distinct Rust-SWE-bench
   `task_id` rows (seven additional sketch obligations plus the original clap
   `5873` entry), relocated the Lake-visible library under

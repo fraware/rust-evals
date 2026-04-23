@@ -1,0 +1,78 @@
+{
+  "agent_id": "golden_agent",
+  "entries": [
+    {
+      "base_commit": "c50b8b4125dc7f1181944dd92d0aca97c2450421",
+      "patch_sha256": "d779157dfe409894913f86d2baf463dd931fbba523db94f0ce2dc2fc190d9717",
+      "patch_url": "https://github.com/BurntSushi/ripgrep/pull/454.diff",
+      "pull_number": 454,
+      "repo": "BurntSushi/ripgrep",
+      "task_id": "BurntSushi__ripgrep_454"
+    },
+    {
+      "base_commit": "1c3958c56eca35235ed6837c666adb8ede979961",
+      "patch_sha256": "9fe59410b8c26774c961fe3ced15bd4f48a477b4d2d8b4fff586fe0077fbfeba",
+      "patch_url": "https://github.com/clap-rs/clap/pull/1624.diff",
+      "pull_number": 1624,
+      "repo": "clap-rs/clap",
+      "task_id": "clap-rs__clap_1624"
+    },
+    {
+      "base_commit": "c192f5effbb9655964630952e530255462174f44",
+      "patch_sha256": "cab7a0a5533fe23d9f9b56817315706184db90fecfe27ce9346ef583723d9f22",
+      "patch_url": "https://github.com/clap-rs/clap/pull/1710.diff",
+      "pull_number": 1710,
+      "repo": "clap-rs/clap",
+      "task_id": "clap-rs__clap_1710"
+    },
+    {
+      "base_commit": "055568d3fe9fd3e96366035e4129975001c7e01c",
+      "patch_sha256": "ec106531310d5697764d4b6f4bcf103d2438f6f2f4a6c5525e1409d2135975d2",
+      "patch_url": "https://github.com/clap-rs/clap/pull/1972.diff",
+      "pull_number": 1972,
+      "repo": "clap-rs/clap",
+      "task_id": "clap-rs__clap_1972"
+    },
+    {
+      "base_commit": "1dd3fcb954355198193a793d2983db383829ec2f",
+      "patch_sha256": "33068bac4cfc00060accd67b5625f6a2ad44cb9087812c4c82bb958b6be6b8d2",
+      "patch_url": "https://github.com/clap-rs/clap/pull/2008.diff",
+      "pull_number": 2008,
+      "repo": "clap-rs/clap",
+      "task_id": "clap-rs__clap_2008"
+    },
+    {
+      "base_commit": "ddd55e57dc4b0205e02c121f1116704bd1b51956",
+      "patch_sha256": "f5a873d3c320ec8724ea365eb67db6a491b60cb095528083e1d28d20508edecf",
+      "patch_url": "https://github.com/clap-rs/clap/pull/2075.diff",
+      "pull_number": 2075,
+      "repo": "clap-rs/clap",
+      "task_id": "clap-rs__clap_2075"
+    },
+    {
+      "base_commit": "6a56a82629d1a990efb37dae9c75a76e943f22a0",
+      "patch_sha256": "680f9be733f3ef1b1855f3b9caa95c00bcc056724432d958c92e1a54959c10cb",
+      "patch_url": "https://github.com/clap-rs/clap/pull/2093.diff",
+      "pull_number": 2093,
+      "repo": "clap-rs/clap",
+      "task_id": "clap-rs__clap_2093"
+    },
+    {
+      "base_commit": "1d5c6798dc16db0b8130a0c73c8a5d818ec22131",
+      "patch_sha256": "babf0e4d20b5d85fdfebc982704959e284925bccf4f8a19c65fd366f60ef5cbf",
+      "patch_url": "https://github.com/clap-rs/clap/pull/5873.diff",
+      "pull_number": 5873,
+      "repo": "clap-rs/clap",
+      "task_id": "clap-rs__clap_5873"
+    }
+  ],
+  "model_id": "upstream_pr_diff",
+  "notes": [
+    "UUIDv5 namespace c4d9e1a2-7f3b-5c6d-8e9f-0a1b2c3d4e5f (distinct from rust_pilot_v1).",
+    "Task list is derived from datasets/derived/proof_subset/manifest.jsonl.",
+    "Use configs/policy/rust_pilot.toml for L3 edit-scope parity with rust_pilot_v1.",
+    "Reviewer-facing Lean sketch fidelity notes: docs/proof_subset_sketches.md."
+  ],
+  "panel_id": "rust_proof_subset_v1",
+  "proof_subset_manifest": "datasets/derived/proof_subset/manifest.jsonl"
+}

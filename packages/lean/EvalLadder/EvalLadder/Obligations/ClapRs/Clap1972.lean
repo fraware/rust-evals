@@ -6,6 +6,11 @@
   pure list-of-characters fact: appending a newline strictly increases length.
 -/
 
+/-
+  Reviewer fidelity: list-of-`Char` algebra only; not wired to clap's `std::fmt`
+  or platform newline conventions. See `docs/proof_subset_sketches.md`.
+-/
+
 namespace EvalLadder.Obligations.ClapRs.Clap1972
 
 theorem version_line_grows (s : List Char) :

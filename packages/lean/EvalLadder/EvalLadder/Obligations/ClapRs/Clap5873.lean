@@ -36,6 +36,8 @@
 
   See `datasets/derived/proof_subset/manifest.jsonl` for the obligation
   metadata and `docs/proof_subset_policy.md` for the selection rubric.
+  Contrast the seven sketch rows in the same manifest, documented in
+  `docs/proof_subset_sketches.md`: this module is the non-sketch semantic anchor.
 -/
 
 namespace EvalLadder.Obligations.ClapRs.Clap5873

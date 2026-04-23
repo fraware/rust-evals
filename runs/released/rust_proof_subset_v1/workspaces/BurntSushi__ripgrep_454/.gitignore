@@ -1,0 +1,8 @@
+.*.swp
+tags
+target
+/grep/Cargo.lock
+/globset/Cargo.lock
+/ignore/Cargo.lock
+/termcolor/Cargo.lock
+/wincolor/Cargo.lock

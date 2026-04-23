@@ -6,6 +6,11 @@
   behaviour without conflating the two channels.
 -/
 
+/-
+  Reviewer fidelity: enum disjointness only; no connection to clap's settings
+  bitset or help pipeline. See `docs/proof_subset_sketches.md`.
+-/
+
 namespace EvalLadder.Obligations.ClapRs.Clap2008
 
 inductive HelpSurface

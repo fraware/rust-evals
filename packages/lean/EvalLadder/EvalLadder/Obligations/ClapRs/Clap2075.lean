@@ -7,6 +7,11 @@
   string descriptions of single-flag usages are pairwise distinct.
 -/
 
+/-
+  Reviewer fidelity: toy two-flag type; does not model clap usage synthesis,
+  wrapping, or blacklist validation order. See `docs/proof_subset_sketches.md`.
+-/
+
 namespace EvalLadder.Obligations.ClapRs.Clap2075
 
 inductive Flag | A | B

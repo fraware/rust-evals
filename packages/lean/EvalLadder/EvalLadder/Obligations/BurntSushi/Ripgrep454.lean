@@ -10,6 +10,11 @@
   preserve even when the chosen span varies.
 -/
 
+/-
+  Reviewer fidelity: generic `List` lemmas only; no model of ripgrep's matcher,
+  `-o` buffering, or line splitting. See `docs/proof_subset_sketches.md`.
+-/
+
 namespace EvalLadder.Obligations.BurntSushi.Ripgrep454
 
 variable {α : Type}

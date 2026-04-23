@@ -5,9 +5,15 @@
   exclusive with every other flag without manually listing them. At the
   semantic level, mutual exclusion is a symmetric binary relation on
   argument identities: if `a` cannot co-occur with `b`, then `b` cannot
-  co-occur with `a`. The upstream tests exercise concrete clap wiring; this
+  co-occur with `a`. The   upstream tests exercise concrete clap wiring; this
   module only pins the discrete relational law that any correct encoding of
   `conflicts_with_everything` must respect.
+-/
+
+/-
+  Reviewer fidelity: the sketch uses `Fin 4` and inequality as mutual exclusion;
+  it does not model clap's `ArgGroup`, override, or positional semantics. See
+  `docs/proof_subset_sketches.md` at the repository root.
 -/
 
 namespace EvalLadder.Obligations.ClapRs.Clap1624

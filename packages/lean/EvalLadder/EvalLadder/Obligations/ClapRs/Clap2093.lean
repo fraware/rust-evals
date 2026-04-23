@@ -6,6 +6,11 @@
   override must be distinguishable so clap can decide which string to render.
 -/
 
+/-
+  Reviewer fidelity: uses illustrative strings, not the verbatim default help
+  text from the pinned base commit. See `docs/proof_subset_sketches.md`.
+-/
+
 namespace EvalLadder.Obligations.ClapRs.Clap2093
 
 def defaultHelpBlurb : String :=

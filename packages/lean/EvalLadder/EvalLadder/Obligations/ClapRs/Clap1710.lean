@@ -8,6 +8,12 @@
   `"temp"`, which are not equal as string literals.
 -/
 
+/-
+  Reviewer fidelity: only proves inequality of two fixed string literals; it does
+  not model clap's subcommand trie, scoring, or error templates. See
+  `docs/proof_subset_sketches.md`.
+-/
+
 namespace EvalLadder.Obligations.ClapRs.Clap1710
 
 def candidateA : String := "test"
