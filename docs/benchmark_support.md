@@ -28,9 +28,15 @@ Run ingest from the CLI, for example:
 ```bash
 eval-ladder ingest verified \
   --manifest configs/evaluator/verified.toml \
-  --source   datasets/cache/swe_bench_verified.jsonl \
+  --source   datasets/cache/verified/swe_bench_verified.jsonl \
   --out-dir  benchmarks/verified/manifests
 ```
+
+Current repository ingest state:
+
+- `benchmarks/verified/manifests/`: 500 tasks (SWE-bench Verified)
+- `benchmarks/live/manifests/`: 500 tasks (SWE-bench-Live `verified` split)
+- `benchmarks/rust/manifests/`: 239 tasks (Multi-SWE-Bench-Rust mirror)
 
 ## SWE-Bench Verified
 
@@ -69,6 +75,10 @@ The Verified adapter:
 - Evaluator config: `configs/evaluator/live.toml`.
 - Task manifests: `benchmarks/live/manifests/`.
 
+The current ingest snapshot intentionally tracks the public
+`SWE-bench-Live/SWE-bench-Live` `verified` split mirror used by the
+bootstrap scripts, not the full 1,319-task aggregate.
+
 The Live adapter preserves:
 - Task timestamp (the upstream `created_at` becomes the manifest
   `created_at`, giving analysis code a stable freshness signal).
@@ -94,6 +104,11 @@ the Verified metadata shape when doing so would hide freshness. The
 - Adapter: `eval_ladder_benchmarks::rust_native`.
 - Evaluator config: `configs/evaluator/rust.toml`.
 - Task manifests: `benchmarks/rust/manifests/`.
+
+The repository currently ingests the public HF mirror with 239 exported
+records (`r1v3r/multi_SWE_Bench_Rust`), which is sufficient for the
+Rust-native pilot release and leaves room to grow to the full upstream
+release set as mirrors converge.
 
 The Rust adapter handles:
 - Cargo workspace resolution. `official_test_entrypoint` is

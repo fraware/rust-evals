@@ -470,10 +470,10 @@ cargo run --bin eval-ladder -- ingest verified \
 cargo run --bin eval-ladder -- evaluate batch \
   --input runs/released/agent_panel_v1/panel.jsonl \
   --levels L0,L1,L2,L3,L4 \
-  --config configs/evaluator/default.toml \
+  --config configs/evaluator/verified.toml \
   --out runs/released/agent_panel_v1/results/ \
-  --strengthening-spec datasets/derived/strengthening_specs/v1.json \
-  --policy configs/evaluator/policy.toml \
+  --strengthening-spec configs/strengthening/default.json \
+  --policy configs/policy/default_policy.toml \
   --obligations datasets/derived/proof_subset/manifest.jsonl \
   --lean-root packages/lean/EvalLadder
 
@@ -520,6 +520,35 @@ bundle hashes and matching summary content.
 
 Single-candidate drive remains available via `evaluate candidate`
 when needed for debugging.
+
+### Released Rust-native pilot path
+
+`runs/released/rust_pilot_v1/` is the shipped Docker-free pilot run.
+It uses the host Rust toolchain through `LocalProcessEngine`:
+
+```powershell
+.\target\debug\eval-ladder.exe evaluate batch `
+  --input "runs/released/rust_pilot_v1/panel.jsonl" `
+  --config "configs/evaluator/rust.toml" `
+  --levels L0,L1,L3,L4 `
+  --policy "configs/policy/rust_pilot.toml" `
+  --obligations "datasets/derived/proof_subset/manifest.jsonl" `
+  --lean-root "packages/lean/EvalLadder" `
+  --out "runs/released/rust_pilot_v1/results" `
+  --timeout-secs 3600 `
+  --deterministic-clock
+```
+
+Released summary (`batch_summary.json`):
+
+- L0: `L0_OFFICIAL_TIMEOUT`
+- L1: `L1_HARNESS_ERROR`
+- L3: `PASS`
+- L4: `L4_OBLIGATION_MET`
+
+Released integrity check (`verify_report.json`):
+
+- `1 ok / 0 invalid` (`trace: ok`, bundle hash sealed)
 
 ## SWE-bench Verified normalization (Milestone I)
 

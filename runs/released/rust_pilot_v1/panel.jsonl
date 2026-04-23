@@ -1,0 +1,1 @@
+{"bundle_name": "golden_agent__clap-rs__clap_5873", "candidate": "candidates/golden_agent/clap-rs__clap_5873.json", "entry_id": "golden_agent__clap-rs__clap_5873", "patch": "patches/golden_agent/clap-rs__clap_5873.diff", "task": "../../../benchmarks/rust/manifests/clap-rs__clap_5873.json", "workspace_template": "workspaces/clap-rs__clap_5873"}

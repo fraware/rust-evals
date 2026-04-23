@@ -94,3 +94,11 @@ The proof subset may ship in either of the two release modes declared in
 only artifact; in Mode 2 (code + new dataset) the manifest and its
 Croissant metadata live under
 `datasets/derived/proof_subset/croissant/`.
+
+## Changelog
+
+- 2026-04-23: seeded first production obligation
+  `obl.rust_swe_bench.clap_rs.clap_5873.ignore_errors_recovery_identity`
+  for task `clap-rs__clap_5873` (`state_machine_safety`), with Lean module
+  `packages/lean/EvalLadder/Obligations/ClapRs/Clap5873.lean` and
+  pass criterion `L4_OBLIGATION_MET`.

@@ -91,7 +91,7 @@ knowledge of containers, file systems, or networks.
    `benchmarks/<benchmark>/manifests/`.
 2. **Candidate submission.** External agents produce `CandidateResolution`
    records, either as single JSON files in `tasks/candidate_resolutions/` or
-   as a JSONL panel in `runs/released/<panel>/candidates.jsonl`.
+   as a JSONL panel in `runs/released/<panel>/panel.jsonl`.
 3. **Evaluate.** The CLI prepares a containerized run per candidate, applies
    the patch, runs level-specific evaluators, emits a trace, and writes an
    evidence bundle.

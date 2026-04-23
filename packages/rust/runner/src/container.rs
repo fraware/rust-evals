@@ -23,6 +23,108 @@ use std::time::{Duration, Instant};
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
 
+/// Environment variables preserved across [`LocalProcessEngine::exec`]'s
+/// `env_clear()` on every platform.
+///
+/// Keep this list small and deliberate. It exists because cargo, rustc,
+/// python, and node all need `PATH` to resolve binaries; without a
+/// curated allow-list we would either leak the full host environment
+/// (hurting reproducibility) or reject real toolchains outright
+/// (breaking native execution on Windows, where rustc fails to locate
+/// a writable temp dir otherwise).
+const PRESERVED_ENV_VARS: &[&str] = &["PATH"];
+
+/// Additional preserved variables on Windows hosts.
+///
+/// Grouped by purpose so callers can reason about the allow-list:
+///
+/// * `SystemRoot`, `PATHEXT`, `ComSpec`, `windir`, `ProgramFiles`,
+///   `ProgramFiles(x86)`, `ProgramData` -- baseline Windows process
+///   requirements; CreateProcess and the DLL loader consult several of
+///   these and will fail mysteriously if they are absent.
+/// * `TEMP`, `TMP` -- rustc, cl.exe, link.exe, and every cargo build
+///   script expect a writable scratch directory. Without these rustc
+///   falls back to `C:\WINDOWS` and fails with access denied.
+/// * `USERPROFILE`, `APPDATA`, `LOCALAPPDATA`, `HOMEDRIVE`, `HOMEPATH`,
+///   `USERNAME` -- consulted by cargo/rustup when resolving `~/.cargo/`
+///   and `~/.rustup/`, and by Windows APIs that need a user identity.
+/// * `CARGO_HOME`, `RUSTUP_HOME` -- explicit toolchain overrides.
+/// * `INCLUDE`, `LIB`, `LIBPATH`, `VCINSTALLDIR`, `VCToolsInstallDir`,
+///   `VCToolsVersion`, `VCToolsRedistDir`, `VSINSTALLDIR`, `DevEnvDir`,
+///   `WindowsSdkDir`, `WindowsSdkBinPath`, `WindowsSdkVerBinPath`,
+///   `WindowsSDKLibVersion`, `WindowsSDKVersion`,
+///   `UCRTVersion`, `UniversalCRTSdkDir`,
+///   `ExtensionSdkDir`, `Platform`, `CommandPromptType`, `VSCMD_ARG_*`
+///   -- populated by Visual Studio's `vcvars64.bat`. Required by cl.exe
+///   and link.exe to locate system headers, import libraries, and the
+///   Windows SDK. We forward the full group instead of only `INCLUDE`
+///   and `LIB` because the MSVC build tooling checks multiple of these
+///   variables (for example, some `build.rs` scripts inspect
+///   `VCToolsInstallDir` directly) and silently misbehaves when even
+///   one is missing.
+#[cfg(windows)]
+const PRESERVED_ENV_VARS_WINDOWS: &[&str] = &[
+    "SystemRoot",
+    "PATHEXT",
+    "ComSpec",
+    "windir",
+    "ProgramFiles",
+    "ProgramFiles(x86)",
+    "ProgramW6432",
+    "ProgramData",
+    "TEMP",
+    "TMP",
+    "USERPROFILE",
+    "APPDATA",
+    "LOCALAPPDATA",
+    "HOMEDRIVE",
+    "HOMEPATH",
+    "USERNAME",
+    "CARGO_HOME",
+    "RUSTUP_HOME",
+    "INCLUDE",
+    "LIB",
+    "LIBPATH",
+    "VCINSTALLDIR",
+    "VCToolsInstallDir",
+    "VCToolsVersion",
+    "VCToolsRedistDir",
+    "VCIDEInstallDir",
+    "VSINSTALLDIR",
+    "DevEnvDir",
+    "WindowsSdkDir",
+    "WindowsSdkBinPath",
+    "WindowsSdkVerBinPath",
+    "WindowsLibPath",
+    "WindowsSDKLibVersion",
+    "WindowsSDKVersion",
+    "WindowsSDK_ExecutablePath_x64",
+    "WindowsSDK_ExecutablePath_x86",
+    "UCRTVersion",
+    "UniversalCRTSdkDir",
+    "ExtensionSdkDir",
+    "FrameworkDir",
+    "FrameworkDir64",
+    "FrameworkVersion",
+    "FrameworkVersion64",
+    "Framework40Version",
+    "Platform",
+    "CommandPromptType",
+    "VSCMD_ARG_HOST_ARCH",
+    "VSCMD_ARG_TGT_ARCH",
+    "VSCMD_ARG_app_plat",
+    "VSCMD_VER",
+    "VisualStudioVersion",
+];
+
+/// Additional preserved variables on Unix hosts.
+///
+/// `HOME` and `TMPDIR` are consulted by virtually every toolchain; the
+/// cargo / rustup home overrides mirror the Windows entry so environments
+/// with non-default toolchain locations still work.
+#[cfg(unix)]
+const PRESERVED_ENV_VARS_UNIX: &[&str] = &["HOME", "TMPDIR", "CARGO_HOME", "RUSTUP_HOME", "USER"];
+
 /// Resource limits for a single run.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -211,17 +313,27 @@ impl ContainerEngine for LocalProcessEngine {
             .stderr(std::process::Stdio::piped())
             .env_clear();
 
-        // PATH must survive env_clear so named commands still resolve.
-        if let Ok(path) = std::env::var("PATH") {
-            cmd.env("PATH", path);
+        // Minimal environment preserved across `env_clear()`. Without
+        // these variables real toolchains (cargo, rustc, python, ...)
+        // cannot resolve binaries, a writable temp directory, or the
+        // user's toolchain installation. The allow list is conservative
+        // and platform-aware; callers can still override or extend it
+        // through `spec.env`.
+        for var in PRESERVED_ENV_VARS {
+            if let Ok(val) = std::env::var(var) {
+                cmd.env(var, val);
+            }
         }
         #[cfg(windows)]
-        {
-            if let Ok(systemroot) = std::env::var("SystemRoot") {
-                cmd.env("SystemRoot", systemroot);
+        for var in PRESERVED_ENV_VARS_WINDOWS {
+            if let Ok(val) = std::env::var(var) {
+                cmd.env(var, val);
             }
-            if let Ok(pathext) = std::env::var("PATHEXT") {
-                cmd.env("PATHEXT", pathext);
+        }
+        #[cfg(unix)]
+        for var in PRESERVED_ENV_VARS_UNIX {
+            if let Ok(val) = std::env::var(var) {
+                cmd.env(var, val);
             }
         }
         for EnvVar { name, value } in &spec.env {

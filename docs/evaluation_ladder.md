@@ -258,10 +258,10 @@ Driving the entire ladder across a panel of candidates is
 eval-ladder evaluate batch \
   --input runs/released/agent_panel_v1/panel.jsonl \
   --levels L0,L1,L2,L3,L4 \
-  --config configs/evaluator/default.toml \
+  --config configs/evaluator/verified.toml \
   --out runs/released/agent_panel_v1/results/ \
   --strengthening-spec datasets/derived/strengthening_specs/v1.json \
-  --policy configs/evaluator/policy.toml \
+  --policy configs/policy/default_policy.toml \
   --obligations datasets/derived/proof_subset/manifest.jsonl \
   --lean-root packages/lean/EvalLadder
 ```

@@ -1,0 +1,1 @@
+{"command":["cargo","--version"],"engine":"local","image_ref":"sha256:0000000000000000000000000000000000000000000000000000000000000000","patch_apply_outcome_l0":"noop","patch_apply_outcome_l1":"noop","resource_limits":{"wall_timeout":{"nanos":0,"secs":120}}}

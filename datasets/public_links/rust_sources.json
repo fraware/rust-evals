@@ -1,13 +1,20 @@
 {
-  "$comment": "Public source links for Rust-SWE-bench. This file is audited at release time; see docs/submission_checklist.md.",
+  "$comment": "Public source links for the Rust-language benchmark slice used by eval-ladder. The production mirror we ingest is Multi-SWE-Bench's Rust split on Hugging Face (239 tasks); it is publicly licensed and derived from real upstream Rust PRs. Prior releases referenced a placeholder URL that has since 404'd; the authoritative source is now the HF dataset below.",
   "benchmark_id": "rust_swe_bench",
   "release": "rust-v1",
   "sources": [
     {
       "kind": "dataset_release",
-      "name": "Rust-SWE-bench",
-      "url": "https://github.com/aliyun/rust-swe-bench",
-      "access": "public"
+      "name": "Multi-SWE-Bench (Rust split)",
+      "url": "https://huggingface.co/datasets/r1v3r/multi_SWE_Bench_Rust",
+      "access": "public",
+      "n_instances": 239,
+      "fetched_file": "all_instances.jsonl"
+    },
+    {
+      "kind": "paper",
+      "name": "Multi-SWE-Bench: A Multilingual Benchmark for Issue Resolving",
+      "url": "https://arxiv.org/abs/2504.02605"
     }
   ]
 }

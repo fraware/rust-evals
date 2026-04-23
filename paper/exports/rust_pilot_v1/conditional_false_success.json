@@ -1,0 +1,1 @@
+[{"level_from":"L0","level_to":"L1","n_failed_to":0,"n_passed_from":0,"rate":null},{"level_from":"L1","level_to":"L2","n_failed_to":0,"n_passed_from":0,"rate":null},{"level_from":"L2","level_to":"L3","n_failed_to":0,"n_passed_from":0,"rate":null},{"level_from":"L3","level_to":"L4","n_failed_to":0,"n_passed_from":1,"rate":0.0}]

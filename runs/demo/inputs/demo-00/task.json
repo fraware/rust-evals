@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "benchmark_id": "swe_bench_verified",
+  "task_id": "demo__milestone-k-demo-00",
+  "repo_name": "demo/milestone-k",
+  "issue_id": "1",
+  "issue_title": "Milestone K demo demo-00",
+  "issue_text": "Synthetic demo task; no upstream benchmark data is involved.",
+  "base_commit": "deadbeefcafe0000000000000000000000000000",
+  "environment_ref": "local:demo",
+  "official_test_entrypoint": "cargo --version",
+  "language": "rust",
+  "labels": [],
+  "created_at": "2025-01-01T00:00:00Z",
+  "source_url": "https://example.test/demo/milestone-k"
+}

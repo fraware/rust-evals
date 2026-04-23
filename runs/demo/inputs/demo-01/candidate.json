@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "candidate_id": "cd225230-c8e3-5e58-8d1c-61653e77f207",
+  "benchmark_id": "swe_bench_verified",
+  "task_id": "demo__milestone-k-demo-01",
+  "agent_id": "demo-harness",
+  "model_id": "demo-model",
+  "generation_mode": "single_shot",
+  "patch_format": "unified_diff",
+  "patch_ref": "demo://noop",
+  "generation_metadata": {
+    "temperature": 0.0,
+    "tool_configuration": {},
+    "context_mode": "file_level",
+    "repo_reproduction_used": false,
+    "random_seed": 0
+  },
+  "submitted_at": "2025-01-01T00:00:00Z"
+}

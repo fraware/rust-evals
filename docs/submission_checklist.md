@@ -25,11 +25,12 @@ Choose one mode per submission.
 
 - [ ] Executable repository at the tagged release commit. Tag pending.
 - [x] Documented CLI with worked examples in `docs/operational_runbook.md`.
-- [ ] Evidence bundles for the agent panel under `runs/released/`. Pending
-      panel curation.
-- [ ] Paper-ready CSVs and figures under `paper/exports/`. Pending panel
-      curation; the `analyze paper-export` pipeline is shipped and pinned
-      by `milestone_g_acceptance.rs` and `milestone_l_acceptance.rs`.
+- [x] Evidence bundles for a released panel under `runs/released/`.
+      `runs/released/rust_pilot_v1/results/` is sealed and
+      `verify run-dir` clean (`1 ok / 0 invalid`).
+- [x] Paper-ready CSV/JSON exports under `paper/exports/`.
+      `paper/exports/rust_pilot_v1/` is generated from the sealed pilot
+      run-dir via `analyze paper-export`.
 - [x] `docs/scientific_scope.md` up to date with the claim and scope.
 - [x] Reproducibility fixtures runnable without downloading full benchmarks.
       Milestone K ships `eval-ladder demo run` as the fifteen-minute
@@ -91,7 +92,7 @@ Choose one mode per submission.
       specification. Pinned by `just validate-schemas` /
       `eval-ladder schema validate`.
 - [ ] Tier 3 CI has passed on the tagged release commit. Release tag
-      pending.
+      still pending.
 
 ## Reviewer ergonomics
 

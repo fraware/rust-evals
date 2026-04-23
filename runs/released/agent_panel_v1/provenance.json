@@ -1,0 +1,152 @@
+{
+  "agents": [
+    {
+      "agent_id": "sweagent",
+      "generation_mode": "agent_loop",
+      "model_id": "claude-3-5-sonnet-20241022",
+      "slug": "20240620_sweagent_claude3.5sonnet"
+    },
+    {
+      "agent_id": "gru",
+      "generation_mode": "agent_loop",
+      "model_id": "gru-2024-08-24",
+      "slug": "20240824_gru"
+    },
+    {
+      "agent_id": "honeycomb",
+      "generation_mode": "agent_loop",
+      "model_id": "honeycomb-2024-08-20",
+      "slug": "20240820_honeycomb"
+    }
+  ],
+  "entries": [
+    {
+      "agent": "sweagent",
+      "patch_sha256": "d1572e34bbfb110b6cf4366d71e7755914c14538d66b0de8b33824698593ead4",
+      "status": "ok",
+      "task": "astropy__astropy-14309",
+      "upstream_resolved": true
+    },
+    {
+      "agent": "sweagent",
+      "patch_sha256": "5083565ea9b1f0eb531c87b0aab1eb52abf93a19281cad5d38a7b7d7ffc34820",
+      "status": "ok",
+      "task": "django__django-10554",
+      "upstream_resolved": false
+    },
+    {
+      "agent": "sweagent",
+      "patch_sha256": "cba0abf4ce2396988377803032d3e3a22a98c43bef2d1ffb4c5fff9bddd7846f",
+      "status": "ok",
+      "task": "django__django-11066",
+      "upstream_resolved": true
+    },
+    {
+      "agent": "sweagent",
+      "patch_sha256": "9045c7db7ab8ff82652e2ee4a93d1fd16d110ebdbee5ade3e49ee6092034e3fc",
+      "status": "ok",
+      "task": "django__django-11211",
+      "upstream_resolved": true
+    },
+    {
+      "agent": "sweagent",
+      "patch_sha256": "752ae88c51bf1f9ed2b5b5159b026a4eb56838dd1442b80a774ed1c95367cdd8",
+      "status": "ok",
+      "task": "astropy__astropy-14096",
+      "upstream_resolved": false
+    },
+    {
+      "agent": "gru",
+      "patch_sha256": "f7615b481159620dc1517d316e17a933b1f7315c8242c80ead29e69771f8398f",
+      "status": "ok",
+      "task": "astropy__astropy-14309",
+      "upstream_resolved": true
+    },
+    {
+      "agent": "gru",
+      "patch_sha256": "2a7a12d4315d8a1be1f1bdb487d52c200e1dc697480e59f04bbf335c70a5ab57",
+      "status": "ok",
+      "task": "django__django-10554",
+      "upstream_resolved": false
+    },
+    {
+      "agent": "gru",
+      "patch_sha256": "1f2d33c69a5f7c6e62cad75cbda09c19c405361e4892c4a99d5b46c7c6d07a58",
+      "status": "ok",
+      "task": "django__django-11066",
+      "upstream_resolved": true
+    },
+    {
+      "agent": "gru",
+      "patch_sha256": "97ab0571b50fca93fb752f0afbb9485869075092fec2f2a52fa9f332dbde8a31",
+      "status": "ok",
+      "task": "django__django-11211",
+      "upstream_resolved": false
+    },
+    {
+      "agent": "gru",
+      "patch_sha256": "764cb253b07f48a870877a532b7f1fd3834c514ec6b5e8f37ad557b653041e0f",
+      "status": "ok",
+      "task": "astropy__astropy-14096",
+      "upstream_resolved": false
+    },
+    {
+      "agent": "honeycomb",
+      "patch_sha256": "ccb2841aeaee26a5d4292ad7636ab44c087cd0e4abf32ef1adbb869418285ffa",
+      "status": "ok",
+      "task": "astropy__astropy-14309",
+      "upstream_resolved": true
+    },
+    {
+      "agent": "honeycomb",
+      "patch_sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+      "status": "ok",
+      "task": "django__django-10554",
+      "upstream_resolved": false
+    },
+    {
+      "agent": "honeycomb",
+      "patch_sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+      "status": "ok",
+      "task": "django__django-11066",
+      "upstream_resolved": false
+    },
+    {
+      "agent": "honeycomb",
+      "patch_sha256": "ff0d0820d7cc6da9cc9b1c8d78bc83e525596cdbc32be281ac6a6d3346616d03",
+      "status": "ok",
+      "task": "django__django-11211",
+      "upstream_resolved": true
+    },
+    {
+      "agent": "honeycomb",
+      "patch_sha256": "ef4f1d23180c4b8fc35ed201cf0c2da59abbddd2e11b1218bb341a9cc3b3f282",
+      "status": "ok",
+      "task": "astropy__astropy-14096",
+      "upstream_resolved": true
+    }
+  ],
+  "n_entries": 15,
+  "notes": [
+    "patch_sha256 is the raw SHA-256 of the per-(agent,task) patch.diff bytes.",
+    "candidate_id is UUIDv5(namespace=3f3e0b4e-...;name='agent|task|patch_sha256').",
+    "The panel currently assumes workspaces/verified_shared/ is provided at run time; it is NOT materialised here because L0/L1 for SWE-bench Verified requires Docker and per-task environment bootstrap."
+  ],
+  "panel_id": "agent_panel_v1",
+  "resolved_counts": {
+    "gru": 226,
+    "honeycomb": 203,
+    "sweagent": 168
+  },
+  "sources": {
+    "leaderboard": "https://github.com/SWE-bench/experiments/tree/main/evaluation/verified",
+    "patch_bucket": "https://swe-bench-submissions.s3.amazonaws.com/verified/"
+  },
+  "tasks": [
+    "astropy__astropy-14309",
+    "django__django-10554",
+    "django__django-11066",
+    "django__django-11211",
+    "astropy__astropy-14096"
+  ]
+}

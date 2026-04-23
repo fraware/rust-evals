@@ -97,6 +97,18 @@ The analysis crate must deterministically produce:
 See `docs/evaluation_ladder.md` and `packages/rust/analysis` for the full
 contract.
 
+## Current empirical status in-tree
+
+The repository now includes one sealed, verified Rust-native pilot run at
+`runs/released/rust_pilot_v1/results/` with matching paper exports under
+`paper/exports/rust_pilot_v1/`.
+
+- This is evidence that the full artifact chain (batch -> paper-export ->
+  verify) executes end-to-end on real upstream data.
+- It is not yet a panel-level scientific result because the sample size is
+  one task and L0/L1 timed out; final claims remain tied to the full panel
+  releases.
+
 ## Non-goals
 
 - Producing our own coding agents. We evaluate externally produced patches.

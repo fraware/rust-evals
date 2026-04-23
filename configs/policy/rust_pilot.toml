@@ -1,0 +1,58 @@
+# L3 policy for the Rust-SWE-bench pilot (rust_pilot_v1).
+#
+# This profile exists because the default verified policy assumes a
+# flat Python-style repository layout (top-level `src/`, `tests/`).
+# Cargo workspaces nest crate sources under `<crate>/src/`, so a
+# legitimate source edit like `clap_builder/src/parser/parser.rs`
+# would trip `PV_EDIT_SCOPE` against the default globs. This profile
+# relaxes the globs to cover workspace-nested sources and Cargo
+# manifests while keeping the same command, network, and trace
+# requirements.
+#
+# Policy semantics are defined by `eval_ladder_policy::Policy`; see
+# `docs/evaluation_ladder.md` for rule descriptions and
+# `schemas/policy.schema.json` for the stable on-disk shape.
+
+name = "rust_workspace_pilot_policy"
+network_mode = "disabled"
+requires_reproducible_seed = true
+max_modified_files = 8
+allow_generated_tests = false
+allow_dependency_lockfile_edits = false
+
+allowed_commands = ["cargo", "rustc", "rustup", "bash", "sh", "git", "python"]
+forbidden_commands = ["curl", "wget", "ssh", "scp", "sudo"]
+
+# Glob vocabulary matches the `globset` crate's extended-glob syntax.
+# `*` matches a single path segment, `**` matches any number of
+# segments. `tests/**` catches top-level Rust integration tests;
+# `*/tests/**` catches workspace-nested ones.
+allowed_edit_globs = [
+    "src/**",
+    "tests/**",
+    "*/src/**",
+    "*/tests/**",
+    "**/src/**",
+    "**/tests/**",
+    "Cargo.toml",
+    "*/Cargo.toml",
+    "**/Cargo.toml",
+]
+
+forbidden_edit_globs = [
+    ".github/**",
+    "docs/**",
+    "ci/**",
+    "secrets/**",
+    "Cargo.lock",
+    "*/Cargo.lock",
+    "**/Cargo.lock",
+]
+
+required_trace_events = [
+    "RunStarted",
+    "PatchApplied",
+    "OfficialEvalStarted",
+    "OfficialEvalFinished",
+    "RunFinished",
+]

@@ -1,0 +1,3 @@
+"agent_id","level","static_passed","static_evaluated","static_pass_rate","live_passed","live_evaluated","live_pass_rate","delta","ratio"
+"demo-harness","L0","2","2","1.000000","0","0","","",""
+"demo-harness","L1","2","2","1.000000","0","0","","",""

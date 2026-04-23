@@ -16,5 +16,11 @@ Subdirectories:
 - `rust/`: same layout, for Rust-SWE-bench. Cargo workspace metadata and
   lockfile policy live here.
 
+Current checked-in ingest snapshot:
+
+- `verified/manifests/`: 500 normalized tasks
+- `live/manifests/`: 500 normalized tasks (live `verified` split)
+- `rust/manifests/`: 239 normalized tasks
+
 Do not commit benchmark source archives here. Use `datasets/public_links/`
 to reference public releases.

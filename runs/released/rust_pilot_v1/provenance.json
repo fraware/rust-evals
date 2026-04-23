@@ -1,0 +1,21 @@
+{
+  "agent_id": "golden_agent",
+  "entries": [
+    {
+      "base_commit": "1d5c6798dc16db0b8130a0c73c8a5d818ec22131",
+      "patch_sha256": "babf0e4d20b5d85fdfebc982704959e284925bccf4f8a19c65fd366f60ef5cbf",
+      "patch_url": "https://github.com/clap-rs/clap/pull/5873.diff",
+      "pull_number": 5873,
+      "repo": "clap-rs/clap",
+      "task_id": "clap-rs__clap_5873"
+    }
+  ],
+  "model_id": "upstream_pr_diff",
+  "notes": [
+    "Candidate patches are the merged upstream PR diffs fetched via GitHub.",
+    "The candidate is therefore the 'golden agent' baseline: fix + tests match the reference merge.",
+    "Workspaces are pristine source trees exported at base_commit (no .git, no build artifacts).",
+    "Test runs are performed with the native cargo toolchain via LocalProcessEngine; no Docker is required for rust-native tasks."
+  ],
+  "pilot_id": "rust_pilot_v1"
+}

@@ -1,0 +1,1 @@
+{"artifacts":[],"candidate_id":"b6771184-01a2-5a0e-a305-e8eb944dfea9","evaluator_version":"0.1.0","finished_at":"2025-01-01T00:00:00.004Z","level":"L0","metrics":{"timed_out":true},"primary_reason":"L0_OFFICIAL_TIMEOUT","schema_version":1,"secondary_reasons":[],"started_at":"2025-01-01T00:00:00.003Z","status":"invalid","task_id":"clap-rs__clap_5873"}

@@ -49,9 +49,13 @@ paper/               # Tables, figures, and exports for the submission.
 ## Quick start
 
 Prerequisites: the Rust toolchain pinned by `rust-toolchain.toml`
-(1.86 at the time of writing), Python 3.10+, and a working Docker
-or OCI-compatible runtime for L1 onward. The Milestone K demo needs
-only the Rust toolchain.
+(1.86 at the time of writing) and Python 3.10+.
+
+Docker (or another OCI runtime) is required for the Python benchmark
+surfaces (`SWE-bench Verified`, `SWE-bench-Live`) because their official
+entrypoints run in benchmark-provided task images. Rust-native runs can
+execute L0/L1 with `LocalProcessEngine` directly on the host toolchain.
+The Milestone K demo needs only the Rust toolchain.
 
 ```bash
 # Build the Rust workspace.
@@ -87,10 +91,10 @@ eval-ladder ingest rust     --manifest configs/evaluator/rust.toml
 eval-ladder evaluate candidate \
   --candidate tasks/candidate_resolutions/<id>.json \
   --levels L0,L1,L2,L3 \
-  --config configs/evaluator/default.toml
+  --config configs/evaluator/verified.toml
 
 eval-ladder evaluate batch \
-  --input runs/released/agent_panel_v1/candidates.jsonl \
+  --input runs/released/agent_panel_v1/panel.jsonl \
   --levels L0,L1,L2,L3 \
   --out runs/released/agent_panel_v1/results/
 
@@ -111,6 +115,20 @@ eval-ladder analyze paper-export \
 eval-ladder verify run-dir --run-dir runs/released/agent_panel_v1/results/
 eval-ladder demo run --out runs/demo --tasks 2
 ```
+
+## Released run status
+
+The repository currently ships two release-track run directories:
+
+- `runs/released/agent_panel_v1/`: panel artifacts (candidates, patches,
+  panel metadata) for 3 agents x 5 Verified tasks. This release is
+  intentionally metadata-only until a Docker-backed reviewer run is
+  executed.
+- `runs/released/rust_pilot_v1/`: completed Rust-native pilot run for
+  `clap-rs__clap_5873` with:
+  - `evaluate batch` levels `L0,L1,L3,L4`,
+  - `analyze paper-export` output in `paper/exports/rust_pilot_v1/`,
+  - `verify run-dir` passing with `1 ok / 0 invalid`.
 
 ## Scientific scope and related work
 
