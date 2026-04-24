@@ -6,7 +6,8 @@ counts legacy bare-pytest targets, and validates non-negotiable fields
 (``benchmark_id``, ``environment_ref`` pattern, absence of ``..`` tokens).
 
 Use ``--strict`` in CI to fail on empty entrypoints, traversal-like ``..`` in
-the entrypoint string, malformed ``environment_ref``, or unknown benchmark id.
+the entrypoint string, malformed ``environment_ref``, unknown benchmark id, or
+(optional) a mismatch on ``--expect-manifest-count``.
 """
 
 from __future__ import annotations
@@ -92,10 +93,20 @@ def main() -> int:
         action="store_true",
         help="non-zero exit on structural violations",
     )
+    ap.add_argument(
+        "--expect-manifest-count",
+        type=int,
+        default=None,
+        metavar="N",
+        help="if set, require exactly N manifest JSON files (dataset drift guard)",
+    )
     args = ap.parse_args()
     manifest_dir = args.manifest_dir.resolve()
     if not manifest_dir.is_dir():
         raise SystemExit(f"manifest dir not found: {manifest_dir}")
+
+    if args.expect_manifest_count is not None and args.expect_manifest_count < 0:
+        raise SystemExit("--expect-manifest-count must be >= 0 when set")
 
     style_counts: Counter[str] = Counter()
     pytest_shape_counts: Counter[str] = Counter()
@@ -103,7 +114,13 @@ def main() -> int:
     n_manifests = 0
     legacy_bare_tasks: list[str] = []
 
-    for path in sorted(manifest_dir.glob("*.json")):
+    paths = sorted(manifest_dir.glob("*.json"))
+    if args.expect_manifest_count is not None and len(paths) != args.expect_manifest_count:
+        failures.append(
+            f"manifest count {len(paths)} != expected {args.expect_manifest_count}"
+        )
+
+    for path in paths:
         n_manifests += 1
         data: dict[str, Any] = json.loads(path.read_text(encoding="utf-8"))
         task_id = str(data.get("task_id", path.stem))
@@ -132,6 +149,7 @@ def main() -> int:
 
     report: dict[str, Any] = {
         "manifest_dir": str(manifest_dir.relative_to(REPO_ROOT)).replace("\\", "/"),
+        "expect_manifest_count": args.expect_manifest_count,
         "total_manifests": n_manifests,
         "entrypoint_style_counts": dict(sorted(style_counts.items())),
         "pytest_target_shape_counts": dict(sorted(pytest_shape_counts.items())),

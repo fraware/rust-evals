@@ -50,7 +50,10 @@ jobs:
             --min-tasks 8
 
       - name: Audit all Verified manifest entrypoints (500 tasks)
-        run: python ci/scripts/audit_verified_manifest_entrypoints.py --strict
+        run: |
+          python ci/scripts/audit_verified_manifest_entrypoints.py \
+            --strict \
+            --expect-manifest-count 500
 
   rust:
     name: Rust fmt / clippy / test / schema validate

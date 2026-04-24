@@ -54,7 +54,9 @@ python ci/scripts/preflight_verified_selectors.py \
 Structural audit of every checked-in Verified manifest (no workspaces required):
 
 ```bash
-python ci/scripts/audit_verified_manifest_entrypoints.py --strict
+python ci/scripts/audit_verified_manifest_entrypoints.py \
+  --strict \
+  --expect-manifest-count 500
 ```
 
 Materialize a stronger panel candidate:
