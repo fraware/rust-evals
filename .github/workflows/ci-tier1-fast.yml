@@ -20,7 +20,7 @@ env:
 
 jobs:
   evidence-tranche-scripts:
-    name: Evidence scripts (syntax + structural rust-proof gate)
+    name: Evidence tier-1 checks (Python scripts + gates)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
