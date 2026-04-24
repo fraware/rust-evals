@@ -120,7 +120,15 @@ eval-ladder evaluate candidate \
 eval-ladder evaluate batch \
   --input runs/released/agent_panel_v1/panel.jsonl \
   --levels L0,L1,L2,L3 \
+  --resume \
+  --jobs 2 \
   --out runs/released/agent_panel_v1/results/
+
+# Performance presets for large Rust panels:
+# --track fast   => L3,L4 semantic/policy loop
+# --track heavy  => L0,L1 execution gate
+# Shared rust incremental cache:
+# --rust-target-cache-root runs/released/<panel>/.cargo_target_cache
 
 eval-ladder prove-subset \
   --subset datasets/derived/proof_subset/manifest.jsonl \
@@ -165,7 +173,9 @@ The repository ships several release-track run directories under
   exports including `static_vs_live` (see `runs/released/live_panel_v1/README.md`).
 - `runs/released/rust_proof_subset_v1/`: eight-task golden panel aligned with
   `datasets/derived/proof_subset/manifest.jsonl` for end-to-end L0–L4 batch
-  design (`build_rust_proof_subset_panel.py`; see directory README and
+  design, with optimized rerun workflow (`--resume`, `--jobs`, adaptive
+  timeouts, shared `CARGO_TARGET_DIR`, fast/heavy tracks) documented in
+  the panel README (`build_rust_proof_subset_panel.py`; see directory README and
   `docs/proof_subset_sketches.md`).
 - `runs/released/rust_pilot_v1/`: Rust-native pilot run for
   `clap-rs__clap_5873` (`LocalProcessEngine`, no Docker) with
