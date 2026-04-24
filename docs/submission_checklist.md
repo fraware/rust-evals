@@ -122,7 +122,9 @@ Choose one mode per submission.
       tier-1 CI on the ``l0l1_pass_hunt_v1`` panel).
 - [x] Repo-wide Verified manifest entrypoint audit:
       `ci/scripts/audit_verified_manifest_entrypoints.py` (tier-1 CI, all 500
-      manifests).
+      manifests, count pinned with ``--expect-manifest-count 500``).
+- [x] Contract tests for pytest selector parsing:
+      `tests/python/test_verified_pytest_targets.py` (tier-2 ``pytest``).
 - [x] Execution playbook for remaining tranche:
       `docs/evidence_tranche_plan.md`.
 - [ ] Verified flagship gate passing (non-degenerate, low harness error).
