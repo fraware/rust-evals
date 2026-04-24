@@ -1,0 +1,3 @@
+"benchmark_id","level","primary_reason","count"
+"rust_swe_bench","L0","L0_OFFICIAL_FAIL","6"
+"rust_swe_bench","L1","L1_HARNESS_ERROR","6"

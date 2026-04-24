@@ -1,0 +1,48 @@
+    Blocking waiting for file lock on package cache
+   Compiling proc-macro2 v1.0.86
+   Compiling unicode-ident v1.0.12
+   Compiling windows_x86_64_msvc v0.52.6
+   Compiling anstyle v1.0.8
+   Compiling utf8parse v0.2.2
+   Compiling colorchoice v1.0.1
+   Compiling is_terminal_polyfill v1.70.0
+   Compiling serde v1.0.204
+   Compiling clap_lex v0.7.4 (C:\Users\mateo\AppData\Local\Temp\.tmpzEsII1\workspace_l0\clap_lex)
+   Compiling heck v0.5.0
+   Compiling strsim v0.11.1
+   Compiling cfg-if v1.0.0
+   Compiling serde_json v1.0.120
+   Compiling itoa v1.0.11
+   Compiling ryu v1.0.18
+   Compiling escargot v0.5.13
+   Compiling anstyle-parse v0.2.4
+   Compiling once_cell v1.19.0
+   Compiling log v0.4.22
+   Compiling memchr v2.7.4
+   Compiling fastrand v2.1.0
+   Compiling wait-timeout v0.2.0
+error: linking with `link.exe` failed: exit code: 1104
+  |
+  = note: "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\bin\\HostX64\\x64\\link.exe" "/NOLOGO" "C:\\Users\\mateo\\AppData\\Local\\Temp\\rustcSyc1SY\\symbols.o" "<2 object files omitted>" "C:\\Users\\mateo\\.rustup\\toolchains\\1.85.1-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib/{libstd-dd4d958a589b8369.rlib,libpanic_unwind-cb2db93379901c65.rlib,libwindows_targets-7697387b268cad71.rlib,librustc_demangle-76bf97b28a1c31af.rlib,libstd_detect-cf208682c297bb04.rlib,libhashbrown-0ac328c647abb98d.rlib,librustc_std_workspace_alloc-952aad82420bc70e.rlib,libunwind-8d0e003976ccc114.rlib,libcfg_if-142dbc66b4ebc10e.rlib,liballoc-67816722dd9fe4c0.rlib,librustc_std_workspace_core-00800893fc4d47ac.rlib,libcore-a965a0d7d3d42ff3.rlib,libcompiler_builtins-34b1b72af8949504.rlib}" "kernel32.lib" "kernel32.lib" "advapi32.lib" "ntdll.lib" "userenv.lib" "ws2_32.lib" "dbghelp.lib" "/defaultlib:msvcrt" "/NXCOMPAT" "/OUT:C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmpzEsII1\\workspace_l0\\runs/released/rust_proof_subset_v1/results_fast\\.cargo_target_cache\\clap-rs__clap\\1d5c6798dc16db0b8130a0c73c8a5d818ec22131\\debug\\build\\serde_json-0454aa4eb12a2ef6\\build_script_build-0454aa4eb12a2ef6.exe" "/OPT:REF,NOICF" "/DEBUG" "/PDBALTPATH:%_PDB%" "/NATVIS:C:\\Users\\mateo\\.rustup\\toolchains\\1.85.1-x86_64-pc-windows-msvc\\lib\\rustlib\\etc\\intrinsic.natvis" "/NATVIS:C:\\Users\\mateo\\.rustup\\toolchains\\1.85.1-x86_64-pc-windows-msvc\\lib\\rustlib\\etc\\liballoc.natvis" "/NATVIS:C:\\Users\\mateo\\.rustup\\toolchains\\1.85.1-x86_64-pc-windows-msvc\\lib\\rustlib\\etc\\libcore.natvis" "/NATVIS:C:\\Users\\mateo\\.rustup\\toolchains\\1.85.1-x86_64-pc-windows-msvc\\lib\\rustlib\\etc\\libstd.natvis"
+  = note: some arguments are omitted. use `--verbose` to show all linker arguments
+  = note: LINK : fatal error LNK1104: cannot open file 'C:\Users\mateo\AppData\Local\Temp\.tmpzEsII1\workspace_l0\runs\released\rust_proof_subset_v1\results_fast\.cargo_target_cache\clap-rs__clap\1d5c6798dc16db0b8130a0c73c8a5d818ec22131\debug\build\serde_json-0454aa4eb12a2ef6\build_script_build-0454aa4eb12a2ef6.exe'␍
+          
+
+error: linking with `link.exe` failed: exit code: 1104
+  |
+  = note: "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\bin\\HostX64\\x64\\link.exe" "/NOLOGO" "C:\\Users\\mateo\\AppData\\Local\\Temp\\rustcuwrBWb\\symbols.o" "<2 object files omitted>" "C:\\Users\\mateo\\.rustup\\toolchains\\1.85.1-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib/{libstd-dd4d958a589b8369.rlib,libpanic_unwind-cb2db93379901c65.rlib,libwindows_targets-7697387b268cad71.rlib,librustc_demangle-76bf97b28a1c31af.rlib,libstd_detect-cf208682c297bb04.rlib,libhashbrown-0ac328c647abb98d.rlib,librustc_std_workspace_alloc-952aad82420bc70e.rlib,libunwind-8d0e003976ccc114.rlib,libcfg_if-142dbc66b4ebc10e.rlib,liballoc-67816722dd9fe4c0.rlib,librustc_std_workspace_core-00800893fc4d47ac.rlib,libcore-a965a0d7d3d42ff3.rlib,libcompiler_builtins-34b1b72af8949504.rlib}" "kernel32.lib" "kernel32.lib" "advapi32.lib" "ntdll.lib" "userenv.lib" "ws2_32.lib" "dbghelp.lib" "/defaultlib:msvcrt" "/NXCOMPAT" "/OUT:C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmpzEsII1\\workspace_l0\\runs/released/rust_proof_subset_v1/results_fast\\.cargo_target_cache\\clap-rs__clap\\1d5c6798dc16db0b8130a0c73c8a5d818ec22131\\debug\\build\\windows_x86_64_msvc-3609a33dfe794827\\build_script_build-3609a33dfe794827.exe" "/OPT:REF,NOICF" "/DEBUG" "/PDBALTPATH:%_PDB%" "/NATVIS:C:\\Users\\mateo\\.rustup\\toolchains\\1.85.1-x86_64-pc-windows-msvc\\lib\\rustlib\\etc\\intrinsic.natvis" "/NATVIS:C:\\Users\\mateo\\.rustup\\toolchains\\1.85.1-x86_64-pc-windows-msvc\\lib\\rustlib\\etc\\liballoc.natvis" "/NATVIS:C:\\Users\\mateo\\.rustup\\toolchains\\1.85.1-x86_64-pc-windows-msvc\\lib\\rustlib\\etc\\libcore.natvis" "/NATVIS:C:\\Users\\mateo\\.rustup\\toolchains\\1.85.1-x86_64-pc-windows-msvc\\lib\\rustlib\\etc\\libstd.natvis"
+  = note: some arguments are omitted. use `--verbose` to show all linker arguments
+  = note: LINK : fatal error LNK1104: cannot open file 'C:\Users\mateo\AppData\Local\Temp\.tmpzEsII1\workspace_l0\runs\released\rust_proof_subset_v1\results_fast\.cargo_target_cache\clap-rs__clap\1d5c6798dc16db0b8130a0c73c8a5d818ec22131\debug\build\windows_x86_64_msvc-3609a33dfe794827\build_script_build-3609a33dfe794827.exe'␍
+          
+
+error: linking with `link.exe` failed: exit code: 1104
+  |
+  = note: "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\bin\\HostX64\\x64\\link.exe" "/NOLOGO" "C:\\Users\\mateo\\AppData\\Local\\Temp\\rustcnEUNUg\\symbols.o" "<3 object files omitted>" "C:\\Users\\mateo\\.rustup\\toolchains\\1.85.1-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib/{libstd-dd4d958a589b8369.rlib,libpanic_unwind-cb2db93379901c65.rlib,libwindows_targets-7697387b268cad71.rlib,librustc_demangle-76bf97b28a1c31af.rlib,libstd_detect-cf208682c297bb04.rlib,libhashbrown-0ac328c647abb98d.rlib,librustc_std_workspace_alloc-952aad82420bc70e.rlib,libunwind-8d0e003976ccc114.rlib,libcfg_if-142dbc66b4ebc10e.rlib,liballoc-67816722dd9fe4c0.rlib,librustc_std_workspace_core-00800893fc4d47ac.rlib,libcore-a965a0d7d3d42ff3.rlib,libcompiler_builtins-34b1b72af8949504.rlib}" "kernel32.lib" "kernel32.lib" "advapi32.lib" "ntdll.lib" "userenv.lib" "ws2_32.lib" "dbghelp.lib" "/defaultlib:msvcrt" "/NXCOMPAT" "/OUT:C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmpzEsII1\\workspace_l0\\runs/released/rust_proof_subset_v1/results_fast\\.cargo_target_cache\\clap-rs__clap\\1d5c6798dc16db0b8130a0c73c8a5d818ec22131\\debug\\build\\proc-macro2-0172f66dd036543c\\build_script_build-0172f66dd036543c.exe" "/OPT:REF,NOICF" "/DEBUG" "/PDBALTPATH:%_PDB%" "/NATVIS:C:\\Users\\mateo\\.rustup\\toolchains\\1.85.1-x86_64-pc-windows-msvc\\lib\\rustlib\\etc\\intrinsic.natvis" "/NATVIS:C:\\Users\\mateo\\.rustup\\toolchains\\1.85.1-x86_64-pc-windows-msvc\\lib\\rustlib\\etc\\liballoc.natvis" "/NATVIS:C:\\Users\\mateo\\.rustup\\toolchains\\1.85.1-x86_64-pc-windows-msvc\\lib\\rustlib\\etc\\libcore.natvis" "/NATVIS:C:\\Users\\mateo\\.rustup\\toolchains\\1.85.1-x86_64-pc-windows-msvc\\lib\\rustlib\\etc\\libstd.natvis"
+  = note: some arguments are omitted. use `--verbose` to show all linker arguments
+  = note: LINK : fatal error LNK1104: cannot open file 'C:\Users\mateo\AppData\Local\Temp\.tmpzEsII1\workspace_l0\runs\released\rust_proof_subset_v1\results_fast\.cargo_target_cache\clap-rs__clap\1d5c6798dc16db0b8130a0c73c8a5d818ec22131\debug\build\proc-macro2-0172f66dd036543c\build_script_build-0172f66dd036543c.exe'␍
+          
+
+error: could not compile `proc-macro2` (build script) due to 1 previous error
+warning: build failed, waiting for other jobs to finish...
+error: could not compile `windows_x86_64_msvc` (build script) due to 1 previous error
+error: could not compile `serde_json` (build script) due to 1 previous error

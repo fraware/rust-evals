@@ -1,0 +1,52 @@
+warning: An explicit [[test]] section is specified in Cargo.toml which currently
+disables Cargo from automatically inferring other test targets.
+This inference behavior will change in the Rust 2018 edition and the following
+files will be included as a test target:
+
+* tests\hay.rs
+* tests\workdir.rs
+
+This is likely to break cargo build or cargo test as these files may not be
+ready to be compiled as a test target today. You can future-proof yourself
+and disable this warning by adding `autotests = false` to your [package]
+section. You may also move the files to a location where Cargo would not
+automatically infer them to be a target, such as in subfolders.
+
+For more information on this warning you can consult
+https://github.com/rust-lang/cargo/issues/5330
+warning: no edition set: defaulting to the 2015 edition while the latest is 2024
+    Blocking waiting for file lock on package cache
+   Compiling winapi-build v0.1.1
+   Compiling winapi v0.2.8
+   Compiling libc v0.2.21
+   Compiling void v1.0.2
+   Compiling utf8-ranges v1.0.0
+   Compiling log v0.3.7
+   Compiling regex-syntax v0.4.0
+   Compiling ansi_term v0.9.0
+   Compiling strsim v0.6.0
+   Compiling lazy_static v0.2.6
+   Compiling unicode-segmentation v1.1.0
+   Compiling vec_map v0.7.0
+   Compiling bitflags v0.8.2
+   Compiling unicode-width v0.1.4
+   Compiling fnv v1.0.5
+   Compiling cfg-if v0.1.0
+   Compiling unreachable v0.1.1
+   Compiling memchr v1.0.1
+   Compiling crossbeam v0.2.10
+   Compiling encoding_rs v0.5.0
+   Compiling env_logger v0.4.2
+   Compiling num_cpus v1.3.0
+   Compiling bytecount v0.1.6
+   Compiling kernel32-sys v0.2.2
+   Compiling aho-corasick v0.6.3
+error: linking with `link.exe` failed: exit code: 1104
+  |
+  = note: "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\bin\\HostX64\\x64\\link.exe" "/NOLOGO" "C:\\Users\\mateo\\AppData\\Local\\Temp\\rustcbKFFfU\\symbols.o" "<2 object files omitted>" "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmpivMYVI\\workspace_l0\\runs\\released\\rust_proof_subset_v1\\results_fast\\.cargo_target_cache\\BurntSushi__ripgrep\\c50b8b4125dc7f1181944dd92d0aca97c2450421\\debug\\deps/{libbuild-c7fea8145bce54d1.rlib}" "C:\\Users\\mateo\\.rustup\\toolchains\\1.85.1-x86_64-pc-windows-msvc\\lib\\rustlib\\x86_64-pc-windows-msvc\\lib/{libstd-dd4d958a589b8369.rlib,libpanic_unwind-cb2db93379901c65.rlib,libwindows_targets-7697387b268cad71.rlib,librustc_demangle-76bf97b28a1c31af.rlib,libstd_detect-cf208682c297bb04.rlib,libhashbrown-0ac328c647abb98d.rlib,librustc_std_workspace_alloc-952aad82420bc70e.rlib,libunwind-8d0e003976ccc114.rlib,libcfg_if-142dbc66b4ebc10e.rlib,liballoc-67816722dd9fe4c0.rlib,librustc_std_workspace_core-00800893fc4d47ac.rlib,libcore-a965a0d7d3d42ff3.rlib,libcompiler_builtins-34b1b72af8949504.rlib}" "kernel32.lib" "kernel32.lib" "advapi32.lib" "ntdll.lib" "userenv.lib" "ws2_32.lib" "dbghelp.lib" "/defaultlib:msvcrt" "/NXCOMPAT" "/OUT:C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmpivMYVI\\workspace_l0\\runs/released/rust_proof_subset_v1/results_fast\\.cargo_target_cache\\BurntSushi__ripgrep\\c50b8b4125dc7f1181944dd92d0aca97c2450421\\debug\\build\\kernel32-sys-0b58fb4ce8c05a72\\build_script_build-0b58fb4ce8c05a72.exe" "/OPT:REF,NOICF" "/DEBUG" "/PDBALTPATH:%_PDB%" "/NATVIS:C:\\Users\\mateo\\.rustup\\toolchains\\1.85.1-x86_64-pc-windows-msvc\\lib\\rustlib\\etc\\intrinsic.natvis" "/NATVIS:C:\\Users\\mateo\\.rustup\\toolchains\\1.85.1-x86_64-pc-windows-msvc\\lib\\rustlib\\etc\\liballoc.natvis" "/NATVIS:C:\\Users\\mateo\\.rustup\\toolchains\\1.85.1-x86_64-pc-windows-msvc\\lib\\rustlib\\etc\\libcore.natvis" "/NATVIS:C:\\Users\\mateo\\.rustup\\toolchains\\1.85.1-x86_64-pc-windows-msvc\\lib\\rustlib\\etc\\libstd.natvis"
+  = note: some arguments are omitted. use `--verbose` to show all linker arguments
+  = note: LINK : fatal error LNK1104: cannot open file 'C:\Users\mateo\AppData\Local\Temp\.tmpivMYVI\workspace_l0\runs\released\rust_proof_subset_v1\results_fast\.cargo_target_cache\BurntSushi__ripgrep\c50b8b4125dc7f1181944dd92d0aca97c2450421\debug\build\kernel32-sys-0b58fb4ce8c05a72\build_script_build-0b58fb4ce8c05a72.exe'␍
+          
+
+error: could not compile `kernel32-sys` (build script) due to 1 previous error
+warning: build failed, waiting for other jobs to finish...
