@@ -41,6 +41,16 @@ def _classify_bucket(text: str) -> str:
         return "empty_stderr"
     if "no module named pytest" in lower:
         return "missing_pytest"
+    if "cannot import name '_c_internal_utils'" in lower or (
+        "matplotlib" in lower and "partially initialized module" in lower
+    ):
+        return "matplotlib_native_extension_unbuilt"
+    if "sklearn" in lower and "__check_build" in lower:
+        return "sklearn_native_build_missing"
+    if "astropy" in lower and (
+        "extension modules" in lower or "file not found:" in lower
+    ):
+        return "astropy_extension_or_selector"
     if "numpy.ndarray size changed" in lower or "binary incompatibility" in lower:
         return "numpy_abi_mismatch"
     if "error: not found:" in lower or "no match in any of" in lower:

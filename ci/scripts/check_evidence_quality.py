@@ -109,6 +109,11 @@ def check_verified(args: argparse.Namespace) -> int:
         failures,
     )
 
+    per_agent = {
+        agent: {"l0_pass": s["l0_pass"], "l1_pass": s["l1_pass"]}
+        for agent, s in sorted(by_agent.items())
+    }
+
     l3_fail_reasons = [
         _reason(_level(e, "l3"))
         for e in entries
@@ -137,6 +142,7 @@ def check_verified(args: argparse.Namespace) -> int:
             "l1_harness_error_rate": harness_rate,
             "nonzero_agents": nonzero_agents,
             "distinct_agent_pass_vectors": len(distinct_score_vectors),
+            "per_agent_l0_l1_pass": per_agent,
             "l3_dominant_reason_share": dominant_share,
             "l3_reason_counts": dict(reason_counts),
         },
@@ -187,6 +193,10 @@ def check_live(args: argparse.Namespace) -> int:
         failures,
     )
 
+    live_rates_by_level: dict[str, list[float]] = defaultdict(list)
+    for row in static_vs_live:
+        live_rates_by_level[str(row["level"])].append(float(row["live_pass_rate"]))
+
     report = {
         "mode": "live",
         "ok": not failures,
@@ -198,6 +208,9 @@ def check_live(args: argparse.Namespace) -> int:
             "negative_delta_rows": negative_delta_rows,
             "total_rows": len(static_vs_live),
             "informative_rank_rows": len(informative_rank_rows),
+            "live_pass_rate_unique_counts_by_level": {
+                lev: len(set(rates)) for lev, rates in live_rates_by_level.items()
+            },
         },
     }
     _print_report(report)
