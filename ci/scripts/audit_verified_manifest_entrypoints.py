@@ -43,6 +43,13 @@ _ENV_REF_RE = re.compile(
 )
 
 
+def _path_for_report(path: Path) -> str:
+    try:
+        return str(path.resolve().relative_to(REPO_ROOT)).replace("\\", "/")
+    except ValueError:
+        return str(path.resolve())
+
+
 def _classify_entrypoint_style(entrypoint: str) -> str:
     s = entrypoint.strip()
     if not s:
@@ -148,7 +155,7 @@ def main() -> int:
                 legacy_bare_tasks.append(task_id)
 
     report: dict[str, Any] = {
-        "manifest_dir": str(manifest_dir.relative_to(REPO_ROOT)).replace("\\", "/"),
+        "manifest_dir": _path_for_report(manifest_dir),
         "expect_manifest_count": args.expect_manifest_count,
         "total_manifests": n_manifests,
         "entrypoint_style_counts": dict(sorted(style_counts.items())),

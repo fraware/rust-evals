@@ -43,6 +43,13 @@ pytest_file_paths = _vpt.pytest_file_paths
 is_explicit_pytest_path = _vpt.is_explicit_pytest_path
 
 
+def _path_for_report(path: Path) -> str:
+    try:
+        return str(path.resolve().relative_to(REPO_ROOT)).replace("\\", "/")
+    except ValueError:
+        return str(path.resolve())
+
+
 def _resolve_pytest_file(workspace_dir: Path, rel: str) -> tuple[bool, Path]:
     """Return (found, resolved_path) where *resolved_path* is the first match."""
     rel = rel.replace("\\", "/").strip()
@@ -201,12 +208,8 @@ def main() -> int:  # noqa: PLR0912
         tasks_out.append(
             {
                 "task_id": task_id,
-                "manifest": str(manifest_path.relative_to(REPO_ROOT)).replace(
-                    "\\", "/"
-                ),
-                "workspace_dir": str(workspace_dir.relative_to(REPO_ROOT)).replace(
-                    "\\", "/"
-                ),
+                "manifest": _path_for_report(manifest_path),
+                "workspace_dir": _path_for_report(workspace_dir),
                 "workspace_present": ws_present,
                 "official_test_entrypoint": entrypoint,
                 "pytest_file_paths": paths,
@@ -216,7 +219,7 @@ def main() -> int:  # noqa: PLR0912
         )
 
     report = {
-        "panel": str(panel_path.relative_to(REPO_ROOT)).replace("\\", "/"),
+        "panel": _path_for_report(panel_path),
         "summary": {
             "tasks": len(tasks_out),
             "tasks_all_selector_files_ok": ok,
