@@ -19,8 +19,8 @@ warnings when they cannot be resolved to a file.
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import json
-import re
 import sys
 from pathlib import Path
 from typing import Any
@@ -28,8 +28,19 @@ from typing import Any
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
 
-def _is_explicit_pytest_path(rel: str) -> bool:
-    return "/" in rel or rel.endswith(".py")
+def _load_verified_pytest_targets() -> Any:
+    path = Path(__file__).resolve().parent / "verified_pytest_targets.py"
+    spec = importlib.util.spec_from_file_location("verified_pytest_targets", path)
+    if spec is None or spec.loader is None:
+        raise RuntimeError("cannot load verified_pytest_targets")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+_vpt = _load_verified_pytest_targets()
+pytest_file_paths = _vpt.pytest_file_paths
+is_explicit_pytest_path = _vpt.is_explicit_pytest_path
 
 
 def _resolve_pytest_file(workspace_dir: Path, rel: str) -> tuple[bool, Path]:
@@ -37,7 +48,7 @@ def _resolve_pytest_file(workspace_dir: Path, rel: str) -> tuple[bool, Path]:
     rel = rel.replace("\\", "/").strip()
     ws = workspace_dir.resolve()
     candidates = [ws / rel, ws / f"{rel}.py"]
-    if not _is_explicit_pytest_path(rel):
+    if not is_explicit_pytest_path(rel):
         candidates.extend([ws / "sympy" / f"{rel}.py", ws / "sympy" / rel])
     for p in candidates:
         try:
@@ -48,42 +59,6 @@ def _resolve_pytest_file(workspace_dir: Path, rel: str) -> tuple[bool, Path]:
         if rp.is_file():
             return True, rp
     return False, (ws / rel).resolve()
-
-
-def _pytest_file_paths(entrypoint: str) -> list[str]:
-    """Return repo-relative pytest file paths (no ``::`` node suffix)."""
-    ep = entrypoint.strip()
-    lowered = ep.lower()
-    if "pytest" not in lowered:
-        return []
-    for prefix in ("python -m pytest ", "python3 -m pytest ", "pytest "):
-        if lowered.startswith(prefix):
-            ep = ep[len(prefix) :].lstrip()
-            break
-    else:
-        return []
-
-    paths: list[str] = []
-    for tok in ep.split():
-        if tok.startswith("-"):
-            continue
-        if "=" in tok and not tok.endswith(".py"):
-            # e.g. -k foo=bar — skip
-            continue
-        if "::" in tok or tok.endswith(".py") or "/" in tok:
-            file_part = tok.split("::", 1)[0].strip()
-            if file_part and not file_part.startswith("-"):
-                paths.append(file_part.replace("\\", "/"))
-        elif re.match(r"^test_[A-Za-z0-9_]+$", tok):
-            # Legacy SWE entrypoints: ``python -m pytest test_issue_11617``
-            paths.append(tok)
-    seen: set[str] = set()
-    out: list[str] = []
-    for p in paths:
-        if p not in seen:
-            seen.add(p)
-            out.append(p)
-    return out
 
 
 def _load_panel_entries(panel_path: Path) -> list[dict[str, Any]]:
@@ -128,7 +103,7 @@ def _task_rows(panel_path: Path) -> list[tuple[str, Path, Path]]:
     return rows
 
 
-def main() -> int:
+def main() -> int:  # noqa: PLR0912
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument(
         "--panel",
@@ -163,7 +138,7 @@ def main() -> int:
     for task_id, manifest_path, workspace_dir in _task_rows(panel_path):
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
         entrypoint = str(manifest.get("official_test_entrypoint", ""))
-        paths = _pytest_file_paths(entrypoint)
+        paths = pytest_file_paths(entrypoint)
         ws_present = workspace_dir.is_dir()
         checks: list[dict[str, Any]] = []
         task_errors = 0
@@ -191,7 +166,7 @@ def main() -> int:
         else:
             for rel in paths:
                 exists, resolved = _resolve_pytest_file(workspace_dir, rel)
-                explicit = _is_explicit_pytest_path(rel)
+                explicit = is_explicit_pytest_path(rel)
                 if not exists:
                     note = (
                         "missing_explicit_pytest_path"

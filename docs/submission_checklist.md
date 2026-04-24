@@ -120,6 +120,9 @@ Choose one mode per submission.
 - [x] Preflight of ``official_test_entrypoint`` selectors vs materialized
       workspaces: `ci/scripts/preflight_verified_selectors.py` (also enforced in
       tier-1 CI on the ``l0l1_pass_hunt_v1`` panel).
+- [x] Repo-wide Verified manifest entrypoint audit:
+      `ci/scripts/audit_verified_manifest_entrypoints.py` (tier-1 CI, all 500
+      manifests).
 - [x] Execution playbook for remaining tranche:
       `docs/evidence_tranche_plan.md`.
 - [ ] Verified flagship gate passing (non-degenerate, low harness error).

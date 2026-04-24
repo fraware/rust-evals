@@ -51,6 +51,12 @@ python ci/scripts/preflight_verified_selectors.py \
   --min-tasks 8
 ```
 
+Structural audit of every checked-in Verified manifest (no workspaces required):
+
+```bash
+python ci/scripts/audit_verified_manifest_entrypoints.py --strict
+```
+
 Materialize a stronger panel candidate:
 
 ```bash
@@ -195,3 +201,6 @@ Tier 3 and release-tag workflow must pass on the same tag.
   runs ``ruff check ci/scripts`` together with the existing Python package lint.
 - The same tier-1 job runs ``preflight_verified_selectors.py --strict`` on the
   tracked ``l0l1_pass_hunt_v1`` panel so selector regression is caught in CI.
+- It also runs ``audit_verified_manifest_entrypoints.py --strict`` over all
+  ``benchmarks/verified/manifests`` JSON files (entrypoint shape, environment
+  ref pattern, no ``..`` in commands).

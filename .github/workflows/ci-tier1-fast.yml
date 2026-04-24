@@ -49,6 +49,9 @@ jobs:
             --strict \
             --min-tasks 8
 
+      - name: Audit all Verified manifest entrypoints (500 tasks)
+        run: python ci/scripts/audit_verified_manifest_entrypoints.py --strict
+
   rust:
     name: Rust fmt / clippy / test / schema validate
     runs-on: ubuntu-latest
