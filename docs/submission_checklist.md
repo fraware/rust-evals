@@ -125,7 +125,8 @@ Choose one mode per submission.
       manifests, count pinned with ``--expect-manifest-count 500``).
 - [x] Contract tests for pytest selector parsing:
       `tests/python/test_verified_pytest_targets.py` (tier-2 ``pytest``).
-- [x] Subprocess CLI tests for preflight, audit, and ``check_evidence_quality``:
+- [x] Subprocess CLI tests for preflight, audit, diagnose, triage, and all
+      ``check_evidence_quality`` modes:
       `tests/python/test_evidence_cli_scripts.py`.
 - [x] Execution playbook for remaining tranche:
       `docs/evidence_tranche_plan.md`.

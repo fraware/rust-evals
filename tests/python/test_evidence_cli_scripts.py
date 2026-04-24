@@ -8,6 +8,8 @@ import sys
 from pathlib import Path
 from typing import Any
 
+import pytest
+
 
 def _run_script(
     repo_root: Path, script_rel: str, args: list[str]
@@ -266,3 +268,232 @@ def test_check_evidence_quality_verified_minimal_pass(
     report = json.loads(proc.stdout)
     assert report["ok"] is True
     assert report["metrics"]["distinct_agent_pass_vectors"] == 2
+
+
+def _live_row(
+    agent_id: str,
+    level: str,
+    live_pass_rate: float,
+    *,
+    delta: float = -0.05,
+) -> dict[str, Any]:
+    return {
+        "agent_id": agent_id,
+        "level": level,
+        "delta": delta,
+        "live_evaluated": 10,
+        "live_pass_rate": live_pass_rate,
+        "live_passed": 1,
+        "ratio": 0.5,
+        "static_evaluated": 10,
+        "static_pass_rate": 0.5,
+        "static_passed": 5,
+    }
+
+
+def test_diagnose_batch_summary_emits_metrics_and_warnings(
+    repo_root: Path, tmp_path: Path
+) -> None:
+    summary_path = tmp_path / "batch_summary.json"
+    summary = {
+        "entries": [
+            {
+                "entry_id": f"a{i}__t",
+                "status": "ok",
+                "levels": {
+                    "l0": {"status": "pass", "primary_reason": "PASS"},
+                    "l1": {
+                        "status": "fail",
+                        "primary_reason": "L1_HARNESS_ERROR",
+                    },
+                    "l3": {"status": "fail", "primary_reason": "PV_EDIT_SCOPE"},
+                },
+            }
+            for i in range(3)
+        ]
+    }
+    summary_path.write_text(json.dumps(summary) + "\n", encoding="utf-8")
+
+    proc = _run_script(
+        repo_root,
+        "ci/scripts/diagnose_batch_summary.py",
+        ["--summary", str(summary_path), "--l1-harness-threshold", "0.10"],
+    )
+    assert proc.returncode == 0, proc.stderr + proc.stdout
+    out = json.loads(proc.stdout)
+    assert out["total_entries"] == 3
+    assert out["metrics"]["l1_harness_error_rate"] == pytest.approx(1.0)
+    assert len(out["warnings"]) >= 1
+
+
+def test_triage_l1_harness_errors_clusters_stderr(
+    repo_root: Path, tmp_path: Path
+) -> None:
+    run_dir = tmp_path / "triage_run"
+    run_dir.mkdir()
+    bundle = "gru__demo__task-1"
+    (run_dir / bundle).mkdir(parents=True)
+    (run_dir / bundle / "stderr.log").write_text(
+        "ERROR: not found: /workspace/t.py::missing\n", encoding="utf-8"
+    )
+    summary = {
+        "entries": [
+            {
+                "bundle_name": bundle,
+                "status": "ok",
+                "levels": {
+                    "l1": {
+                        "status": "fail",
+                        "primary_reason": "L1_HARNESS_ERROR",
+                    },
+                },
+            }
+        ]
+    }
+    (run_dir / "batch_summary.json").write_text(
+        json.dumps(summary) + "\n", encoding="utf-8"
+    )
+
+    proc = _run_script(
+        repo_root,
+        "ci/scripts/triage_l1_harness_errors.py",
+        ["--run-dir", str(run_dir)],
+    )
+    assert proc.returncode == 0, proc.stderr + proc.stdout
+    out = json.loads(proc.stdout)
+    assert out["l1_harness_error_entries"] == 1
+    assert out["distinct_stderr_sha256"] >= 1
+    assert "pytest_selector_not_found" in out["bucket_bundle_counts"]
+
+
+def test_check_evidence_quality_live_minimal_pass(
+    repo_root: Path, tmp_path: Path
+) -> None:
+    export = tmp_path / "paper_live"
+    export.mkdir()
+    static_vs_live = [
+        _live_row("gru", "L0", 0.10),
+        _live_row("honeycomb", "L0", 0.25),
+        _live_row("sweagent", "L0", 0.18),
+        _live_row("gru", "L1", 0.40),
+        _live_row("honeycomb", "L1", 0.55),
+        _live_row("sweagent", "L1", 0.48),
+    ]
+    (export / "static_vs_live.json").write_text(
+        json.dumps(static_vs_live) + "\n", encoding="utf-8"
+    )
+    rank_stability = [
+        {
+            "kendall_tau_b": 0.33,
+            "level_a": "L0",
+            "level_b": "L1",
+            "n_agents": 3,
+        }
+    ]
+    (export / "rank_stability.json").write_text(
+        json.dumps(rank_stability) + "\n", encoding="utf-8"
+    )
+
+    proc = _run_script(
+        repo_root,
+        "ci/scripts/check_evidence_quality.py",
+        ["live", "--paper-export-dir", str(export), "--min-agents", "3"],
+    )
+    assert proc.returncode == 0, proc.stderr + proc.stdout
+    report = json.loads(proc.stdout)
+    assert report["ok"] is True
+    assert report["metrics"]["non_tied_levels"] >= 1
+
+
+def test_check_evidence_quality_l2_minimal_pass(
+    repo_root: Path, tmp_path: Path
+) -> None:
+    run_dir = tmp_path / "l2_run"
+    run_dir.mkdir()
+    summary = {
+        "entries": [
+            {
+                "entry_id": "gru__t1",
+                "status": "ok",
+                "levels": {
+                    "l1": {"status": "pass", "primary_reason": "PASS"},
+                    "l2": {"status": "fail", "primary_reason": "L2_AUG_TESTS_FAIL"},
+                },
+            },
+            {
+                "entry_id": "honeycomb__t2",
+                "status": "ok",
+                "levels": {
+                    "l1": {"status": "pass", "primary_reason": "PASS"},
+                    "l2": {"status": "fail", "primary_reason": "L2_TIMEOUT"},
+                },
+            },
+        ]
+    }
+    (run_dir / "batch_summary.json").write_text(
+        json.dumps(summary) + "\n", encoding="utf-8"
+    )
+
+    proc = _run_script(
+        repo_root,
+        "ci/scripts/check_evidence_quality.py",
+        [
+            "l2",
+            "--run-dir",
+            str(run_dir),
+            "--min-l1-passed-from",
+            "2",
+            "--min-l2-failures",
+            "2",
+            "--min-l2-reason-families",
+            "2",
+        ],
+    )
+    assert proc.returncode == 0, proc.stderr + proc.stdout
+    report = json.loads(proc.stdout)
+    assert report["ok"] is True
+
+
+def test_check_evidence_quality_rust_proof_structural_pass(
+    repo_root: Path, tmp_path: Path
+) -> None:
+    run_dir = tmp_path / "rust_run"
+    run_dir.mkdir()
+    summary = {
+        "entries": [
+            {
+                "entry_id": f"golden_agent__task{i}",
+                "status": "ok",
+                "levels": {
+                    "l0": {"status": "fail", "primary_reason": "L0_OFFICIAL_FAIL"},
+                    "l1": {"status": "fail", "primary_reason": "L1_HARNESS_ERROR"},
+                    "l3": {"status": "pass", "primary_reason": "PASS"},
+                    "l4": {"status": "pass", "primary_reason": "L4_OBLIGATION_MET"},
+                },
+            }
+            for i in range(2)
+        ]
+    }
+    (run_dir / "batch_summary.json").write_text(
+        json.dumps(summary) + "\n", encoding="utf-8"
+    )
+
+    proc = _run_script(
+        repo_root,
+        "ci/scripts/check_evidence_quality.py",
+        [
+            "rust-proof",
+            "--run-dir",
+            str(run_dir),
+            "--expected-entries",
+            "2",
+            "--min-l3-pass-l4-fail",
+            "0",
+            "--min-all-level-pass",
+            "0",
+        ],
+    )
+    assert proc.returncode == 0, proc.stderr + proc.stdout
+    report = json.loads(proc.stdout)
+    assert report["ok"] is True
+    assert report["metrics"]["ok_entries"] == 2
