@@ -200,17 +200,15 @@ Tier 3 and release-tag workflow must pass on the same tag.
 - Verified ``results_verified_v4`` has been observed to fail the harness-rate
   and distinct-agent gates until L1 stderr clusters above are driven down; see
   ``runs/released/agent_panel_v3/README.md`` for triage commands.
-- On every push/PR, ``ci-tier1-fast`` runs ``python -m compileall`` on
-  ``ci/scripts`` plus the structural ``rust-proof`` gate on tracked
-  ``runs/released/rust_proof_subset_v1/results_fast``; ``ci-tier2-medium``
-  runs ``ruff check ci/scripts`` together with the existing Python package lint.
-- The same tier-1 job runs ``preflight_verified_selectors.py --strict`` on the
-  tracked ``l0l1_pass_hunt_v1`` panel so selector regression is caught in CI.
-- It also runs ``audit_verified_manifest_entrypoints.py --strict`` over all
-  ``benchmarks/verified/manifests`` JSON files (entrypoint shape, environment
-  ref pattern, no ``..`` in commands).
-- **Local parity** with that tier-1 evidence job (no Rust build): run
-  ``python ci/scripts/run_evidence_tier1_checks.py`` from the repository root.
-  When you change the GitHub workflow steps, update that script in lockstep.
+- On every push/PR, ``ci-tier1-fast`` runs
+  ``python ci/scripts/run_evidence_tier1_checks.py`` (``compileall`` on
+  ``ci/scripts``, structural ``rust-proof`` on tracked
+  ``runs/released/rust_proof_subset_v1/results_fast``, ``preflight_verified_selectors.py --strict``
+  on ``l0l1_pass_hunt_v1``, ``audit_verified_manifest_entrypoints.py --strict``
+  over 500 manifests). ``ci-tier2-medium`` runs ``ruff check ci/scripts``
+  together with the existing Python package lint.
+- **Local** runs use the same command from the repository root (no Rust build).
+  Add or reorder checks in ``ci/scripts/run_evidence_tier1_checks.py`` only;
+  the workflow invokes that script so CI and local stay aligned.
 - ``diagnose_batch_summary.py`` supports ``--fail-on-warnings`` (exit code 2)
   for strict automation when harness or L3 dominance thresholds are exceeded.

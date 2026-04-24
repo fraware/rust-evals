@@ -31,29 +31,8 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Syntax-check CI Python utilities
-        run: python -m compileall -q ci/scripts
-
-      - name: Structural rust-proof gate (tracked results_fast)
-        run: |
-          python ci/scripts/check_evidence_quality.py rust-proof \
-            --run-dir runs/released/rust_proof_subset_v1/results_fast \
-            --expected-entries 8 \
-            --min-l3-pass-l4-fail 0 \
-            --min-all-level-pass 0
-
-      - name: Preflight Verified pytest selectors (tracked l0l1 panel)
-        run: |
-          python ci/scripts/preflight_verified_selectors.py \
-            --panel runs/released/l0l1_pass_hunt_v1/panel.jsonl \
-            --strict \
-            --min-tasks 8
-
-      - name: Audit all Verified manifest entrypoints (500 tasks)
-        run: |
-          python ci/scripts/audit_verified_manifest_entrypoints.py \
-            --strict \
-            --expect-manifest-count 500
+      - name: Evidence tier-1 checks (compileall + gates + preflight + audit)
+        run: python ci/scripts/run_evidence_tier1_checks.py
 
   rust:
     name: Rust fmt / clippy / test / schema validate

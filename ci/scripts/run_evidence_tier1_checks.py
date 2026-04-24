@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
-"""Run the same Python evidence checks as ``ci-tier1-fast`` (evidence-tranche-scripts).
+"""Single entrypoint for the ``evidence-tranche-scripts`` job in ``ci-tier1-fast``.
 
-This is a local parity entrypoint: syntax ``compileall``, structural rust-proof
-gate, Verified preflight on the tracked ``l0l1_pass_hunt_v1`` panel, and the
-full Verified manifest audit. It does **not** run Rust fmt/clippy/tests.
+Runs, in order: ``compileall`` on ``ci/scripts``, structural ``rust-proof`` gate
+on tracked ``runs/released/rust_proof_subset_v1/results_fast``, Verified
+preflight on ``runs/released/l0l1_pass_hunt_v1/panel.jsonl``, and the full
+Verified manifest audit (500 manifests). It does **not** run Rust
+fmt/clippy/tests.
 
 Execute from the repository root::
 
