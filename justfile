@@ -69,7 +69,7 @@ ci-tier1: fmt-check clippy test validate-schemas
 
 ci-tier2: ci-tier1 py-lint py-test
 
-# ci-tier3 is invoked only from ci/github/workflows/ci-tier3-heavy.yml
+# ci-tier3 is invoked only from .github/workflows/ci-tier3-heavy.yml
 # because it runs container-backed fixtures.
 
 # ---------------------------------------------------------------------------

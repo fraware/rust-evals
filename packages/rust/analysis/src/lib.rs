@@ -37,5 +37,8 @@ pub use bundle_loader::{
     load_bundle_dir, BundleLoadError, LoadOptions, TaskCategoryLookup, CANDIDATE_RESOLUTION_FILE,
     LEVEL_RESULT_FILES,
 };
-pub use input::{AnalysisInput, AnalysisInputRow};
+pub use input::{
+    project_analysis_mode, AnalysisInput, AnalysisInputRow, AnalysisMode,
+    CUMULATIVE_PREREQUISITE_NOT_MET,
+};
 pub use paper_export::{write_paper_exports, PaperExport, PaperExportManifest, PaperExportSet};

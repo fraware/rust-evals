@@ -1,0 +1,4 @@
+"agent_id","level","static_passed","static_evaluated","static_pass_rate","live_passed","live_evaluated","live_pass_rate","delta","ratio"
+"golden","L0","0","5","0.000000","0","0","","",""
+"golden","L1","0","5","0.000000","0","0","","",""
+"golden","L2","0","5","0.000000","0","0","","",""

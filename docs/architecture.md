@@ -508,7 +508,9 @@ Key abstractions:
   emitted file plus `schema_version`, `evaluator_version`, and
   `input_row_count`. This is the single audit surface that
   downstream tooling (paper builds, CI drift detection) hashes.
-  `PAPER_EXPORT_SCHEMA_VERSION` is `2` since Milestone L added the
+  `PAPER_EXPORT_SCHEMA_VERSION` is `3` (`2` from Milestone L's
+  static-vs-live files, then `3` for explicit `analysis_mode`
+  provenance in `manifest.json`).
   `static_vs_live` pair.
 
 The Milestone G acceptance invariants - "bundles load into a
@@ -542,7 +544,8 @@ Design points:
   to avoid conveying a relative comparison that has no informational
   content.
 - **Schema bump.** `PAPER_EXPORT_SCHEMA_VERSION` is bumped from `1`
-  to `2`. The manifest remains sorted by `files[].path`, so
+  to `2`, then to `3` for the `analysis_mode` field. The manifest
+  remains sorted by `files[].path`, so
   filename-based readers are forward-compatible; hash-based readers
   re-pin.
 

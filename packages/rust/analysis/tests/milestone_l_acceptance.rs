@@ -30,12 +30,12 @@ use eval_ladder_analysis::{
     load_bundle_dir,
     paper_export::{write_paper_exports, PAPER_EXPORT_SCHEMA_VERSION},
     static_vs_live::static_vs_live,
-    LoadOptions, CANDIDATE_RESOLUTION_FILE,
+    AnalysisMode, LoadOptions, CANDIDATE_RESOLUTION_FILE,
 };
 use eval_ladder_core::{
-    BenchmarkId, CandidateId, CandidateResolution, ContextMode, EvaluationLevel, EvaluationResult,
-    EvaluationStatus, GenerationMetadata, GenerationMode, PatchFormat, TaskId, EVALUATOR_VERSION,
-    SCHEMA_VERSION,
+    candidate::ContextMode, BenchmarkId, CandidateId, CandidateResolution, EvaluationLevel,
+    EvaluationResult, EvaluationStatus, GenerationMetadata, GenerationMode, PatchFormat, TaskId,
+    EVALUATOR_VERSION, SCHEMA_VERSION,
 };
 use tempfile::TempDir;
 
@@ -178,7 +178,7 @@ fn seed_run_dir() -> TempDir {
 fn milestone_l_static_vs_live_quantifies_overstatement() {
     let run = seed_run_dir();
     let input = load_bundle_dir(run.path(), &LoadOptions::default()).unwrap();
-    let table = static_vs_live(&input);
+    let table = static_vs_live(&input, AnalysisMode::Raw);
 
     // Exactly one row per (agent, level) with data.
     let by_key: BTreeMap<(String, EvaluationLevel), _> = table
@@ -216,15 +216,15 @@ fn milestone_l_paper_export_emits_static_vs_live_files() {
     let out = TempDir::new().unwrap();
 
     let input = load_bundle_dir(run.path(), &LoadOptions::default()).unwrap();
-    let manifest = write_paper_exports(&input, out.path()).unwrap();
+    let manifest = write_paper_exports(&input, out.path(), AnalysisMode::Cumulative).unwrap();
 
     assert_eq!(
         manifest.schema_version, PAPER_EXPORT_SCHEMA_VERSION,
         "Milestone L bumps paper-export schema_version"
     );
     assert_eq!(
-        PAPER_EXPORT_SCHEMA_VERSION, 2,
-        "schema bump must move from 1 -> 2 (readers re-pin intentionally)"
+        PAPER_EXPORT_SCHEMA_VERSION, 3,
+        "schema bump must move from 2 -> 3 for analysis_mode"
     );
 
     for name in ["static_vs_live.csv", "static_vs_live.json"] {

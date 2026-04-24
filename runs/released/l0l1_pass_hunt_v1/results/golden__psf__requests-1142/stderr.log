@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 189, in _run_module_as_main
+  File "<frozen runpy>", line 112, in _get_module_details
+  File "C:\Users\mateo\miniconda3\Lib\site-packages\swebench\__init__.py", line 3, in <module>
+    from swebench.collect.build_dataset import main as build_dataset
+  File "C:\Users\mateo\miniconda3\Lib\site-packages\swebench\collect\build_dataset.py", line 9, in <module>
+    from swebench.collect.utils import (
+    ...<3 lines>...
+    )
+  File "C:\Users\mateo\miniconda3\Lib\site-packages\swebench\collect\utils.py", line 6, in <module>
+    import requests
+  File "C:\Users\mateo\AppData\Local\Temp\.tmpVW7txs\workspace_l0\requests\__init__.py", line 52, in <module>
+    from . import utils
+  File "C:\Users\mateo\AppData\Local\Temp\.tmpVW7txs\workspace_l0\requests\utils.py", line 12, in <module>
+    import cgi
+ModuleNotFoundError: No module named 'cgi'

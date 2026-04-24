@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "augmented": {
+    "commands": [
+      {
+        "id": "aug_warnings_as_errors",
+        "command": [
+          "python",
+          "-W",
+          "error",
+          "-c",
+          "import pkg_resources"
+        ],
+        "workdir": null,
+        "env": [],
+        "expected_exit_code": null,
+        "flaky": false
+      }
+    ],
+    "retry_flaky": false
+  },
+  "regression": {
+    "commands": [
+      {
+        "id": "regression_import_sanity",
+        "command": [
+          "python",
+          "-c",
+          "import pkg_resources"
+        ],
+        "workdir": null,
+        "env": [],
+        "expected_exit_code": null,
+        "flaky": false
+      }
+    ]
+  },
+  "differential": null,
+  "property_fuzz": null
+}

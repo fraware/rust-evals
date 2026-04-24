@@ -148,7 +148,7 @@ convenient:
 | `taxonomy.json`                      | Canonical JSON   | same                                                      |
 | `static_vs_live.csv`                 | CSV (RFC 4180)   | `eval_ladder_analysis::static_vs_live::static_vs_live` (Milestone L) |
 | `static_vs_live.json`                | Canonical JSON   | same                                                      |
-| `manifest.json`                      | Canonical JSON   | `PaperExportManifest` (audit index, `schema_version = 2`) |
+| `manifest.json`                      | Canonical JSON   | `PaperExportManifest` (audit index, `schema_version = 3`) |
 
 Every `*.csv` field is RFC-4180 quoted and floats use six-digit fixed
 precision so diffs are stable across platforms. Every `*.json` file
@@ -163,7 +163,7 @@ acceptance test in
 invariant.
 
 The manifest's `schema_version` is the single breaking-change knob for
-this artifact. It is currently `2`:
+this artifact. It is currently `3`:
 
 - `1` (Milestone G): `score_descent`, `conditional_false_success`,
   `rank_stability`, `taxonomy`.
@@ -171,6 +171,9 @@ this artifact. It is currently `2`:
   keyed on the manifest hash must re-pin; readers keyed on filenames
   or `files[].path` remain forward-compatible because the manifest
   stays sorted.
+- `3` (P0 cumulative headline semantics): adds `analysis_mode` to
+  `manifest.json` and allows exports to declare whether tables were
+  generated from `raw` or `cumulative` semantics.
 
 #### `static_vs_live` (Milestone L)
 

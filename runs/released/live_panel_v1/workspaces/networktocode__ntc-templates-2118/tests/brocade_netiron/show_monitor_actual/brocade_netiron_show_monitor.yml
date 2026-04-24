@@ -1,0 +1,14 @@
+---
+parsed_sample:
+  - inputmirror: "1/13"
+    monitoredport: "1/10"
+    outputmirror: "1/13"
+  - inputmirror: "1/13"
+    monitoredport: "1/11"
+    outputmirror: "1/13"
+  - inputmirror: "1/13"
+    monitoredport: "2/10"
+    outputmirror: "1/13"
+  - inputmirror: "1/13"
+    monitoredport: "2/11"
+    outputmirror: "1/13"

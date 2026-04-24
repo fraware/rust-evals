@@ -30,21 +30,19 @@ use serde::{Deserialize, Serialize};
 use thiserror::Error;
 
 use crate::csv::write_table;
-use crate::input::AnalysisInput;
+use crate::input::{AnalysisInput, AnalysisMode};
 use crate::rank_stability::{rank_stability, RankStabilityRow};
-use crate::score_descent::{
-    conditional_false_success, score_descent, ConditionalFalseSuccessRow, ScoreDescentRow,
-};
+use crate::score_descent::{self, score_descent, ConditionalFalseSuccessRow, ScoreDescentRow};
 use crate::static_vs_live::{static_vs_live, StaticVsLiveRow};
 use crate::taxonomy::{taxonomy_counts, TaxonomyRow};
 
 /// Schema version for [`PaperExportManifest`].
 ///
 /// Bumped to `2` in Milestone L when the `static_vs_live.{csv,json}`
-/// pair was added to the manifest. Readers keyed on exact manifest
-/// hashes must re-pin; readers keyed on filenames or schema fields
-/// remain forward-compatible.
-pub const PAPER_EXPORT_SCHEMA_VERSION: u32 = 2;
+/// pair was added to the manifest. Bumped to `3` when
+/// `analysis_mode` was added to make raw-vs-cumulative semantics
+/// explicit in exported artifacts.
+pub const PAPER_EXPORT_SCHEMA_VERSION: u32 = 3;
 
 /// Output file names.
 const SCORE_DESCENT_CSV: &str = "score_descent.csv";
@@ -111,6 +109,8 @@ pub struct PaperExportManifest {
     pub evaluator_version: EvaluatorVersion,
     /// Row count of the input passed to [`write_paper_exports`].
     pub input_row_count: u64,
+    /// Analysis semantics used to produce every table in this export set.
+    pub analysis_mode: AnalysisMode,
     /// One entry per emitted file.
     pub files: Vec<PaperExport>,
 }
@@ -122,6 +122,7 @@ pub struct PaperExportManifest {
 pub fn write_paper_exports(
     input: &AnalysisInput,
     out_dir: &Path,
+    mode: AnalysisMode,
 ) -> Result<PaperExportManifest, PaperExportError> {
     fs::create_dir_all(out_dir).map_err(|e| PaperExportError::Io {
         path: out_dir.to_path_buf(),
@@ -131,7 +132,7 @@ pub fn write_paper_exports(
     let mut pairs: Vec<PaperExportPair> = Vec::with_capacity(5);
 
     // Score descent.
-    let score_descent_rows = score_descent(input);
+    let score_descent_rows = score_descent(input, mode);
     pairs.push(write_csv_and_json(
         out_dir,
         SCORE_DESCENT_CSV,
@@ -161,7 +162,7 @@ pub fn write_paper_exports(
     )?);
 
     // Conditional false-success rate.
-    let cfs_rows = conditional_false_success(input);
+    let cfs_rows = score_descent::conditional_false_success_with_mode(input, mode);
     pairs.push(write_csv_and_json(
         out_dir,
         CONDITIONAL_CSV,
@@ -186,7 +187,7 @@ pub fn write_paper_exports(
     )?);
 
     // Rank stability.
-    let rank_rows = rank_stability(input);
+    let rank_rows = rank_stability(input, mode);
     pairs.push(write_csv_and_json(
         out_dir,
         RANK_STABILITY_CSV,
@@ -222,7 +223,7 @@ pub fn write_paper_exports(
     )?);
 
     // Static-vs-live comparison (Milestone L). Headline paper table.
-    let svl_rows = static_vs_live(input);
+    let svl_rows = static_vs_live(input, mode);
     pairs.push(write_csv_and_json(
         out_dir,
         STATIC_VS_LIVE_CSV,
@@ -267,6 +268,7 @@ pub fn write_paper_exports(
         schema_version: PAPER_EXPORT_SCHEMA_VERSION,
         evaluator_version: EVALUATOR_VERSION,
         input_row_count: row_count,
+        analysis_mode: mode,
         files,
     };
 
@@ -387,8 +389,8 @@ mod tests {
         let input = fixture_input();
         let tmp_a = TempDir::new().unwrap();
         let tmp_b = TempDir::new().unwrap();
-        let m_a = write_paper_exports(&input, tmp_a.path()).unwrap();
-        let m_b = write_paper_exports(&input, tmp_b.path()).unwrap();
+        let m_a = write_paper_exports(&input, tmp_a.path(), AnalysisMode::Cumulative).unwrap();
+        let m_b = write_paper_exports(&input, tmp_b.path(), AnalysisMode::Cumulative).unwrap();
         assert_eq!(m_a, m_b, "manifest manifests must match");
         for f in &m_a.files {
             let a = fs::read(tmp_a.path().join(&f.path)).unwrap();
@@ -404,7 +406,7 @@ mod tests {
     fn paper_export_writes_every_expected_file() {
         let input = fixture_input();
         let tmp = TempDir::new().unwrap();
-        write_paper_exports(&input, tmp.path()).unwrap();
+        write_paper_exports(&input, tmp.path(), AnalysisMode::Cumulative).unwrap();
         for f in [
             SCORE_DESCENT_CSV,
             SCORE_DESCENT_JSON,

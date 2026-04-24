@@ -22,8 +22,8 @@ use tracing::{debug, info};
 
 use crate::adapter::{BenchmarkAdapter, BenchmarkAdapterError, IngestOptions, IngestReport};
 use crate::normalize::{
-    issue_id_from_instance_id, issue_title_from_problem_statement, parse_created_at,
-    VERIFIED_SOURCE_URL,
+    issue_id_from_instance_id, issue_title_from_problem_statement, official_pytest_entrypoint,
+    parse_created_at, VERIFIED_SOURCE_URL,
 };
 use crate::raw::{apply_filters, read_jsonl, RawSweBenchRecord};
 use crate::writer::ManifestWriter;
@@ -122,10 +122,7 @@ pub fn record_to_task(
     let created_at = parse_created_at(&raw.instance_id, raw, ingest_now)?;
 
     let environment_ref = verified_environment_ref(&raw.instance_id);
-    let official_test_entrypoint = format!(
-        "python -m swebench.harness.run_evaluation --instance_ids {}",
-        raw.instance_id
-    );
+    let official_test_entrypoint = official_pytest_entrypoint(raw);
 
     let mut labels: Vec<String> = Vec::new();
     if let Some(v) = raw.version.as_deref() {
@@ -215,6 +212,8 @@ mod tests {
             t.environment_ref,
             "swebench/sweb.eval.x86_64.astropy__astropy-12907:latest"
         );
+        assert!(t.official_test_entrypoint.starts_with("python -m pytest"));
+        assert!(t.official_test_entrypoint.contains("python -m pytest a b"));
         assert!(t.labels.contains(&"upstream_version:4.3".into()));
         assert!(t.labels.contains(&"fail_to_pass_count:2".into()));
         assert!(t.labels.contains(&"pass_to_pass_count:1".into()));

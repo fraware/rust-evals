@@ -1,0 +1,8 @@
+ImportError while loading conftest '/workspace/lib/matplotlib/tests/conftest.py'.
+lib/matplotlib/__init__.py:1003: in <module>
+    rcParams = rc_params()
+lib/matplotlib/__init__.py:867: in rc_params
+    return rc_params_from_file(matplotlib_fname(), fail_on_error)
+lib/matplotlib/__init__.py:688: in matplotlib_fname
+    raise RuntimeError("Could not find matplotlibrc file; your Matplotlib "
+E   RuntimeError: Could not find matplotlibrc file; your Matplotlib install is broken

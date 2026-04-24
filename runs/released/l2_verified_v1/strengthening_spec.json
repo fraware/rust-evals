@@ -1,0 +1,38 @@
+{
+  "augmented": {
+    "commands": [
+      {
+        "command": [
+          "python",
+          "-c",
+          "import sys; sys.exit(1)"
+        ],
+        "env": [],
+        "expected_exit_code": null,
+        "flaky": false,
+        "id": "aug_forced_failure",
+        "workdir": null
+      }
+    ],
+    "retry_flaky": false
+  },
+  "differential": null,
+  "property_fuzz": null,
+  "regression": {
+    "commands": [
+      {
+        "command": [
+          "python",
+          "-c",
+          "import sys; sys.exit(0)"
+        ],
+        "env": [],
+        "expected_exit_code": null,
+        "flaky": false,
+        "id": "regression_sanity",
+        "workdir": null
+      }
+    ]
+  },
+  "schema_version": 1
+}

@@ -1,0 +1,1 @@
+{"command":["python","-m","pytest","testing/logging/test_fixture.py::test_clear_for_call_stage"],"engine":"other","image_ref":"swebench/sweb.eval.x86_64.pytest-dev_1776_pytest-10051:latest","patch_apply_outcome_l0":"applied","patch_apply_outcome_l1":"applied","resource_limits":{"wall_timeout":{"nanos":0,"secs":5400}}}

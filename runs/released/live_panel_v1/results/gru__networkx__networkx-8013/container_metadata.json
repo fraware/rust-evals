@@ -1,0 +1,1 @@
+{"command":["python","-m","pytest","networkx/algorithms/traversal/tests/test_bfs.py::TestBFS::test_bfs_layers"],"engine":"other","image_ref":"starryzhang/sweb.eval.x86_64.networkx_1776_networkx-8013","patch_apply_outcome_l0":"applied","patch_apply_outcome_l1":"applied","resource_limits":{"wall_timeout":{"nanos":0,"secs":600}}}

@@ -40,7 +40,7 @@ use eval_ladder_policy::{L3Extension, Policy};
 use eval_ladder_runner::{
     DeterministicSeed, DockerCliEngine, EnvVar, EvaluationPipeline, FixedClock, L1Strategy,
     LevelExtension, LocalProcessEngine, PipelineInputs, PipelineOutcome, ResourceLimits,
-    SimpleExitCodeScorer, SystemClock,
+    RunManifest, SimpleExitCodeScorer, SystemClock,
 };
 use eval_ladder_strengthening::{L2Extension, StrengtheningMode, StrengtheningSpec};
 use serde::{Deserialize, Serialize};
@@ -834,6 +834,63 @@ fn parse_existing_summary(out_dir: &Path) -> Option<BatchSummary> {
     serde_json::from_slice::<BatchSummary>(&bytes).ok()
 }
 
+fn result_file_for_level(level: EvaluationLevel) -> &'static str {
+    match level {
+        EvaluationLevel::L0Official => "official_results.json",
+        EvaluationLevel::L1TrustedRerun => "l1_trusted_rerun_results.json",
+        EvaluationLevel::L2Strengthened => "strengthened_results.json",
+        EvaluationLevel::L3PolicyConformant => "policy_results.json",
+        EvaluationLevel::L4Semantic => "proof_results.json",
+    }
+}
+
+fn try_row_from_existing_bundle(
+    entry: &PanelEntry,
+    bundle_name: &str,
+    bundle_dir: &Path,
+    levels: &[EvaluationLevel],
+) -> Option<BatchEntryRow> {
+    let run_manifest_path = bundle_dir.join("run_manifest.json");
+    let run_manifest_bytes = fs::read(&run_manifest_path).ok()?;
+    let _manifest: RunManifest = serde_json::from_slice(&run_manifest_bytes).ok()?;
+
+    let mut levels_obj = serde_json::Map::new();
+    for level in levels {
+        let result_path = bundle_dir.join(result_file_for_level(*level));
+        let bytes = fs::read(&result_path).ok()?;
+        let value: serde_json::Value = serde_json::from_slice(&bytes).ok()?;
+        let status = value.get("status")?.clone();
+        let primary_reason = value.get("primary_reason")?.clone();
+        levels_obj.insert(
+            level.short_code().to_ascii_lowercase(),
+            serde_json::json!({
+                "status": status,
+                "primary_reason": primary_reason,
+            }),
+        );
+    }
+
+    let bundle_hash = fs::read(bundle_dir.join("artifact_hashes.json"))
+        .ok()
+        .and_then(|bytes| serde_json::from_slice::<serde_json::Value>(&bytes).ok())
+        .and_then(|v| v.get("bundle_hash").cloned())
+        .and_then(|v| serde_json::from_value::<Sha256Digest>(v).ok());
+
+    Some(BatchEntryRow {
+        entry_id: entry
+            .entry_id
+            .clone()
+            .unwrap_or_else(|| bundle_name.to_owned()),
+        bundle_name: bundle_name.to_owned(),
+        task_path: entry.task.display().to_string(),
+        candidate_path: entry.candidate.display().to_string(),
+        status: BatchEntryStatus::Ok,
+        levels: serde_json::Value::Object(levels_obj),
+        bundle_hash,
+        error: None,
+    })
+}
+
 fn workload_key_for_entry(entry: &PanelEntry) -> Option<String> {
     let task_bytes = fs::read(&entry.task).ok()?;
     let task: BenchmarkTask = serde_json::from_slice(&task_bytes).ok()?;
@@ -936,15 +993,16 @@ pub fn run_batch(args: BatchArgs) -> Result<()> {
             });
             let bundle_dir = args.out.join(&bundle_name);
 
-            if args.resume
-                && bundle_dir.join("run_manifest.json").exists()
-                && existing_rows.get(&bundle_name).is_some_and(|r| {
-                    r.status == BatchEntryStatus::Ok
-                        && levels.iter().all(|lvl| has_level_result(r, *lvl))
-                })
-            {
-                if let Some(row) = existing_rows.get(&bundle_name) {
+            if args.resume && bundle_dir.join("run_manifest.json").exists() {
+                if let Some(row) = existing_rows.get(&bundle_name).filter(|r| {
+                    r.status == BatchEntryStatus::Ok && levels.iter().all(|lvl| has_level_result(r, *lvl))
+                }) {
                     rows.push(row.clone());
+                    continue;
+                }
+                if let Some(row) = try_row_from_existing_bundle(entry, &bundle_name, &bundle_dir, &levels)
+                {
+                    rows.push(row);
                     continue;
                 }
             }
@@ -1330,6 +1388,34 @@ mod tests {
             .as_deref()
             .unwrap_or("")
             .starts_with("BATCH_LOAD_FAILED"));
+    }
+
+    #[test]
+    fn milestone_h_resume_uses_run_manifest_without_summary_row() {
+        let tmp = TempDir::new().unwrap();
+        let panel = build_panel(tmp.path(), &["alpha"]);
+        let out = tmp.path().join("out");
+        let config = tmp.path().join("config.toml");
+        write_dummy_config(&config);
+
+        // First run creates bundle + summary.
+        let args = default_batch_args(panel.clone(), out.clone(), config.clone());
+        run_batch(args).expect("initial batch run must succeed");
+
+        // Simulate stale/missing summary state while bundle artifacts remain.
+        fs::remove_file(out.join(BATCH_SUMMARY_FILE)).unwrap();
+
+        // Resume should skip/reconstruct from bundle artifacts, not rerun
+        // into a non-empty bundle_dir.
+        let mut resume_args = default_batch_args(panel, out.clone(), config);
+        resume_args.resume = true;
+        run_batch(resume_args).expect("resume must succeed from run_manifest evidence");
+
+        let summary: BatchSummary =
+            serde_json::from_slice(&fs::read(out.join(BATCH_SUMMARY_FILE)).unwrap()).unwrap();
+        assert_eq!(summary.total_entries, 1);
+        assert_eq!(summary.ok_entries, 1);
+        assert_eq!(summary.invalid_entries, 0);
     }
 
     #[test]

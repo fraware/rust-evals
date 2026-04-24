@@ -1,0 +1,10 @@
+============================= test session starts ==============================
+platform linux -- Python 3.9.20, pytest-8.3.3, pluggy-1.5.0
+libraries: Sphinx-5.0.0+, docutils-0.17.1
+base tempdir: /tmp/pytest-of-root/pytest-0
+rootdir: /workspace
+configfile: setup.cfg
+plugins: cov-5.0.0
+collected 0 items
+
+============================ no tests ran in 0.90s =============================

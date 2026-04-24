@@ -1,0 +1,19 @@
+{
+  "panel_id": "l2_verified_xarray_v1",
+  "schema_version": 1,
+  "validator_families": [
+    "augmented_unit_tests",
+    "targeted_regression"
+  ],
+  "tasks": [
+    {
+      "task_id": "pydata__xarray-2905",
+      "benchmark_id": "swe_bench_verified",
+      "applied_families": [
+        "augmented_unit_tests",
+        "targeted_regression"
+      ],
+      "rationale": "Use a known L0/L1 pass case and strengthen it with warnings-as-errors to evaluate robustness under stricter quality gates while preserving a baseline regression command."
+    }
+  ]
+}

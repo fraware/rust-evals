@@ -5,7 +5,7 @@ use std::collections::BTreeMap;
 use eval_ladder_core::{BenchmarkId, EvaluationLevel, EvaluationStatus};
 use serde::{Deserialize, Serialize};
 
-use crate::input::AnalysisInput;
+use crate::input::{project_analysis_mode, AnalysisInput, AnalysisMode};
 
 /// Aggregation key for score-descent tables.
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Ord, PartialOrd, Serialize, Deserialize)]
@@ -38,7 +38,8 @@ pub struct ScoreDescentRow {
 /// `agent_id = None`) stratum per level, plus per-benchmark, per-agent, and
 /// per-(benchmark, agent) rows.
 #[must_use]
-pub fn score_descent(input: &AnalysisInput) -> Vec<ScoreDescentRow> {
+pub fn score_descent(input: &AnalysisInput, mode: AnalysisMode) -> Vec<ScoreDescentRow> {
+    let input = project_analysis_mode(input, mode);
     #[derive(Default, Clone, Copy)]
     struct Counts {
         passed: u64,
@@ -123,6 +124,16 @@ pub struct ConditionalFalseSuccessRow {
 /// for a candidate are ignored; `NotApplicable` is treated as "no verdict".
 #[must_use]
 pub fn conditional_false_success(input: &AnalysisInput) -> Vec<ConditionalFalseSuccessRow> {
+    conditional_false_success_with_mode(input, AnalysisMode::Raw)
+}
+
+/// Conditional false-success rate under the requested [`AnalysisMode`].
+#[must_use]
+pub fn conditional_false_success_with_mode(
+    input: &AnalysisInput,
+    mode: AnalysisMode,
+) -> Vec<ConditionalFalseSuccessRow> {
+    let input = project_analysis_mode(input, mode);
     // Group by candidate.
     let mut per_candidate: BTreeMap<
         eval_ladder_core::CandidateId,
@@ -237,7 +248,7 @@ mod tests {
             ),
         ];
         let input = AnalysisInput { rows };
-        let table = score_descent(&input);
+        let table = score_descent(&input, AnalysisMode::Raw);
         let pooled = table
             .iter()
             .find(|r| {
@@ -301,7 +312,7 @@ mod tests {
             ),
         ];
         let input = AnalysisInput { rows };
-        let table = conditional_false_success(&input);
+        let table = conditional_false_success_with_mode(&input, AnalysisMode::Raw);
         let l1_l2 = table
             .iter()
             .find(|r| {
@@ -312,5 +323,117 @@ mod tests {
         assert_eq!(l1_l2.n_passed_from, 2);
         assert_eq!(l1_l2.n_failed_to, 1);
         assert!((l1_l2.rate.unwrap() - 0.5).abs() < 1e-12);
+    }
+
+    #[test]
+    fn cumulative_mode_blocks_pathological_upper_pass() {
+        let c = CandidateId::new_v4();
+        let rows = vec![
+            row(
+                c,
+                "a",
+                BenchmarkId::RustSweBench,
+                EvaluationLevel::L0Official,
+                EvaluationStatus::Invalid,
+            ),
+            row(
+                c,
+                "a",
+                BenchmarkId::RustSweBench,
+                EvaluationLevel::L1TrustedRerun,
+                EvaluationStatus::Invalid,
+            ),
+            row(
+                c,
+                "a",
+                BenchmarkId::RustSweBench,
+                EvaluationLevel::L3PolicyConformant,
+                EvaluationStatus::Pass,
+            ),
+            row(
+                c,
+                "a",
+                BenchmarkId::RustSweBench,
+                EvaluationLevel::L4Semantic,
+                EvaluationStatus::Pass,
+            ),
+        ];
+        let input = AnalysisInput { rows };
+
+        let raw = score_descent(&input, AnalysisMode::Raw);
+        let cum = score_descent(&input, AnalysisMode::Cumulative);
+
+        let raw_l3 = raw
+            .iter()
+            .find(|r| {
+                r.stratum.benchmark_id.is_none()
+                    && r.stratum.agent_id.is_none()
+                    && r.level == EvaluationLevel::L3PolicyConformant
+            })
+            .unwrap();
+        let cum_l3 = cum
+            .iter()
+            .find(|r| {
+                r.stratum.benchmark_id.is_none()
+                    && r.stratum.agent_id.is_none()
+                    && r.level == EvaluationLevel::L3PolicyConformant
+            })
+            .unwrap();
+        assert_eq!(raw_l3.passed, 1);
+        assert_eq!(cum_l3.passed, 0);
+    }
+
+    #[test]
+    fn cumulative_conditional_false_success_uses_projected_rows() {
+        let c = CandidateId::new_v4();
+        let rows = vec![
+            row(
+                c,
+                "a",
+                BenchmarkId::RustSweBench,
+                EvaluationLevel::L0Official,
+                EvaluationStatus::Invalid,
+            ),
+            row(
+                c,
+                "a",
+                BenchmarkId::RustSweBench,
+                EvaluationLevel::L1TrustedRerun,
+                EvaluationStatus::Invalid,
+            ),
+            row(
+                c,
+                "a",
+                BenchmarkId::RustSweBench,
+                EvaluationLevel::L3PolicyConformant,
+                EvaluationStatus::Pass,
+            ),
+            row(
+                c,
+                "a",
+                BenchmarkId::RustSweBench,
+                EvaluationLevel::L4Semantic,
+                EvaluationStatus::Pass,
+            ),
+        ];
+        let input = AnalysisInput { rows };
+        let raw = conditional_false_success_with_mode(&input, AnalysisMode::Raw);
+        let cum = conditional_false_success_with_mode(&input, AnalysisMode::Cumulative);
+        let raw_l3_l4 = raw
+            .iter()
+            .find(|r| {
+                r.level_from == EvaluationLevel::L3PolicyConformant
+                    && r.level_to == EvaluationLevel::L4Semantic
+            })
+            .unwrap();
+        let cum_l3_l4 = cum
+            .iter()
+            .find(|r| {
+                r.level_from == EvaluationLevel::L3PolicyConformant
+                    && r.level_to == EvaluationLevel::L4Semantic
+            })
+            .unwrap();
+        assert_eq!(raw_l3_l4.n_passed_from, 1);
+        assert_eq!(cum_l3_l4.n_passed_from, 0);
     }
 }

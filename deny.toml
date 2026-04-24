@@ -1,5 +1,5 @@
 # cargo-deny configuration. See https://embarkstudios.github.io/cargo-deny/
-# for the full schema. This file is enforced by ci/github/workflows/release-hygiene.yml.
+# for the full schema. This file is enforced by .github/workflows/release-hygiene.yml.
 
 [graph]
 targets = []
@@ -16,6 +16,7 @@ allow = [
     "Apache-2.0",
     "Apache-2.0 WITH LLVM-exception",
     "MIT",
+    "MIT-0",
     "BSD-2-Clause",
     "BSD-3-Clause",
     "ISC",

@@ -27,13 +27,13 @@ use chrono::{TimeZone, Utc};
 use eval_ladder_analysis::{
     load_bundle_dir,
     paper_export::{write_paper_exports, PaperExportManifest},
-    score_descent::conditional_false_success,
-    LoadOptions, CANDIDATE_RESOLUTION_FILE,
+    score_descent::conditional_false_success_with_mode,
+    AnalysisMode, LoadOptions, CANDIDATE_RESOLUTION_FILE,
 };
 use eval_ladder_core::{
-    BenchmarkId, CandidateId, CandidateResolution, ContextMode, EvaluationLevel, EvaluationResult,
-    EvaluationStatus, GenerationMetadata, GenerationMode, PatchFormat, TaskId, EVALUATOR_VERSION,
-    SCHEMA_VERSION,
+    candidate::ContextMode, BenchmarkId, CandidateId, CandidateResolution, EvaluationLevel,
+    EvaluationResult, EvaluationStatus, GenerationMetadata, GenerationMode, PatchFormat, TaskId,
+    EVALUATOR_VERSION, SCHEMA_VERSION,
 };
 use tempfile::TempDir;
 
@@ -280,8 +280,10 @@ fn milestone_g_paper_export_is_deterministic() {
     let out_b = TempDir::new().unwrap();
 
     let input = load_bundle_dir(run.path(), &LoadOptions::default()).unwrap();
-    let manifest_a: PaperExportManifest = write_paper_exports(&input, out_a.path()).unwrap();
-    let manifest_b: PaperExportManifest = write_paper_exports(&input, out_b.path()).unwrap();
+    let manifest_a: PaperExportManifest =
+        write_paper_exports(&input, out_a.path(), AnalysisMode::Cumulative).unwrap();
+    let manifest_b: PaperExportManifest =
+        write_paper_exports(&input, out_b.path(), AnalysisMode::Cumulative).unwrap();
 
     assert_eq!(
         manifest_a, manifest_b,
@@ -309,7 +311,7 @@ fn milestone_g_paper_export_is_deterministic() {
 fn milestone_g_conditional_false_success_sees_l2_drop() {
     let run = seed_run_dir();
     let input = load_bundle_dir(run.path(), &LoadOptions::default()).unwrap();
-    let table = conditional_false_success(&input);
+    let table = conditional_false_success_with_mode(&input, AnalysisMode::Raw);
     let l1_l2 = table
         .iter()
         .find(|r| {

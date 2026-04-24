@@ -1,0 +1,12 @@
+ERROR: not found: /workspace/tests/unittest_pyreverse_writer.py::test_get_annotation_annassign[a:
+(no name '/workspace/tests/unittest_pyreverse_writer.py::test_get_annotation_annassign[a:' in any of [<Module tests/unittest_pyreverse_writer.py>])
+
+ERROR: not found: /workspace/tests/unittest_pyreverse_writer.py::test_get_annotation_assignattr[def
+(no name '/workspace/tests/unittest_pyreverse_writer.py::test_get_annotation_assignattr[def' in any of [<Module tests/unittest_pyreverse_writer.py>])
+
+ERROR: not found: /workspace/tests/unittest_pyreverse_writer.py::test_infer_node_1
+(no name '/workspace/tests/unittest_pyreverse_writer.py::test_infer_node_1' in any of [<Module tests/unittest_pyreverse_writer.py>])
+
+ERROR: not found: /workspace/tests/unittest_pyreverse_writer.py::test_infer_node_2
+(no name '/workspace/tests/unittest_pyreverse_writer.py::test_infer_node_2' in any of [<Module tests/unittest_pyreverse_writer.py>])
+

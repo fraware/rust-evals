@@ -1,0 +1,2009 @@
+
+running 75 tests
+test decoder::tests::peeker_empty ... ok
+test decoder::tests::peeker_four ... ok
+test decoder::tests::peeker_one ... ok
+test decoder::tests::peeker_one_at_a_time ... ok
+test decoder::tests::peeker_three ... ok
+test decoder::tests::peeker_two ... ok
+test decoder::tests::trans_simple_auto ... ok
+test decoder::tests::trans_simple_big5_hkscs ... ok
+test decoder::tests::trans_simple_chinese ... ok
+test decoder::tests::trans_simple_eucjp ... ok
+test decoder::tests::trans_simple_gbk ... ok
+test decoder::tests::trans_simple_korean ... ok
+test decoder::tests::trans_simple_latin1 ... ok
+test decoder::tests::trans_simple_sjis ... ok
+test decoder::tests::trans_simple_utf16be ... ok
+test decoder::tests::trans_simple_utf16le ... ok
+test decoder::tests::trans_simple_utf8 ... ok
+test decoder::tests::trans_utf16_basic ... ok
+test decoder::tests::trans_utf16_bom ... ok
+test decoder::tests::trans_utf16_incomplete ... ok
+test printer::tests::merge ... ok
+test printer::tests::spec_errors ... ok
+test printer::tests::specs ... ok
+test search_buffer::tests::files_with_matches ... ok
+test search_buffer::tests::invert_match ... ok
+test search_buffer::tests::files_without_matches ... ok
+test search_buffer::tests::count ... ok
+test search_buffer::tests::basic_search ... ok
+test search_buffer::tests::invert_match_count ... ok
+test search_buffer::tests::invert_match_max_count ... ok
+test search_buffer::tests::invert_match_line_numbers ... ok
+test search_buffer::tests::line_numbers ... ok
+test search_buffer::tests::max_count ... ok
+test search_stream::tests::after_context_invert_one1 ... ok
+test search_stream::tests::after_context_one1 ... ok
+test search_stream::tests::after_context_invert_one2 ... ok
+test search_buffer::tests::binary ... ok
+test search_stream::tests::after_context_three1 ... ok
+test search_stream::tests::after_context_two1 ... ok
+test search_stream::tests::after_context_two2 ... ok
+test search_stream::tests::basic_search1 ... ok
+test search_buffer::tests::binary_text ... ok
+test search_stream::tests::before_context_invert_one1 ... ok
+test search_stream::tests::before_context_invert_one2 ... ok
+test search_stream::tests::before_context_one1 ... ok
+test search_stream::tests::before_context_three1 ... ok
+test search_stream::tests::before_context_two1 ... ok
+test search_stream::tests::before_context_two5 ... ok
+test search_stream::tests::before_context_two2 ... ok
+test search_stream::tests::before_context_two4 ... ok
+test search_stream::tests::count ... ok
+test search_stream::tests::files_with_matches ... ok
+test search_stream::tests::files_without_matches ... ok
+test search_stream::tests::invert_match ... ok
+test search_stream::tests::invert_match_max_count ... ok
+test search_stream::tests::invert_match_line_numbers ... ok
+test search_stream::tests::invert_match_count ... ok
+test search_stream::tests::previous_lines_empty ... ok
+test search_stream::tests::previous_lines ... ok
+test search_stream::tests::max_count ... ok
+test unescape::tests::unescape_carriage ... ok
+test search_stream::tests::line_numbers ... ok
+test unescape::tests::unescape_nl ... ok
+test search_stream::tests::previous_lines_short ... ok
+test unescape::tests::unescape_nothing_hex0 ... ok
+test search_stream::tests::after_context_two3 ... ok
+test unescape::tests::unescape_nothing_hex1 ... ok
+test unescape::tests::unescape_nothing_hex2 ... ok
+test unescape::tests::unescape_nothing_simple ... ok
+test unescape::tests::unescape_nul ... ok
+test unescape::tests::unescape_tab ... ok
+test search_stream::tests::before_context_two3 ... ok
+test search_stream::tests::before_after_context_two1 ... ok
+test search_stream::tests::binary ... ok
+test search_stream::tests::binary_text ... ok
+
+test result: ok. 75 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+
+running 124 tests
+test binary_search_no_mmap ... ok
+test after_context_line_numbers ... ok
+test columns ... ok
+test binary_nosearch ... ok
+test after_context ... ok
+test case_insensitive ... ok
+test before_context ... ok
+test context_line_numbers ... ok
+test context ... ok
+test binary_search_mmap ... ok
+test before_context_line_numbers ... ok
+test feature_109_max_depth ... FAILED
+test feature_129_context ... FAILED
+test feature_129_matches ... FAILED
+test feature_129_replace ... FAILED
+test feature_159_works ... FAILED
+test feature_159_zero_max ... ok
+test feature_1_replacement_encoding ... ok
+test feature_1_eucjp ... FAILED
+test feature_1_sjis ... FAILED
+test feature_1_unknown_encoding ... ok
+test feature_1_utf16_auto ... FAILED
+test feature_1_utf16_explicit ... FAILED
+test feature_20_no_filename ... FAILED
+test feature_243_column_line ... FAILED
+test feature_263_sort_files ... ok
+test feature_275_pathsep ... FAILED
+test feature_34_only_matching ... FAILED
+test feature_34_only_matching_line_column ... FAILED
+test feature_362_dfa_size_limit ... ok
+test feature_362_exceeds_regex_size_limit ... ok
+test feature_419_zero_as_shortcut_for_null ... FAILED
+test feature_45_precedence_internal ... FAILED
+test feature_45_precedence_with_others ... FAILED
+test feature_45_relative_cwd ... FAILED
+test feature_68_no_ignore_vcs ... FAILED
+test feature_7 ... ok
+test feature_70_smart_case ... FAILED
+test feature_7_dash ... FAILED
+test feature_89_count ... FAILED
+test feature_89_files ... FAILED
+test feature_89_files_with_matches ... FAILED
+test feature_89_files_without_matches ... FAILED
+test feature_89_match ... FAILED
+test file_type_add ... FAILED
+test file_type_add_compose ... FAILED
+test file_type_clear ... ok
+test file_types ... FAILED
+test file_types_all ... FAILED
+test file_types_negate ... FAILED
+test file_types_negate_all ... FAILED
+test files ... FAILED
+test files_with_matches ... FAILED
+test files_without_matches ... FAILED
+test glob ... FAILED
+test glob_negate ... FAILED
+test ignore_generic ... ok
+test ignore_git ... ok
+test ignore_git_parent ... ok
+test ignore_git_parent_stop ... FAILED
+test ignore_hidden ... ok
+test count ... FAILED
+test feature_109_case_sensitive_part1 ... ok
+test dir ... FAILED
+test feature_109_case_sensitive_part2 ... ok
+test inverted ... ok
+test inverted_line_numbers ... ok
+test line_numbers ... ok
+test literal ... ok
+test max_filesize_parse_error_length ... ok
+test max_filesize_parse_error_suffix ... ok
+test max_filesize_parse_no_suffix ... FAILED
+test max_filesize_suffix_overflow ... ok
+test no_ignore ... FAILED
+test no_ignore_hidden ... FAILED
+test no_parent_ignore_git ... FAILED
+test quiet ... ok
+test regression_105_part1 ... FAILED
+test regression_105_part2 ... FAILED
+test regression_127 ... FAILED
+test regression_128 ... FAILED
+test regression_131 ... ok
+test regression_156 ... ok
+test regression_184 ... FAILED
+test regression_16 ... ok
+test regression_199 ... FAILED
+test regression_206 ... FAILED
+test regression_228 ... ok
+test regression_229 ... ok
+test regression_25 ... FAILED
+test regression_251 ... FAILED
+test regression_270 ... FAILED
+test regression_279 ... FAILED
+test regression_30 ... FAILED
+test regression_391 ... FAILED
+test regression_405 ... FAILED
+test regression_428_color_context_path ... FAILED
+test regression_49 ... ok
+test regression_50 ... ok
+test regression_64 ... FAILED
+test regression_65 ... ok
+test regression_67 ... FAILED
+test regression_87 ... ok
+test regression_90 ... FAILED
+test regression_93 ... FAILED
+test regression_99 ... ok
+test replace ... ok
+test replace_groups ... ok
+test regression_428_unrecognized_style ... ok
+test replace_named_groups ... ok
+test single_file ... ok
+test type_list ... ok
+test unrestricted1 ... FAILED
+test unrestricted2 ... FAILED
+test unrestricted3 ... FAILED
+test vimgrep ... FAILED
+test with_filename ... ok
+test with_heading ... ok
+test with_heading_default ... ok
+test word ... ok
+test max_filesize_parse_k_suffix ... FAILED
+test ignore_ripgrep ... ok
+test max_filesize_parse_m_suffix ... FAILED
+test ignore_ripgrep_parent_no_stop ... ok
+
+failures:
+
+---- feature_109_max_depth stdout ----
+
+thread 'feature_109_max_depth' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "far" "." "--maxdepth" "2"
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\feature_109_max_depth\15
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- feature_129_context stdout ----
+
+thread 'feature_129_context' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "test" "." "-M20" "-C1"
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\feature_129_context\16
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- feature_129_matches stdout ----
+
+thread 'feature_129_matches' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "test" "." "-M26"
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\feature_129_matches\17
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- feature_129_replace stdout ----
+
+thread 'feature_129_replace' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "test" "." "-M26" "-rfoo"
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\feature_129_replace\18
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- feature_159_works stdout ----
+
+thread 'feature_159_works' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "test" "." "-m1"
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\feature_159_works\19
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- feature_1_eucjp stdout ----
+
+thread 'feature_1_eucjp' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "Шерлок Холмс" "." "-Eeuc-jp"
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\feature_1_eucjp\21
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- feature_1_sjis stdout ----
+
+thread 'feature_1_sjis' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "Шерлок Холмс" "." "-Esjis"
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\feature_1_sjis\23
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- feature_1_utf16_auto stdout ----
+
+thread 'feature_1_utf16_auto' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "Шерлок Холмс" "."
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\feature_1_utf16_auto\25
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- feature_1_utf16_explicit stdout ----
+
+thread 'feature_1_utf16_explicit' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "Шерлок Холмс" "." "-Eutf-16le"
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\feature_1_utf16_explicit\26
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- feature_20_no_filename stdout ----
+
+thread 'feature_20_no_filename' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "Sherlock" "." "--no-filename"
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\feature_20_no_filename\27
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- feature_243_column_line stdout ----
+
+thread 'feature_243_column_line' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "test" "." "--column"
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\feature_243_column_line\28
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- feature_275_pathsep stdout ----
+
+thread 'feature_275_pathsep' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "test" "." "--path-separator" "Z"
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\feature_275_pathsep\30
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- feature_34_only_matching stdout ----
+
+thread 'feature_34_only_matching' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "Sherlock" "." "--only-matching"
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\feature_34_only_matching\31
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- feature_34_only_matching_line_column stdout ----
+
+thread 'feature_34_only_matching_line_column' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "Sherlock" "." "--only-matching" "--column" "--line-number"
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\feature_34_only_matching_line_column\32
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- feature_419_zero_as_shortcut_for_null stdout ----
+
+thread 'feature_419_zero_as_shortcut_for_null' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "Sherlock" "." "-0" "--count"
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\feature_419_zero_as_shortcut_for_null\35
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- feature_45_precedence_internal stdout ----
+
+thread 'feature_45_precedence_internal' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "test" "." "--ignore-file" ".not-an-ignore1" "--ignore-file" ".not-an-ignore2"
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\feature_45_precedence_internal\36
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- feature_45_precedence_with_others stdout ----
+
+thread 'feature_45_precedence_with_others' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "test" "." "--ignore-file" ".not-an-ignore"
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\feature_45_precedence_with_others\37
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- feature_45_relative_cwd stdout ----
+
+thread 'feature_45_relative_cwd' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "test" "."
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\feature_45_relative_cwd\38
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- feature_68_no_ignore_vcs stdout ----
+
+thread 'feature_68_no_ignore_vcs' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "test" "." "--no-ignore-vcs"
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\feature_68_no_ignore_vcs\39
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- feature_70_smart_case stdout ----
+
+thread 'feature_70_smart_case' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "sherlock" "." "--smart-case"
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\feature_70_smart_case\41
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- feature_7_dash stdout ----
+
+thread 'feature_7_dash' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "-f-" "."
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\feature_7_dash\42
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- feature_89_count stdout ----
+
+thread 'feature_89_count' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "Sherlock" "." "--null" "--count"
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\feature_89_count\43
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- feature_89_files stdout ----
+
+thread 'feature_89_files' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "NADA" "." "--null" "--files"
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\feature_89_files\44
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- feature_89_files_with_matches stdout ----
+
+thread 'feature_89_files_with_matches' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "Sherlock" "." "--null" "--files-with-matches"
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\feature_89_files_with_matches\45
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- feature_89_files_without_matches stdout ----
+
+thread 'feature_89_files_without_matches' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "Sherlock" "." "--null" "--files-without-match"
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\feature_89_files_without_matches\46
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- feature_89_match stdout ----
+
+thread 'feature_89_match' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "Sherlock" "." "--null" "-C1"
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\feature_89_match\47
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- file_type_add stdout ----
+
+thread 'file_type_add' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "Sherlock" "." "--type-add" "wat:*.wat" "-t" "wat"
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\file_type_add\48
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- file_type_add_compose stdout ----
+
+thread 'file_type_add_compose' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "Sherlock" "." "--type-add" "wat:*.wat" "--type-add" "combo:include:wat,py" "-t" "combo"
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\file_type_add_compose\49
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- file_types stdout ----
+
+thread 'file_types' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "Sherlock" "." "-t" "rust"
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\file_types\51
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- file_types_all stdout ----
+
+thread 'file_types_all' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "Sherlock" "." "-t" "all"
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\file_types_all\52
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- file_types_negate stdout ----
+
+thread 'file_types_negate' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "Sherlock" "." "-T" "rust"
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\file_types_negate\53
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- file_types_negate_all stdout ----
+
+thread 'file_types_negate_all' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "Sherlock" "." "-T" "all"
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\file_types_negate_all\54
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- files stdout ----
+
+thread 'files' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "--files"
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\files\55
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- files_with_matches stdout ----
+
+thread 'files_with_matches' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "Sherlock" "." "--files-with-matches"
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\files_with_matches\56
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- files_without_matches stdout ----
+
+thread 'files_without_matches' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "Sherlock" "." "--files-without-match"
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\files_without_matches\57
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- glob stdout ----
+
+thread 'glob' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "Sherlock" "." "-g" "*.rs"
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\glob\58
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- glob_negate stdout ----
+
+thread 'glob_negate' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "Sherlock" "." "-g" "!*.rs"
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\glob_negate\59
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- ignore_git_parent_stop stdout ----
+
+thread 'ignore_git_parent_stop' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "Sherlock" "."
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\ignore_git_parent_stop\63
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- count stdout ----
+
+thread 'count' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "Sherlock" "." "--count"
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\count\11
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- dir stdout ----
+
+thread 'dir' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "Sherlock" "."
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\dir\12
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- max_filesize_parse_no_suffix stdout ----
+
+thread 'max_filesize_parse_no_suffix' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "Sherlock" "." "--max-filesize" "50" "--files"
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\max_filesize_parse_no_suffix\75
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- no_ignore stdout ----
+
+thread 'no_ignore' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "Sherlock" "." "--no-ignore"
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\no_ignore\77
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- no_ignore_hidden stdout ----
+
+thread 'no_ignore_hidden' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "Sherlock" "." "--hidden"
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\no_ignore_hidden\78
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- no_parent_ignore_git stdout ----
+
+thread 'no_parent_ignore_git' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "Sherlock" "." "--no-ignore-parent"
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\no_parent_ignore_git\79
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- regression_105_part1 stdout ----
+
+thread 'regression_105_part1' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "test" "." "--vimgrep"
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\regression_105_part1\81
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- regression_105_part2 stdout ----
+
+thread 'regression_105_part2' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "test" "." "--column"
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\regression_105_part2\82
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- regression_127 stdout ----
+
+thread 'regression_127' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "Sherlock" "."
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\regression_127\83
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- regression_128 stdout ----
+
+thread 'regression_128' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "x" "." "-n"
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\regression_128\84
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- regression_184 stdout ----
+
+thread 'regression_184' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "test" "."
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\regression_184\88
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- regression_199 stdout ----
+
+thread 'regression_199' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "\\btest\\b" "." "--smart-case"
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\regression_199\89
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- regression_206 stdout ----
+
+thread 'regression_206' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "test" "." "-g" "*.txt"
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\regression_206\90
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- regression_25 stdout ----
+
+thread 'regression_25' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "test" "."
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\regression_25\93
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- regression_251 stdout ----
+
+thread 'regression_251' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "привет" "." "-i"
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\regression_251\94
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- regression_270 stdout ----
+
+thread 'regression_270' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "-e" "-test"
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\regression_270\95
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- regression_279 stdout ----
+
+thread 'regression_279' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "test" "." "-q"
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\regression_279\96
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- regression_30 stdout ----
+
+thread 'regression_30' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "test" "."
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\regression_30\97
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- regression_391 stdout ----
+
+thread 'regression_391' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "--no-ignore" "--hidden" "--follow" "--files" "--glob" "!{.git,node_modules,plugged}/**" "--glob" "*.{js,json,php,md,styl,scss,sass,pug,html,config,py,cpp,c,go,hs}"
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\regression_391\98
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- regression_405 stdout ----
+
+thread 'regression_405' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "test" "." "-g" "!/foo/**"
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\regression_405\99
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- regression_428_color_context_path stdout ----
+
+thread 'regression_428_color_context_path' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "foo" "." "-A1" "-H" "--no-heading" "-N" "--colors=match:none" "--color=always"
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\regression_428_color_context_path\100
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- regression_64 stdout ----
+
+thread 'regression_64' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "--files" "foo"
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\regression_64\104
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- regression_67 stdout ----
+
+thread 'regression_67' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "test" "."
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\regression_67\106
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- regression_90 stdout ----
+
+thread 'regression_90' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "test" "."
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\regression_90\108
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- regression_93 stdout ----
+
+thread 'regression_93' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "(\\d{1,3}\\.){3}\\d{1,3}" "."
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\regression_93\109
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- unrestricted1 stdout ----
+
+thread 'unrestricted1' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "Sherlock" "." "-u"
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\unrestricted1\116
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- unrestricted2 stdout ----
+
+thread 'unrestricted2' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "Sherlock" "." "-uu"
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\unrestricted2\117
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- unrestricted3 stdout ----
+
+thread 'unrestricted3' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "foo" "." "-uuu"
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\unrestricted3\118
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- vimgrep stdout ----
+
+thread 'vimgrep' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "Sherlock|Watson" "." "--vimgrep"
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\vimgrep\119
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- max_filesize_parse_k_suffix stdout ----
+
+thread 'max_filesize_parse_k_suffix' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "Sherlock" "." "--max-filesize" "4K" "--files"
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\max_filesize_parse_k_suffix\73
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+---- max_filesize_parse_m_suffix stdout ----
+
+thread 'max_filesize_parse_m_suffix' panicked at tests\workdir.rs:227:13:
+
+
+==========
+command failed but expected success!
+
+command: "C:\\Users\\mateo\\AppData\\Local\\Temp\\.tmp6n6su1\\workspace_l0\\target\\debug\\deps\\rg.exe" "Sherlock" "." "--max-filesize" "1M" "--files"
+cwd: C:\Users\mateo\AppData\Local\Temp\.tmp6n6su1\workspace_l0\target\debug\deps\ripgrep-tests\max_filesize_parse_m_suffix\74
+
+status: exit code: 0xc0000409
+
+stdout: 
+
+stderr: 
+thread 'main' panicked at library\core\src\panicking.rs:218:5:
+attempted to leave type `ignore::walk::Message` uninitialized, which is invalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+thread caused non-unwinding panic. aborting.
+
+
+==========
+
+
+
+failures:
+    count
+    dir
+    feature_109_max_depth
+    feature_129_context
+    feature_129_matches
+    feature_129_replace
+    feature_159_works
+    feature_1_eucjp
+    feature_1_sjis
+    feature_1_utf16_auto
+    feature_1_utf16_explicit
+    feature_20_no_filename
+    feature_243_column_line
+    feature_275_pathsep
+    feature_34_only_matching
+    feature_34_only_matching_line_column
+    feature_419_zero_as_shortcut_for_null
+    feature_45_precedence_internal
+    feature_45_precedence_with_others
+    feature_45_relative_cwd
+    feature_68_no_ignore_vcs
+    feature_70_smart_case
+    feature_7_dash
+    feature_89_count
+    feature_89_files
+    feature_89_files_with_matches
+    feature_89_files_without_matches
+    feature_89_match
+    file_type_add
+    file_type_add_compose
+    file_types
+    file_types_all
+    file_types_negate
+    file_types_negate_all
+    files
+    files_with_matches
+    files_without_matches
+    glob
+    glob_negate
+    ignore_git_parent_stop
+    max_filesize_parse_k_suffix
+    max_filesize_parse_m_suffix
+    max_filesize_parse_no_suffix
+    no_ignore
+    no_ignore_hidden
+    no_parent_ignore_git
+    regression_105_part1
+    regression_105_part2
+    regression_127
+    regression_128
+    regression_184
+    regression_199
+    regression_206
+    regression_25
+    regression_251
+    regression_270
+    regression_279
+    regression_30
+    regression_391
+    regression_405
+    regression_428_color_context_path
+    regression_64
+    regression_67
+    regression_90
+    regression_93
+    unrestricted1
+    unrestricted2
+    unrestricted3
+    vimgrep
+
+test result: FAILED. 55 passed; 69 failed; 0 ignored; 0 measured; 0 filtered out; finished in 7.45s
+

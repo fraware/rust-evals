@@ -60,7 +60,7 @@ pub enum PatchApplyError {
 
 /// Apply `patch_bytes` to `workspace`.
 ///
-/// - Empty bytes -> [`PatchApplyOutcome::Noop`].
+/// - Empty or whitespace-only bytes -> [`PatchApplyOutcome::Noop`].
 /// - Non-empty bytes -> invoke `git apply --whitespace=nowarn` with the
 ///   patch streamed on stdin. Returns [`PatchApplyOutcome::Applied`] on
 ///   exit code 0.
@@ -71,7 +71,7 @@ pub fn apply_patch(
     if !workspace.exists() {
         return Err(PatchApplyError::WorkspaceMissing(workspace.to_path_buf()));
     }
-    if patch_bytes.is_empty() {
+    if patch_bytes.is_empty() || patch_bytes.iter().all(u8::is_ascii_whitespace) {
         return Ok(PatchApplyOutcome::Noop);
     }
 
@@ -110,6 +110,13 @@ mod tests {
     fn empty_patch_is_noop() {
         let dir = tempdir().unwrap();
         let r = apply_patch(dir.path(), b"").unwrap();
+        assert_eq!(r, PatchApplyOutcome::Noop);
+    }
+
+    #[test]
+    fn whitespace_only_patch_is_noop() {
+        let dir = tempdir().unwrap();
+        let r = apply_patch(dir.path(), b"\n \t\r\n").unwrap();
         assert_eq!(r, PatchApplyOutcome::Noop);
     }
 

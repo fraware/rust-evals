@@ -350,6 +350,145 @@ impl ContainerEngine for LocalProcessEngine {
     }
 }
 
+/// Docker CLI-backed container engine.
+///
+/// This backend shells out to `docker` and runs each exec in a fresh
+/// `docker run --rm` container with the workspace mounted at `/workspace`.
+#[derive(Debug, Default, Clone, Copy)]
+pub struct DockerCliEngine;
+
+impl ContainerEngine for DockerCliEngine {
+    fn prepare_image(&self, image: &str) -> Result<String, ContainerEngineError> {
+        if which::which("docker").is_err() {
+            return Err(ContainerEngineError::NoBackendAvailable);
+        }
+
+        // Pull is idempotent and makes transient missing-image errors explicit.
+        // Some SWE-bench images were published with a legacy repository shape
+        // (`<repo>_1776_<issue>`) while manifests may still carry the old
+        // (`<repo>__<issue>`) form. We try canonical + compatibility aliases.
+        let mut last_err: Option<String> = None;
+        for candidate in image_pull_candidates(image) {
+            let pull = std::process::Command::new("docker")
+                .arg("pull")
+                .arg(&candidate)
+                .stdin(std::process::Stdio::null())
+                .stdout(std::process::Stdio::null())
+                .stderr(std::process::Stdio::piped())
+                .output()
+                .map_err(|e| ContainerEngineError::StartFailed(format!("docker pull: {e}")))?;
+            if pull.status.success() {
+                return Ok(candidate);
+            }
+            let stderr = String::from_utf8_lossy(&pull.stderr).trim().to_owned();
+            last_err = Some(format!("{candidate}: {stderr}"));
+        }
+        Err(ContainerEngineError::ImageNotFound(
+            last_err.unwrap_or_else(|| format!("{image}: unknown pull failure")),
+        ))
+    }
+
+    fn exec(&self, spec: &ExecSpec) -> Result<ExecOutcome, ContainerEngineError> {
+        if spec.command.is_empty() {
+            return Err(ContainerEngineError::EmptyCommand);
+        }
+        if !spec.workdir.exists() {
+            return Err(ContainerEngineError::WorkdirMissing(spec.workdir.clone()));
+        }
+
+        let mut cmd = std::process::Command::new("docker");
+        cmd.arg("run")
+            .arg("--rm")
+            .arg("-v")
+            .arg(format!("{}:/workspace", spec.workdir.display()))
+            .arg("-w")
+            .arg("/workspace");
+        if let Some(cpus) = &spec.limits.cpu_limit {
+            cmd.arg("--cpus").arg(cpus);
+        }
+        if let Some(memory) = &spec.limits.memory_limit {
+            cmd.arg("--memory").arg(memory);
+        }
+        for EnvVar { name, value } in &spec.env {
+            cmd.arg("-e").arg(format!("{name}={value}"));
+        }
+
+        let mut wrapper_script: Option<PathBuf> = None;
+        let is_swebench = is_swebench_eval_image(&spec.image);
+        if command_requires_wrapper(&spec.command) {
+            let script_name = format!(
+                ".eval_ladder_exec_{}_{}.sh",
+                std::process::id(),
+                std::time::SystemTime::now()
+                    .duration_since(std::time::UNIX_EPOCH)
+                    .map(|d| d.as_millis())
+                    .unwrap_or(0)
+            );
+            let script_path = spec.workdir.join(&script_name);
+            let script_body = format!(
+                "#!/bin/sh\nset -eu\nexec {}\n",
+                spec.command
+                    .iter()
+                    .map(|arg| shell_quote_posix(arg))
+                    .collect::<Vec<_>>()
+                    .join(" ")
+            );
+            std::fs::write(&script_path, script_body).map_err(|e| {
+                ContainerEngineError::ExecFailed(format!(
+                    "write wrapper script {}: {e}",
+                    script_path.display()
+                ))
+            })?;
+            wrapper_script = Some(script_path);
+            cmd.arg(&spec.image);
+            if is_swebench {
+                let activation = format!(
+                    ". /opt/miniconda3/bin/activate && conda activate testbed && exec sh /workspace/{script_name}"
+                );
+                cmd.arg("sh").arg("-lc").arg(activation);
+            } else {
+                cmd.arg("sh").arg(format!("/workspace/{script_name}"));
+            }
+        } else {
+            cmd.arg(&spec.image);
+            if is_swebench {
+                let script = format!(
+                    ". /opt/miniconda3/bin/activate && conda activate testbed && exec {}",
+                    spec.command
+                        .iter()
+                        .map(|arg| shell_quote_posix(arg))
+                        .collect::<Vec<_>>()
+                        .join(" ")
+                );
+                cmd.arg("sh").arg("-lc").arg(script);
+            } else {
+                cmd.args(&spec.command);
+            }
+        }
+        cmd.stdin(std::process::Stdio::null())
+            .stdout(std::process::Stdio::piped())
+            .stderr(std::process::Stdio::piped());
+
+        let start = Instant::now();
+        let child = match cmd.spawn() {
+            Ok(child) => child,
+            Err(e) => {
+                if let Some(path) = &wrapper_script {
+                    let _ = std::fs::remove_file(path);
+                }
+                return Err(ContainerEngineError::ExecFailed(format!(
+                    "docker run spawn: {e}"
+                )));
+            }
+        };
+        let out = wait_with_timeout(child, spec.limits.wall_timeout, start);
+        if let Some(path) = &wrapper_script {
+            let _ = std::fs::remove_file(path);
+        }
+        out
+    }
+}
+
 fn wait_with_timeout(
     mut child: std::process::Child,
     wall_timeout: Option<Duration>,
@@ -404,6 +543,51 @@ fn read_stdio(child: &mut std::process::Child) -> (String, String) {
         let _ = err.read_to_string(&mut stderr);
     }
     (stdout, stderr)
+}
+
+fn command_requires_wrapper(command: &[String]) -> bool {
+    // Avoid OS command-line length limits (notably on Windows host shells)
+    // by switching very long argv payloads to a mounted script.
+    command.iter().map(|s| s.len() + 1).sum::<usize>() > 6000
+}
+
+fn shell_quote_posix(s: &str) -> String {
+    if s.is_empty() {
+        return "''".to_owned();
+    }
+    format!("'{}'", s.replace('\'', "'\"'\"'"))
+}
+
+fn image_pull_candidates(image: &str) -> Vec<String> {
+    let mut out = vec![image.to_owned()];
+    if let Some(mapped) = map_legacy_swebench_image(image) {
+        if mapped != image {
+            out.push(mapped);
+        }
+    }
+    out
+}
+
+fn is_swebench_eval_image(image: &str) -> bool {
+    image.starts_with("swebench/sweb.eval.x86_64.")
+}
+
+fn map_legacy_swebench_image(image: &str) -> Option<String> {
+    let prefix = "swebench/sweb.eval.x86_64.";
+    if !image.starts_with(prefix) {
+        return None;
+    }
+
+    let (repo_segment, tag_segment) = image[prefix.len()..]
+        .split_once(':')
+        .map_or((&image[prefix.len()..], ""), |(repo, tag)| (repo, tag));
+    let (head, tail) = repo_segment.split_once("__")?;
+    let mapped_repo = format!("{head}_1776_{tail}");
+    if tag_segment.is_empty() {
+        Some(format!("{prefix}{mapped_repo}"))
+    } else {
+        Some(format!("{prefix}{mapped_repo}:{tag_segment}"))
+    }
 }
 
 /// Convenience constructor for [`ExecSpec`] used throughout the pipeline
@@ -495,5 +679,37 @@ mod tests {
         assert_eq!(out.exit_code, Some(0));
         assert!(out.stdout.to_lowercase().starts_with("cargo "));
         assert!(!out.timed_out);
+    }
+
+    #[test]
+    fn maps_legacy_verified_image_name() {
+        let mapped =
+            map_legacy_swebench_image("swebench/sweb.eval.x86_64.astropy__astropy-12907:latest")
+                .unwrap();
+        assert_eq!(
+            mapped,
+            "swebench/sweb.eval.x86_64.astropy_1776_astropy-12907:latest"
+        );
+    }
+
+    #[test]
+    fn keeps_non_swebench_image_unchanged() {
+        let candidates = image_pull_candidates("ubuntu:22.04");
+        assert_eq!(candidates, vec!["ubuntu:22.04".to_owned()]);
+    }
+
+    #[test]
+    fn posix_quote_escapes_single_quotes() {
+        assert_eq!(shell_quote_posix("abc"), "'abc'");
+        assert_eq!(shell_quote_posix("a'b"), "'a'\"'\"'b'");
+        assert_eq!(shell_quote_posix(""), "''");
+    }
+
+    #[test]
+    fn wrapper_threshold_detects_long_argv() {
+        let short = vec!["python".to_owned(), "-m".to_owned(), "pytest".to_owned()];
+        assert!(!command_requires_wrapper(&short));
+        let long = vec!["x".repeat(7000)];
+        assert!(command_requires_wrapper(&long));
     }
 }

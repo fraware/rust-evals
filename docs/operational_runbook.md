@@ -425,11 +425,36 @@ Contract (see `docs/artifact_spec.md` for the field-level schema):
 - `RustSweBench` is intentionally excluded from this table; it is a
   separate paper surface.
 
-`analyze paper-export` bumps `PAPER_EXPORT_SCHEMA_VERSION` from `1`
-to `2` so readers keyed on the manifest hash re-pin intentionally.
+`analyze paper-export` bumped `PAPER_EXPORT_SCHEMA_VERSION` from `1`
+to `2` for static-vs-live, and from `2` to `3` for explicit
+`analysis_mode` provenance (`raw` vs `cumulative`) in
+`manifest.json`. Readers keyed on the manifest hash re-pin
+intentionally.
 Filename-based readers remain forward-compatible. Determinism is
 pinned by
 `packages/rust/analysis/tests/milestone_l_acceptance.rs`.
+
+### Raw vs cumulative headline semantics (P0)
+
+Analysis now supports two semantics:
+
+- `raw`: preserves evaluator contract exactly; each level is independent.
+- `cumulative`: for headline reporting only, upper-level pass requires
+  lower-level pass prerequisites.
+
+CLI usage:
+
+```bash
+# Raw (appendix/debug).
+eval-ladder analyze score-descent --run-dir <run_dir> --analysis-mode raw
+
+# Cumulative (headline).
+eval-ladder analyze score-descent --run-dir <run_dir> --analysis-mode cumulative
+
+# paper-export defaults to cumulative; override to raw explicitly when needed.
+eval-ladder analyze paper-export --run-dir <run_dir> --out-dir <out_dir>
+eval-ladder analyze paper-export --run-dir <run_dir> --out-dir <out_dir> --analysis-mode raw
+```
 
 ## Batch evaluation (Milestone H)
 
@@ -732,7 +757,7 @@ eval-ladder demo run --out runs/demo --tasks 2 --skip-analyze
     rank_stability.{csv,json}
     taxonomy.{csv,json}
     static_vs_live.{csv,json}     # Milestone L
-    manifest.json                 # schema_version = 2
+    manifest.json                 # schema_version = 3 (includes analysis_mode)
 ```
 
 ### Determinism contract
@@ -761,7 +786,7 @@ Every artifact emitted by `demo run` is a pure function of
 
 ## CI tiers
 
-Full specifications live under `ci/github/workflows/`.
+Full specifications live under `.github/workflows/`.
 
 ### Tier 1 (fast)
 - Rust unit tests, `cargo fmt --check`, `cargo clippy -D warnings`.

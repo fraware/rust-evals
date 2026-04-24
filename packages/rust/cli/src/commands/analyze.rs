@@ -15,15 +15,11 @@ use std::fs;
 use std::path::{Path, PathBuf};
 
 use anyhow::{Context, Result};
-use clap::{Args, Subcommand};
+use clap::{Args, Subcommand, ValueEnum};
 use eval_ladder_analysis::{
-    csv, load_bundle_dir,
-    paper_export::write_paper_exports,
-    rank_stability::rank_stability,
-    score_descent::{self, conditional_false_success},
-    static_vs_live::static_vs_live,
-    taxonomy::taxonomy_counts,
-    AnalysisInput, LoadOptions,
+    csv, load_bundle_dir, paper_export::write_paper_exports, rank_stability::rank_stability,
+    score_descent, static_vs_live::static_vs_live, taxonomy::taxonomy_counts, AnalysisInput,
+    AnalysisMode, LoadOptions,
 };
 
 /// `analyze` subcommands.
@@ -58,6 +54,13 @@ pub struct AnalyzeArgs {
     /// (for provenance and deterministic hashing).
     #[arg(long)]
     pub json_out: Option<PathBuf>,
+    /// Analysis semantics used to build derived paper tables.
+    ///
+    /// `raw`: preserve level independence exactly as emitted by the evaluator.
+    /// `cumulative`: require lower-level pass preconditions for upper-level
+    /// pass when computing derived tables.
+    #[arg(long, value_enum, default_value_t = CliAnalysisMode::Raw)]
+    pub analysis_mode: CliAnalysisMode,
 }
 
 /// Arguments for `analyze paper-export`.
@@ -71,6 +74,27 @@ pub struct PaperExportArgs {
     /// missing.
     #[arg(long)]
     pub out_dir: PathBuf,
+    /// Analysis semantics used for paper-export tables.
+    ///
+    /// Defaults to `cumulative` for headline reporting; use `raw` for
+    /// appendix/debug exports.
+    #[arg(long, value_enum, default_value_t = CliAnalysisMode::Cumulative)]
+    pub analysis_mode: CliAnalysisMode,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, ValueEnum)]
+pub enum CliAnalysisMode {
+    Raw,
+    Cumulative,
+}
+
+impl From<CliAnalysisMode> for AnalysisMode {
+    fn from(value: CliAnalysisMode) -> Self {
+        match value {
+            CliAnalysisMode::Raw => AnalysisMode::Raw,
+            CliAnalysisMode::Cumulative => AnalysisMode::Cumulative,
+        }
+    }
 }
 
 /// Dispatch.
@@ -128,7 +152,8 @@ fn write_output(
 
 fn run_score_descent(args: AnalyzeArgs) -> Result<()> {
     let input = load_input(&args.run_dir)?;
-    let table = score_descent::score_descent(&input);
+    let mode: AnalysisMode = args.analysis_mode.into();
+    let table = score_descent::score_descent(&input, mode);
     let header = &[
         "benchmark_id",
         "agent_id",
@@ -158,7 +183,8 @@ fn run_score_descent(args: AnalyzeArgs) -> Result<()> {
 
 fn run_conditional_false_success(args: AnalyzeArgs) -> Result<()> {
     let input = load_input(&args.run_dir)?;
-    let table = conditional_false_success(&input);
+    let mode: AnalysisMode = args.analysis_mode.into();
+    let table = score_descent::conditional_false_success_with_mode(&input, mode);
     let header = &[
         "level_from",
         "level_to",
@@ -183,7 +209,8 @@ fn run_conditional_false_success(args: AnalyzeArgs) -> Result<()> {
 
 fn run_rank_stability(args: AnalyzeArgs) -> Result<()> {
     let input = load_input(&args.run_dir)?;
-    let table = rank_stability(&input);
+    let mode: AnalysisMode = args.analysis_mode.into();
+    let table = rank_stability(&input, mode);
     let header = &["level_a", "level_b", "n_agents", "kendall_tau_b"];
     let rows: Vec<Vec<String>> = table
         .iter()
@@ -220,7 +247,8 @@ fn run_taxonomy(args: AnalyzeArgs) -> Result<()> {
 
 fn run_static_vs_live(args: AnalyzeArgs) -> Result<()> {
     let input = load_input(&args.run_dir)?;
-    let table = static_vs_live(&input);
+    let mode: AnalysisMode = args.analysis_mode.into();
+    let table = static_vs_live(&input, mode);
     let header = &[
         "agent_id",
         "level",
@@ -257,7 +285,8 @@ fn run_static_vs_live(args: AnalyzeArgs) -> Result<()> {
 
 fn run_paper_export(args: PaperExportArgs) -> Result<()> {
     let input = load_input(&args.run_dir)?;
-    let manifest = write_paper_exports(&input, &args.out_dir)
+    let mode: AnalysisMode = args.analysis_mode.into();
+    let manifest = write_paper_exports(&input, &args.out_dir, mode)
         .with_context(|| format!("writing paper exports into {}", args.out_dir.display()))?;
     let canonical = eval_ladder_core::canonical_json(&manifest)?;
     let stdout = std::io::stdout();

@@ -38,7 +38,7 @@ use std::collections::BTreeMap;
 use eval_ladder_core::{BenchmarkId, EvaluationLevel, EvaluationStatus};
 use serde::{Deserialize, Serialize};
 
-use crate::input::AnalysisInput;
+use crate::input::{project_analysis_mode, AnalysisInput, AnalysisMode};
 
 /// Benchmarks treated as the "static" arm of the comparison.
 pub const STATIC_BENCHMARKS: &[BenchmarkId] = &[BenchmarkId::SweBenchVerified];
@@ -103,7 +103,8 @@ pub struct StaticVsLiveRow {
 /// See the module-level documentation for contract and determinism
 /// guarantees.
 #[must_use]
-pub fn static_vs_live(input: &AnalysisInput) -> Vec<StaticVsLiveRow> {
+pub fn static_vs_live(input: &AnalysisInput, mode: AnalysisMode) -> Vec<StaticVsLiveRow> {
+    let input = project_analysis_mode(input, mode);
     #[derive(Default, Clone, Copy)]
     struct Counts {
         static_passed: u64,
@@ -270,7 +271,7 @@ mod tests {
             ),
         ];
         let input = AnalysisInput { rows };
-        let table = static_vs_live(&input);
+        let table = static_vs_live(&input, AnalysisMode::Raw);
         assert_eq!(table.len(), 1, "one row per (agent, level) with data");
         let r = &table[0];
         assert_eq!(r.agent_id, "a");
@@ -301,7 +302,7 @@ mod tests {
             EvaluationStatus::Pass,
         )];
         let input = AnalysisInput { rows };
-        let table = static_vs_live(&input);
+        let table = static_vs_live(&input, AnalysisMode::Raw);
         assert_eq!(table.len(), 1);
         let r = &table[0];
         assert_eq!(r.static_evaluated, 1);
@@ -329,7 +330,7 @@ mod tests {
             ),
         ];
         let input = AnalysisInput { rows };
-        let table = static_vs_live(&input);
+        let table = static_vs_live(&input, AnalysisMode::Raw);
         let r = &table[0];
         assert_eq!(r.static_pass_rate, Some(0.0));
         assert_eq!(r.live_pass_rate, Some(1.0));
@@ -363,7 +364,7 @@ mod tests {
             ),
         ];
         let input = AnalysisInput { rows };
-        let table = static_vs_live(&input);
+        let table = static_vs_live(&input, AnalysisMode::Raw);
         let keys: Vec<(String, EvaluationLevel)> = table
             .iter()
             .map(|r| (r.agent_id.clone(), r.level))
@@ -377,5 +378,75 @@ mod tests {
             ],
             "rows must be sorted by (agent_id, level)"
         );
+    }
+
+    #[test]
+    fn cumulative_mode_blocks_pathological_l4_passes_in_arms() {
+        // Same agent has one static and one live candidate where L0 is invalid
+        // but L4 is raw-pass. Raw mode counts those as L4 passes; cumulative
+        // mode must project both to non-pass.
+        let cid_static = CandidateId::new_v4();
+        let cid_live = CandidateId::new_v4();
+        let rows = vec![
+            AnalysisInputRow {
+                candidate_id: cid_static,
+                task_id: TaskId::new("t-static").unwrap(),
+                benchmark_id: BenchmarkId::SweBenchVerified,
+                agent_id: "agent-x".into(),
+                model_id: "m".into(),
+                level: EvaluationLevel::L0Official,
+                status: EvaluationStatus::Invalid,
+                primary_reason: "L0_OFFICIAL_TIMEOUT".into(),
+                task_category: None,
+            },
+            AnalysisInputRow {
+                candidate_id: cid_static,
+                task_id: TaskId::new("t-static").unwrap(),
+                benchmark_id: BenchmarkId::SweBenchVerified,
+                agent_id: "agent-x".into(),
+                model_id: "m".into(),
+                level: EvaluationLevel::L4Semantic,
+                status: EvaluationStatus::Pass,
+                primary_reason: "L4_OBLIGATION_MET".into(),
+                task_category: None,
+            },
+            AnalysisInputRow {
+                candidate_id: cid_live,
+                task_id: TaskId::new("t-live").unwrap(),
+                benchmark_id: BenchmarkId::SweBenchLive,
+                agent_id: "agent-x".into(),
+                model_id: "m".into(),
+                level: EvaluationLevel::L0Official,
+                status: EvaluationStatus::Invalid,
+                primary_reason: "L0_OFFICIAL_TIMEOUT".into(),
+                task_category: None,
+            },
+            AnalysisInputRow {
+                candidate_id: cid_live,
+                task_id: TaskId::new("t-live").unwrap(),
+                benchmark_id: BenchmarkId::SweBenchLive,
+                agent_id: "agent-x".into(),
+                model_id: "m".into(),
+                level: EvaluationLevel::L4Semantic,
+                status: EvaluationStatus::Pass,
+                primary_reason: "L4_OBLIGATION_MET".into(),
+                task_category: None,
+            },
+        ];
+        let input = AnalysisInput { rows };
+        let raw = static_vs_live(&input, AnalysisMode::Raw);
+        let cum = static_vs_live(&input, AnalysisMode::Cumulative);
+        let raw_l4 = raw
+            .iter()
+            .find(|r| r.level == EvaluationLevel::L4Semantic)
+            .unwrap();
+        let cum_l4 = cum
+            .iter()
+            .find(|r| r.level == EvaluationLevel::L4Semantic)
+            .unwrap();
+        assert_eq!(raw_l4.static_passed, 1);
+        assert_eq!(raw_l4.live_passed, 1);
+        assert_eq!(cum_l4.static_passed, 0);
+        assert_eq!(cum_l4.live_passed, 0);
     }
 }

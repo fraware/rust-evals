@@ -1,0 +1,1 @@
+{"command":["python","-m","pytest","tests/x509/test_x509.py::TestCertificateRevocationList::test_crl_issuer_invalid_printable_string"],"engine":"other","image_ref":"starryzhang/sweb.eval.x86_64.pyca_1776_cryptography-12812","patch_apply_outcome_l0":"applied","patch_apply_outcome_l1":"applied","resource_limits":{"wall_timeout":{"nanos":0,"secs":600}}}

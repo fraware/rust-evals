@@ -5,6 +5,7 @@
 //! title truncation, and label construction identically.
 
 use chrono::{DateTime, Utc};
+use regex::Regex;
 
 use crate::adapter::BenchmarkAdapterError;
 use crate::raw::RawSweBenchRecord;
@@ -84,9 +85,77 @@ pub const LIVE_SOURCE_URL: &str = "https://huggingface.co/datasets/SWE-bench/SWE
 /// See [`VERIFIED_SOURCE_URL`].
 pub const RUST_SOURCE_URL: &str = "https://huggingface.co/datasets/bytedance/Rust-SWE-bench";
 
+/// Build a deterministic pytest entrypoint from SWE-bench test selectors.
+///
+/// The selector set is `FAIL_TO_PASS`, deduplicated and sorted to guarantee
+/// byte-stable manifests.
+#[must_use]
+pub fn official_pytest_entrypoint(raw: &RawSweBenchRecord) -> String {
+    let mut selectors = normalized_fail_to_pass_selectors(raw);
+    selectors.sort();
+    selectors.dedup();
+
+    if raw.repo.eq_ignore_ascii_case("django/django") {
+        if selectors.is_empty() {
+            "python tests/runtests.py".to_owned()
+        } else {
+            format!("python tests/runtests.py {}", selectors.join(" "))
+        }
+    } else if selectors.is_empty() {
+        "python -m pytest".to_owned()
+    } else {
+        format!("python -m pytest {}", selectors.join(" "))
+    }
+}
+
+fn normalized_fail_to_pass_selectors(raw: &RawSweBenchRecord) -> Vec<String> {
+    let django = raw.repo.eq_ignore_ascii_case("django/django");
+    let mut out: Vec<String> = Vec::new();
+    let token_re = Regex::new(r"^[A-Za-z0-9_./:-]+$").expect("valid selector regex");
+    let django_unittest_re =
+        Regex::new(r"^([A-Za-z0-9_]+)\s+\(([A-Za-z0-9_\.]+)\)$").expect("valid django regex");
+    for selector in raw.fail_to_pass_list() {
+        let s = selector.trim();
+        if s.is_empty() {
+            continue;
+        }
+        if django {
+            if let Some(caps) = django_unittest_re.captures(s) {
+                let test_name = caps.get(1).map(|m| m.as_str()).unwrap_or_default();
+                let suite = caps.get(2).map(|m| m.as_str()).unwrap_or_default();
+                if !test_name.is_empty() && !suite.is_empty() {
+                    out.push(format!("{suite}.{test_name}"));
+                    continue;
+                }
+            }
+            for tok in s.split_whitespace() {
+                let t = tok.trim();
+                if t.is_empty() || t.starts_with("--") || t.contains('(') || t.contains(')') {
+                    continue;
+                }
+                if !token_re.is_match(t) {
+                    continue;
+                }
+                if t.matches('.').count() < 2 {
+                    continue;
+                }
+                out.push(t.to_owned());
+            }
+        } else if let Some((head, _param)) = s.split_once('[') {
+            // Historical selector snapshots may include parametrized ids that
+            // no longer match the exact test node name in current fixtures.
+            out.push(head.to_owned());
+        } else {
+            out.push(s.to_owned());
+        }
+    }
+    out
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+    use serde_json::json;
 
     #[test]
     fn title_takes_first_non_empty_line() {
@@ -111,5 +180,102 @@ mod tests {
         assert_eq!(issue_id_from_instance_id("astropy__astropy-12907"), "12907");
         assert_eq!(issue_id_from_instance_id("weird-name"), "name");
         assert_eq!(issue_id_from_instance_id("noseparator"), "noseparator");
+    }
+
+    #[test]
+    fn pytest_entrypoint_is_sorted_and_deduped() {
+        let raw: RawSweBenchRecord = serde_json::from_value(json!({
+            "instance_id": "a__b-1",
+            "repo": "a/b",
+            "base_commit": "deadbeef",
+            "problem_statement": "p",
+            "FAIL_TO_PASS": ["z::t", "a::t", "z::t"],
+            "PASS_TO_PASS": "[\"b::t\",\"a::t\"]"
+        }))
+        .unwrap();
+        let cmd = official_pytest_entrypoint(&raw);
+        assert_eq!(cmd, "python -m pytest a::t z::t");
+    }
+
+    #[test]
+    fn pytest_entrypoint_falls_back_when_no_selectors() {
+        let raw: RawSweBenchRecord = serde_json::from_value(json!({
+            "instance_id": "a__b-1",
+            "repo": "a/b",
+            "base_commit": "deadbeef",
+            "problem_statement": "p"
+        }))
+        .unwrap();
+        let cmd = official_pytest_entrypoint(&raw);
+        assert_eq!(cmd, "python -m pytest");
+    }
+
+    #[test]
+    fn django_uses_runtests_entrypoint() {
+        let raw: RawSweBenchRecord = serde_json::from_value(json!({
+            "instance_id": "django__django-1",
+            "repo": "django/django",
+            "base_commit": "deadbeef",
+            "problem_statement": "p",
+            "FAIL_TO_PASS": ["auth_tests.test_views.LoginTest.test_security_check"]
+        }))
+        .unwrap();
+        let cmd = official_pytest_entrypoint(&raw);
+        assert_eq!(
+            cmd,
+            "python tests/runtests.py auth_tests.test_views.LoginTest.test_security_check"
+        );
+    }
+
+    #[test]
+    fn strips_pytest_param_suffix_from_selector() {
+        let raw: RawSweBenchRecord = serde_json::from_value(json!({
+            "instance_id": "a__b-1",
+            "repo": "astropy/astropy",
+            "base_commit": "deadbeef",
+            "problem_statement": "p",
+            "FAIL_TO_PASS": ["pkg/tests/test_mod.py::test_case[param1]"]
+        }))
+        .unwrap();
+        let cmd = official_pytest_entrypoint(&raw);
+        assert_eq!(cmd, "python -m pytest pkg/tests/test_mod.py::test_case");
+    }
+
+    #[test]
+    fn django_selector_normalization_filters_noise_tokens() {
+        let raw: RawSweBenchRecord = serde_json::from_value(json!({
+            "instance_id": "django__django-1",
+            "repo": "django/django",
+            "base_commit": "deadbeef",
+            "problem_statement": "p",
+            "FAIL_TO_PASS": [
+                "--username isn't provided. auth_tests.test_views.LoginTest.test_security_check (x.y) test_other.case"
+            ]
+        }))
+        .unwrap();
+        let cmd = official_pytest_entrypoint(&raw);
+        assert_eq!(
+            cmd,
+            "python tests/runtests.py auth_tests.test_views.LoginTest.test_security_check"
+        );
+    }
+
+    #[test]
+    fn django_unittest_style_selector_is_converted() {
+        let raw: RawSweBenchRecord = serde_json::from_value(json!({
+            "instance_id": "django__django-1",
+            "repo": "django/django",
+            "base_commit": "deadbeef",
+            "problem_statement": "p",
+            "FAIL_TO_PASS": [
+                "test_union_with_values_list_and_order (queries.test_qs_combinators.QuerySetSetOperationTests)"
+            ]
+        }))
+        .unwrap();
+        let cmd = official_pytest_entrypoint(&raw);
+        assert_eq!(
+            cmd,
+            "python tests/runtests.py queries.test_qs_combinators.QuerySetSetOperationTests.test_union_with_values_list_and_order"
+        );
     }
 }

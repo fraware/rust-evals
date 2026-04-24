@@ -1,0 +1,55 @@
+{
+  "panel_id": "l2_verified_v1",
+  "schema_version": 1,
+  "validator_families": [
+    "augmented_unit_tests",
+    "targeted_regression"
+  ],
+  "tasks": [
+    {
+      "task_id": "astropy__astropy-14096",
+      "benchmark_id": "swe_bench_verified",
+      "applied_families": [
+        "augmented_unit_tests",
+        "targeted_regression"
+      ],
+      "rationale": "Python scientific stack task with stable CLI/runtime; suitable for deterministic augmented command checks plus a baseline regression command."
+    },
+    {
+      "task_id": "astropy__astropy-14309",
+      "benchmark_id": "swe_bench_verified",
+      "applied_families": [
+        "augmented_unit_tests",
+        "targeted_regression"
+      ],
+      "rationale": "Parser/IO-adjacent task where additional commands are reviewer-readable and reproducible in workspace-local execution."
+    },
+    {
+      "task_id": "django__django-10554",
+      "benchmark_id": "swe_bench_verified",
+      "applied_families": [
+        "augmented_unit_tests",
+        "targeted_regression"
+      ],
+      "rationale": "Framework task with deterministic command surface; suitable for explicit augmented failure probes and regression sanity checks."
+    },
+    {
+      "task_id": "django__django-11066",
+      "benchmark_id": "swe_bench_verified",
+      "applied_families": [
+        "augmented_unit_tests",
+        "targeted_regression"
+      ],
+      "rationale": "Application-level behavior task where command-level strengthening remains local, reproducible, and attributable by family."
+    },
+    {
+      "task_id": "django__django-11211",
+      "benchmark_id": "swe_bench_verified",
+      "applied_families": [
+        "augmented_unit_tests",
+        "targeted_regression"
+      ],
+      "rationale": "Patch-local Django task with clear command-based strengthening hooks and deterministic repro artifacts."
+    }
+  ]
+}

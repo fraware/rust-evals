@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "augmented": {
+    "commands": [
+      {
+        "id": "aug_warnings_as_errors",
+        "command": [
+          "python",
+          "-W",
+          "error",
+          "-m",
+          "pytest",
+          "xarray/tests/test_variable.py",
+          "-q",
+          "--maxfail=1"
+        ],
+        "workdir": null,
+        "env": [],
+        "expected_exit_code": null,
+        "flaky": false
+      }
+    ],
+    "retry_flaky": false
+  },
+  "regression": {
+    "commands": [
+      {
+        "id": "regression_module_sanity",
+        "command": [
+          "python",
+          "-m",
+          "pytest",
+          "xarray/tests/test_variable.py",
+          "-q",
+          "--maxfail=1"
+        ],
+        "workdir": null,
+        "env": [],
+        "expected_exit_code": null,
+        "flaky": false
+      }
+    ]
+  },
+  "differential": null,
+  "property_fuzz": null
+}

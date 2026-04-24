@@ -1,0 +1,7 @@
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
+ImportError while loading conftest '/workspace/lib/matplotlib/tests/conftest.py'.
+lib/matplotlib/__init__.py:138: in <module>
+    from . import cbook, rcsetup
+lib/matplotlib/cbook/__init__.py:31: in <module>
+    import numpy as np
+E   ModuleNotFoundError: No module named 'numpy'

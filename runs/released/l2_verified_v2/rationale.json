@@ -1,0 +1,28 @@
+{
+  "panel_id": "l2_verified_v2",
+  "schema_version": 1,
+  "validator_families": [
+    "augmented_unit_tests",
+    "targeted_regression"
+  ],
+  "tasks": [
+    {
+      "task_id": "astropy__astropy-12907",
+      "benchmark_id": "swe_bench_verified",
+      "applied_families": [
+        "augmented_unit_tests",
+        "targeted_regression"
+      ],
+      "rationale": "Task is a verified L0/L1 pass under Docker testbed. Warnings-as-errors in augmented validation probes stricter runtime hygiene than baseline import sanity."
+    },
+    {
+      "task_id": "pydata__xarray-2905",
+      "benchmark_id": "swe_bench_verified",
+      "applied_families": [
+        "augmented_unit_tests",
+        "targeted_regression"
+      ],
+      "rationale": "Second independent L0/L1 pass case on a different repository to ensure the L2 drop is not single-task-specific while preserving deterministic command semantics."
+    }
+  ]
+}

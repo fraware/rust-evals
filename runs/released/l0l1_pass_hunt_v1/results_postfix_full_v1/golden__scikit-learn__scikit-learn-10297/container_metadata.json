@@ -1,0 +1,1 @@
+{"command":["python","-m","pytest","sklearn/linear_model/tests/test_ridge.py::test_ridge_classifier_cv_store_cv_values"],"engine":"other","image_ref":"swebench/sweb.eval.x86_64.scikit-learn_1776_scikit-learn-10297:latest","patch_apply_outcome_l0":"applied","patch_apply_outcome_l1":"applied","resource_limits":{"wall_timeout":{"nanos":0,"secs":5400}}}

@@ -1,0 +1,1 @@
+{"command":["python","-m","pytest","astropy/modeling/tests/test_separable.py::test_separable"],"engine":"other","image_ref":"swebench/sweb.eval.x86_64.astropy_1776_astropy-12907:latest","patch_apply_outcome_l0":"applied","patch_apply_outcome_l1":"applied","resource_limits":{"wall_timeout":{"nanos":0,"secs":600}}}

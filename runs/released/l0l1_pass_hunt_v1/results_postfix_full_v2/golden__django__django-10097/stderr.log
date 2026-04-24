@@ -1,0 +1,74 @@
+..........................................................................................................................................................................................ssssssssssss...................................................................................................................................E.............................................................E..................................................................s..............s.....................................................................................sss..s............................................s....................................................................................................................................................................................................................................................................................................................................................................sssssssssssssssssssssssssssss......................................s....................................................ssssssssssssssssssssssssssssssssssssssssssssssssssssssss.................sss..s........sssssssssssssssssssssssssssssssssssssssssssssssssssssss..s........s.........................................................................................s.....s................ss...........s.................s............................................s...s......................s..................................s................................................................................s.s.......s.s...............................................sssss..s....................................................................................................................sssssssssssssssssssssssssssssssssssss...................s.............................................s..............................................................................................................s.....................EE.EEEE.E........EE.....................E.....................................................EEE...........................................................................multiprocessing.pool.RemoteTraceback: 
+"""
+Traceback (most recent call last):
+  File "/opt/miniconda3/envs/testbed/lib/python3.5/multiprocessing/pool.py", line 119, in worker
+    result = (True, func(*args, **kwds))
+  File "/opt/miniconda3/envs/testbed/lib/python3.5/site-packages/Django-2.2.dev20180625180104-py3.5.egg/django/test/runner.py", line 309, in _run_subsuite
+    result = runner.run(subsuite)
+  File "/opt/miniconda3/envs/testbed/lib/python3.5/site-packages/Django-2.2.dev20180625180104-py3.5.egg/django/test/runner.py", line 256, in run
+    test(result)
+  File "/opt/miniconda3/envs/testbed/lib/python3.5/unittest/suite.py", line 84, in __call__
+    return self.run(*args, **kwds)
+  File "/opt/miniconda3/envs/testbed/lib/python3.5/unittest/suite.py", line 122, in run
+    test(result)
+  File "/opt/miniconda3/envs/testbed/lib/python3.5/site-packages/Django-2.2.dev20180625180104-py3.5.egg/django/test/testcases.py", line 208, in __call__
+    super().__call__(result)
+  File "/opt/miniconda3/envs/testbed/lib/python3.5/unittest/case.py", line 653, in __call__
+    return self.run(*args, **kwds)
+  File "/opt/miniconda3/envs/testbed/lib/python3.5/unittest/case.py", line 613, in run
+    self._feedErrorsToResult(result, outcome.errors)
+  File "/opt/miniconda3/envs/testbed/lib/python3.5/unittest/case.py", line 543, in _feedErrorsToResult
+    result.addError(test, exc_info)
+  File "/opt/miniconda3/envs/testbed/lib/python3.5/site-packages/Django-2.2.dev20180625180104-py3.5.egg/django/test/runner.py", line 197, in addError
+    self.check_picklable(test, err)
+  File "/opt/miniconda3/envs/testbed/lib/python3.5/site-packages/Django-2.2.dev20180625180104-py3.5.egg/django/test/runner.py", line 130, in check_picklable
+    self._confirm_picklable(err)
+  File "/opt/miniconda3/envs/testbed/lib/python3.5/site-packages/Django-2.2.dev20180625180104-py3.5.egg/django/test/runner.py", line 104, in _confirm_picklable
+    pickle.loads(pickle.dumps(obj))
+_pickle.PicklingError: Can't pickle <function echo2 at 0x70baaae698c8>: it's not the same object as template_tests.templatetags.subpackage.echo.echo2
+"""
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "tests/runtests.py", line 484, in <module>
+    options.exclude_tags,
+  File "tests/runtests.py", line 289, in django_tests
+    extra_tests=extra_tests,
+  File "/opt/miniconda3/envs/testbed/lib/python3.5/site-packages/Django-2.2.dev20180625180104-py3.5.egg/django/test/runner.py", line 606, in run_tests
+    result = self.run_suite(suite)
+  File "/opt/miniconda3/envs/testbed/lib/python3.5/site-packages/Django-2.2.dev20180625180104-py3.5.egg/django/test/runner.py", line 572, in run_suite
+    return runner.run(suite)
+  File "/opt/miniconda3/envs/testbed/lib/python3.5/unittest/runner.py", line 176, in run
+    test(result)
+  File "/opt/miniconda3/envs/testbed/lib/python3.5/unittest/suite.py", line 84, in __call__
+    return self.run(*args, **kwds)
+  File "/opt/miniconda3/envs/testbed/lib/python3.5/site-packages/Django-2.2.dev20180625180104-py3.5.egg/django/test/runner.py", line 373, in run
+    subsuite_index, events = test_results.next(timeout=0.1)
+  File "/opt/miniconda3/envs/testbed/lib/python3.5/multiprocessing/pool.py", line 731, in next
+    raise value
+  File "/opt/miniconda3/envs/testbed/lib/python3.5/multiprocessing/pool.py", line 119, in worker
+    result = (True, func(*args, **kwds))
+  File "/opt/miniconda3/envs/testbed/lib/python3.5/site-packages/Django-2.2.dev20180625180104-py3.5.egg/django/test/runner.py", line 309, in _run_subsuite
+    result = runner.run(subsuite)
+  File "/opt/miniconda3/envs/testbed/lib/python3.5/site-packages/Django-2.2.dev20180625180104-py3.5.egg/django/test/runner.py", line 256, in run
+    test(result)
+  File "/opt/miniconda3/envs/testbed/lib/python3.5/unittest/suite.py", line 84, in __call__
+    return self.run(*args, **kwds)
+  File "/opt/miniconda3/envs/testbed/lib/python3.5/unittest/suite.py", line 122, in run
+    test(result)
+  File "/opt/miniconda3/envs/testbed/lib/python3.5/site-packages/Django-2.2.dev20180625180104-py3.5.egg/django/test/testcases.py", line 208, in __call__
+    super().__call__(result)
+  File "/opt/miniconda3/envs/testbed/lib/python3.5/unittest/case.py", line 653, in __call__
+    return self.run(*args, **kwds)
+  File "/opt/miniconda3/envs/testbed/lib/python3.5/unittest/case.py", line 613, in run
+    self._feedErrorsToResult(result, outcome.errors)
+  File "/opt/miniconda3/envs/testbed/lib/python3.5/unittest/case.py", line 543, in _feedErrorsToResult
+    result.addError(test, exc_info)
+  File "/opt/miniconda3/envs/testbed/lib/python3.5/site-packages/Django-2.2.dev20180625180104-py3.5.egg/django/test/runner.py", line 197, in addError
+    self.check_picklable(test, err)
+  File "/opt/miniconda3/envs/testbed/lib/python3.5/site-packages/Django-2.2.dev20180625180104-py3.5.egg/django/test/runner.py", line 130, in check_picklable
+    self._confirm_picklable(err)
+  File "/opt/miniconda3/envs/testbed/lib/python3.5/site-packages/Django-2.2.dev20180625180104-py3.5.egg/django/test/runner.py", line 104, in _confirm_picklable
+    pickle.loads(pickle.dumps(obj))
+_pickle.PicklingError: Can't pickle <function echo2 at 0x70baaae698c8>: it's not the same object as template_tests.templatetags.subpackage.echo.echo2

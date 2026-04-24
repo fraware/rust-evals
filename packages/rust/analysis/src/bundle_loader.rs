@@ -193,7 +193,13 @@ pub fn load_bundle_dir(
             source: e,
         })?;
         if ft.is_dir() {
-            subdirs.push(entry.path());
+            let path = entry.path();
+            // Ignore non-bundle helper directories (for example shared
+            // build caches) so analysis can run directly on evaluator
+            // output directories that co-locate runtime artifacts.
+            if is_bundle_dir(&path) {
+                subdirs.push(path);
+            }
         }
     }
     subdirs.sort();
@@ -285,6 +291,10 @@ fn load_candidate_resolution(bundle_dir: &Path) -> Result<CandidateResolution, B
             source: e,
         })?;
     Ok(resolution)
+}
+
+fn is_bundle_dir(path: &Path) -> bool {
+    path.join(CANDIDATE_RESOLUTION_FILE).exists()
 }
 
 fn read_evaluation_result(path: &Path) -> Result<EvaluationResult, BundleLoadError> {
@@ -451,11 +461,11 @@ mod tests {
         let tmp = TempDir::new().unwrap();
         let bundle = tmp.path().join("bogus");
         fs::create_dir_all(&bundle).unwrap();
-        let err = load_bundle_dir(tmp.path(), &LoadOptions::default()).unwrap_err();
-        assert!(matches!(
-            err,
-            BundleLoadError::MissingCandidateResolution { .. }
-        ));
+        let input = load_bundle_dir(tmp.path(), &LoadOptions::default()).unwrap();
+        assert!(
+            input.rows.is_empty(),
+            "non-bundle directories should be ignored"
+        );
     }
 
     #[test]
@@ -529,5 +539,28 @@ mod tests {
         };
         let input = load_bundle_dir(tmp.path(), &opts).unwrap();
         assert_eq!(input.rows[0].task_category.as_deref(), Some("unit-test"));
+    }
+
+    #[test]
+    fn ignores_cache_like_subdirectory_beside_bundles() {
+        let tmp = TempDir::new().unwrap();
+        let c = fake_candidate("task-1", "agent-a");
+        seed_bundle(
+            tmp.path(),
+            "bundle-a",
+            &c,
+            &[(
+                "official_results.json",
+                fake_result(
+                    &c,
+                    EvaluationLevel::L0Official,
+                    EvaluationStatus::Pass,
+                    "PASS",
+                ),
+            )],
+        );
+        fs::create_dir_all(tmp.path().join(".cargo_target_cache")).unwrap();
+        let input = load_bundle_dir(tmp.path(), &LoadOptions::default()).unwrap();
+        assert_eq!(input.rows.len(), 1);
     }
 }

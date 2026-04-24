@@ -9,7 +9,7 @@ use std::collections::BTreeMap;
 use eval_ladder_core::{EvaluationLevel, EvaluationStatus};
 use serde::{Deserialize, Serialize};
 
-use crate::input::AnalysisInput;
+use crate::input::{project_analysis_mode, AnalysisInput, AnalysisMode};
 
 /// Kendall tau-b between agent leaderboards at two levels.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -26,7 +26,8 @@ pub struct RankStabilityRow {
 
 /// Compute pairwise Kendall tau-b across all levels that appear in `input`.
 #[must_use]
-pub fn rank_stability(input: &AnalysisInput) -> Vec<RankStabilityRow> {
+pub fn rank_stability(input: &AnalysisInput, mode: AnalysisMode) -> Vec<RankStabilityRow> {
+    let input = project_analysis_mode(input, mode);
     // agent -> level -> (passed, evaluated)
     #[derive(Default)]
     struct C {
@@ -133,6 +134,8 @@ pub fn kendall_tau_b(x: &[f64], y: &[f64]) -> Option<f64> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::input::{AnalysisInput, AnalysisInputRow, AnalysisMode};
+    use eval_ladder_core::{BenchmarkId, CandidateId, TaskId};
 
     #[test]
     fn perfect_agreement_gives_tau_b_one() {
@@ -148,5 +151,97 @@ mod tests {
         let y = [0.4, 0.3, 0.2, 0.1];
         let tau = kendall_tau_b(&x, &y).unwrap();
         assert!((tau + 1.0).abs() < 1e-12);
+    }
+
+    #[test]
+    fn cumulative_mode_reorders_upper_level_agent_leaderboard() {
+        let mut rows = Vec::new();
+        let mut push = |agent: &str, task: &str, l0: EvaluationStatus, l3: EvaluationStatus| {
+            let cid = CandidateId::new_v4();
+            rows.push(AnalysisInputRow {
+                candidate_id: cid,
+                task_id: TaskId::new(task).unwrap(),
+                benchmark_id: BenchmarkId::RustSweBench,
+                agent_id: agent.into(),
+                model_id: "m".into(),
+                level: EvaluationLevel::L0Official,
+                status: l0,
+                primary_reason: "X".into(),
+                task_category: None,
+            });
+            rows.push(AnalysisInputRow {
+                candidate_id: cid,
+                task_id: TaskId::new(task).unwrap(),
+                benchmark_id: BenchmarkId::RustSweBench,
+                agent_id: agent.into(),
+                model_id: "m".into(),
+                level: EvaluationLevel::L3PolicyConformant,
+                status: l3,
+                primary_reason: "X".into(),
+                task_category: None,
+            });
+        };
+        // agent-a: pathological upper passes despite lower invalids.
+        push(
+            "agent-a",
+            "a1",
+            EvaluationStatus::Invalid,
+            EvaluationStatus::Pass,
+        );
+        push(
+            "agent-a",
+            "a2",
+            EvaluationStatus::Invalid,
+            EvaluationStatus::Pass,
+        );
+        // agent-b: clean strong performer.
+        push(
+            "agent-b",
+            "b1",
+            EvaluationStatus::Pass,
+            EvaluationStatus::Pass,
+        );
+        push(
+            "agent-b",
+            "b2",
+            EvaluationStatus::Pass,
+            EvaluationStatus::Fail,
+        );
+        // agent-c: middling on L0, weak on L3.
+        push(
+            "agent-c",
+            "c1",
+            EvaluationStatus::Pass,
+            EvaluationStatus::Fail,
+        );
+        push(
+            "agent-c",
+            "c2",
+            EvaluationStatus::Fail,
+            EvaluationStatus::Fail,
+        );
+        let input = AnalysisInput { rows };
+        let raw = rank_stability(&input, AnalysisMode::Raw);
+        let cum = rank_stability(&input, AnalysisMode::Cumulative);
+
+        let raw_l0_l3 = raw
+            .iter()
+            .find(|r| {
+                r.level_a == EvaluationLevel::L0Official
+                    && r.level_b == EvaluationLevel::L3PolicyConformant
+            })
+            .unwrap();
+        assert!(
+            raw_l0_l3.kendall_tau_b.is_some(),
+            "fixture should yield a defined tau in raw mode"
+        );
+        let cum_l0_l3 = cum
+            .iter()
+            .find(|r| {
+                r.level_a == EvaluationLevel::L0Official
+                    && r.level_b == EvaluationLevel::L3PolicyConformant
+            })
+            .unwrap();
+        assert_ne!(raw_l0_l3.kendall_tau_b, cum_l0_l3.kendall_tau_b);
     }
 }

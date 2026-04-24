@@ -1,0 +1,6 @@
+ERROR: not found: /workspace/pyomo/common/tests/test_tee.py::TestTeeStream::test_context_mismatch
+(no match in any of [<UnitTestCase TestTeeStream>])
+
+ERROR: not found: /workspace/pyomo/common/tests/test_tee.py::TestTeeStream::test_handle_prematurely_closed
+(no match in any of [<UnitTestCase TestTeeStream>])
+

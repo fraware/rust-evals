@@ -1,0 +1,185 @@
+diff --git a/src/parse/validator.rs b/src/parse/validator.rs
+index 5df7697a4fc..254c4078aec 100644
+--- a/src/parse/validator.rs
++++ b/src/parse/validator.rs
+@@ -168,16 +168,51 @@ impl<'help, 'app, 'parser> Validator<'help, 'app, 'parser> {
+         Ok(())
+     }
+ 
++    fn build_conflict_err_usage(
++        &self,
++        matcher: &ArgMatcher,
++        retained_arg: &Arg,
++        conflicting_key: &Id,
++    ) -> String {
++        let retained_blacklist = &retained_arg.blacklist;
++        let used_filtered: Vec<Id> = matcher
++            .arg_names()
++            .filter(|key| *key != conflicting_key)
++            .filter(|key| !retained_blacklist.contains(key))
++            .cloned()
++            .collect();
++        let required: Vec<Id> = used_filtered
++            .iter()
++            .filter_map(|key| self.p.app.find(key))
++            .flat_map(|key_arg| key_arg.requires.iter().map(|item| &item.1))
++            .filter(|item| !used_filtered.contains(item))
++            .filter(|key| *key != conflicting_key)
++            .filter(|key| !retained_blacklist.contains(key))
++            .chain(used_filtered.iter())
++            .cloned()
++            .collect();
++        Usage::new(self.p).create_usage_with_title(&required)
++    }
++
+     fn build_conflict_err(&self, name: &Id, matcher: &ArgMatcher) -> ClapResult<()> {
+         debug!("Validator::build_conflict_err: name={:?}", name);
+-        let usg = Usage::new(self.p).create_usage_with_title(&[]);
+-        if let Some(other_arg) = self.p.app.find(name) {
++        if let Some(checked_arg) = self.p.app.find(name) {
+             for k in matcher.arg_names() {
+                 if let Some(a) = self.p.app.find(k) {
+                     if a.blacklist.contains(&name) {
++                        let (_former, former_arg, latter, latter_arg) = {
++                            let name_pos = matcher.arg_names().position(|key| key == name);
++                            let k_pos = matcher.arg_names().position(|key| key == k);
++                            if name_pos < k_pos {
++                                (name, checked_arg, k, a)
++                            } else {
++                                (k, a, name, checked_arg)
++                            }
++                        };
++                        let usg = self.build_conflict_err_usage(matcher, former_arg, latter);
+                         return Err(Error::argument_conflict(
+-                            a,
+-                            Some(other_arg.to_string()),
++                            latter_arg,
++                            Some(former_arg.to_string()),
+                             &*usg,
+                             self.p.app.color(),
+                         )?);
+@@ -185,6 +220,7 @@ impl<'help, 'app, 'parser> Validator<'help, 'app, 'parser> {
+                 }
+             }
+         } else if let Some(g) = self.p.app.groups.iter().find(|x| x.id == *name) {
++            let usg = Usage::new(self.p).create_usage_with_title(&[]);
+             let args_in_group = self.p.app.unroll_args_in_group(&g.id);
+             let first = matcher
+                 .arg_names()
+diff --git a/tests/conflicts.rs b/tests/conflicts.rs
+index c5154e51d90..ef3a4b44d0b 100644
+--- a/tests/conflicts.rs
++++ b/tests/conflicts.rs
+@@ -16,6 +16,13 @@ USAGE:
+ 
+ For more information try --help";
+ 
++static CONFLICT_ERR_THREE: &str = "error: The argument '--two' cannot be used with '--one'
++
++USAGE:
++    three_conflicting_arguments --one
++
++For more information try --help";
++
+ #[test]
+ fn flag_conflict() {
+     let result = App::new("flag_conflict")
+@@ -88,22 +95,68 @@ fn group_conflict_2() {
+ 
+ #[test]
+ fn conflict_output() {
+-    utils::compare_output(
++    assert!(utils::compare_output(
+         utils::complex_app(),
+-        "clap-test val1 --flag --long-option-2 val2 -F",
++        "clap-test val1 fa --flag --long-option-2 val2 -F",
+         CONFLICT_ERR,
+         true,
+-    );
++    ));
+ }
+ 
+ #[test]
+ fn conflict_output_rev() {
+-    utils::compare_output(
++    assert!(utils::compare_output(
++        utils::complex_app(),
++        "clap-test val1 fa -F --long-option-2 val2 --flag",
++        CONFLICT_ERR_REV,
++        true,
++    ));
++}
++
++#[test]
++fn conflict_output_with_required() {
++    assert!(utils::compare_output(
++        utils::complex_app(),
++        "clap-test val1 --flag --long-option-2 val2 -F",
++        CONFLICT_ERR,
++        true,
++    ));
++}
++
++#[test]
++fn conflict_output_rev_with_required() {
++    assert!(utils::compare_output(
+         utils::complex_app(),
+         "clap-test val1 -F --long-option-2 val2 --flag",
+         CONFLICT_ERR_REV,
+         true,
+-    );
++    ));
++}
++
++#[test]
++fn conflict_output_three_conflicting() {
++    let app = App::new("three_conflicting_arguments")
++        .arg(
++            Arg::new("one")
++                .long("one")
++                .conflicts_with_all(&["two", "three"]),
++        )
++        .arg(
++            Arg::new("two")
++                .long("two")
++                .conflicts_with_all(&["one", "three"]),
++        )
++        .arg(
++            Arg::new("three")
++                .long("three")
++                .conflicts_with_all(&["one", "two"]),
++        );
++    assert!(utils::compare_output(
++        app,
++        "three_conflicting_arguments --one --two --three",
++        CONFLICT_ERR_THREE,
++        true,
++    ));
+ }
+ 
+ #[test]
+@@ -137,13 +190,13 @@ fn two_conflicting_arguments() {
+     let a = a.unwrap_err();
+     assert_eq!(
+         a.cause,
+-        "The argument \'--develop\' cannot be used with \'--production\'"
++        "The argument \'--production\' cannot be used with \'--develop\'"
+     );
+ }
+ 
+ #[test]
+ fn three_conflicting_arguments() {
+-    let a = App::new("two_conflicting_arguments")
++    let a = App::new("three_conflicting_arguments")
+         .arg(
+             Arg::new("one")
+                 .long("one")
+@@ -165,7 +218,7 @@ fn three_conflicting_arguments() {
+     let a = a.unwrap_err();
+     assert_eq!(
+         a.cause,
+-        "The argument \'--one\' cannot be used with \'--two\'"
++        "The argument \'--two\' cannot be used with \'--one\'"
+     );
+ }
+ 

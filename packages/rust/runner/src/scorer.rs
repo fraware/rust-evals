@@ -110,12 +110,23 @@ impl Scorer for SimpleExitCodeScorer {
                 secondary_reasons: Vec::new(),
                 metrics: json!({ "exit_code": 0 }),
             },
-            (Some(n), false) => ScorerVerdict {
-                outcome: RunOutcome::Fail,
-                primary_reason: FailureReason::L0_OFFICIAL_FAIL.as_str().to_owned(),
-                secondary_reasons: Vec::new(),
-                metrics: json!({ "exit_code": n }),
-            },
+            (Some(n), false) => {
+                if looks_like_harness_error(&exec.stderr) {
+                    ScorerVerdict {
+                        outcome: RunOutcome::Invalid,
+                        primary_reason: FailureReason::L0_OFFICIAL_INVALID.as_str().to_owned(),
+                        secondary_reasons: Vec::new(),
+                        metrics: json!({ "exit_code": n, "harness_error": true }),
+                    }
+                } else {
+                    ScorerVerdict {
+                        outcome: RunOutcome::Fail,
+                        primary_reason: FailureReason::L0_OFFICIAL_FAIL.as_str().to_owned(),
+                        secondary_reasons: Vec::new(),
+                        metrics: json!({ "exit_code": n }),
+                    }
+                }
+            }
             (_, true) => ScorerVerdict {
                 outcome: RunOutcome::Invalid,
                 primary_reason: FailureReason::L0_OFFICIAL_TIMEOUT.as_str().to_owned(),
@@ -130,6 +141,16 @@ impl Scorer for SimpleExitCodeScorer {
             },
         }
     }
+}
+
+fn looks_like_harness_error(stderr: &str) -> bool {
+    let s = stderr.to_ascii_lowercase();
+    s.contains("no module named pytest")
+        || s.contains("no module named swebench")
+        || s.contains("importerror while loading conftest")
+        || s.contains("unrecognized arguments:")
+        || s.contains("argument list too long")
+        || s.contains("unterminated quoted string")
 }
 
 #[cfg(test)]
@@ -158,6 +179,15 @@ mod tests {
         let v = SimpleExitCodeScorer.score(&outcome(Some(1), false));
         assert_eq!(v.outcome, RunOutcome::Fail);
         assert_eq!(v.primary_reason, "L0_OFFICIAL_FAIL");
+    }
+
+    #[test]
+    fn harness_error_stderr_is_invalid() {
+        let mut o = outcome(Some(1), false);
+        o.stderr = "ImportError while loading conftest".to_owned();
+        let v = SimpleExitCodeScorer.score(&o);
+        assert_eq!(v.outcome, RunOutcome::Invalid);
+        assert_eq!(v.primary_reason, "L0_OFFICIAL_INVALID");
     }
 
     #[test]

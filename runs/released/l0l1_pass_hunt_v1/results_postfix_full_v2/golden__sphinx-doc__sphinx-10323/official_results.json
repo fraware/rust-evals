@@ -1,0 +1,1 @@
+{"artifacts":[],"candidate_id":"6c12fc15-f0e1-57ff-a6f2-bf3ac68e1cec","evaluator_version":"0.1.0","finished_at":"2025-01-01T00:00:00.004Z","level":"L0","metrics":{"exit_code":4},"primary_reason":"L0_OFFICIAL_FAIL","schema_version":1,"secondary_reasons":[],"started_at":"2025-01-01T00:00:00.003Z","status":"fail","task_id":"sphinx-doc__sphinx-10323"}

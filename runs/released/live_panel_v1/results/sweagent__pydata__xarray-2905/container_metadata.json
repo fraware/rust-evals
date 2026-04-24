@@ -1,0 +1,1 @@
+{"command":["python","-m","pytest","xarray/tests/test_variable.py::TestAsCompatibleData::test_unsupported_type"],"engine":"other","image_ref":"swebench/sweb.eval.x86_64.pydata_1776_xarray-2905:latest","patch_apply_outcome_l0":"applied","patch_apply_outcome_l1":"applied","resource_limits":{"wall_timeout":{"nanos":0,"secs":600}}}

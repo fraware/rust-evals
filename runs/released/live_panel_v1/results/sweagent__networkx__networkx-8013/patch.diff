@@ -1,0 +1,15 @@
+diff --git a/networkx/algorithms/traversal/tests/test_bfs.py b/networkx/algorithms/traversal/tests/test_bfs.py
+index fcfbbc68dc1..7f4f37a31c4 100644
+--- a/networkx/algorithms/traversal/tests/test_bfs.py
++++ b/networkx/algorithms/traversal/tests/test_bfs.py
+@@ -58,8 +58,8 @@ def test_bfs_layers(self):
+             2: [2, 3],
+             3: [4],
+         }
+-        assert dict(enumerate(nx.bfs_layers(self.G, sources=[0]))) == expected
+-        assert dict(enumerate(nx.bfs_layers(self.G, sources=0))) == expected
++        for sources in [0, [0], (i for i in [0]), [0, 0]]:
++            assert dict(enumerate(nx.bfs_layers(self.G, sources))) == expected
+ 
+     def test_bfs_layers_missing_source(self):
+         with pytest.raises(nx.NetworkXError):

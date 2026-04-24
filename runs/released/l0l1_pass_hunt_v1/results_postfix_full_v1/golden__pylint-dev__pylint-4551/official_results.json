@@ -1,0 +1,1 @@
+{"artifacts":[],"candidate_id":"765178de-ed58-5053-94b3-90aa0919ea09","evaluator_version":"0.1.0","finished_at":"2025-01-01T00:00:00.004Z","level":"L0","metrics":{"exit_code":4},"primary_reason":"L0_OFFICIAL_FAIL","schema_version":1,"secondary_reasons":[],"started_at":"2025-01-01T00:00:00.003Z","status":"fail","task_id":"pylint-dev__pylint-4551"}

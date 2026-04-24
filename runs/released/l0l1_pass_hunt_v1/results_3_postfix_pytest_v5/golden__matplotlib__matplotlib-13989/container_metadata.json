@@ -1,0 +1,1 @@
+{"command":["python","-m","pytest","lib/matplotlib/tests/test_axes.py::test_hist_range_and_density"],"engine":"other","image_ref":"eval-ladder-prepped/swebench_sweb.eval.x86_64.matplotlib_1776_matplotlib-13989_latest:latest","patch_apply_outcome_l0":"applied","patch_apply_outcome_l1":"applied","resource_limits":{"wall_timeout":{"nanos":0,"secs":5400}}}

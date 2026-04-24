@@ -1,0 +1,9 @@
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
+ImportError while loading conftest '/workspace/conftest.py'.
+conftest.py:11: in <module>
+    from astropy import __version__
+astropy/__init__.py:12: in <module>
+    from .version import version as __version__
+astropy/version.py:11: in <module>
+    warnings.warn(
+E   UserWarning: could not determine astropy package version; this indicates a broken installation

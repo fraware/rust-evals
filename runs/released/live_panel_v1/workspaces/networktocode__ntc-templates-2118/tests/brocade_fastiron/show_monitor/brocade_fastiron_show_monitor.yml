@@ -1,0 +1,8 @@
+---
+parsed_sample:
+  - inputmirror: "18"
+    monitoredport: "10"
+    outputmirror: "18"
+  - inputmirror: "18"
+    monitoredport: "16"
+    outputmirror: "18"

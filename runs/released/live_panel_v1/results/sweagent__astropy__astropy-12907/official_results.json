@@ -1,0 +1,1 @@
+{"artifacts":[],"candidate_id":"f9710dfe-527e-5234-b027-a2cb3616aeb9","evaluator_version":"0.1.0","finished_at":"2025-01-01T00:00:00.004Z","level":"L0","metrics":{"exit_code":0},"primary_reason":"PASS","schema_version":1,"secondary_reasons":[],"started_at":"2025-01-01T00:00:00.003Z","status":"pass","task_id":"astropy__astropy-12907"}

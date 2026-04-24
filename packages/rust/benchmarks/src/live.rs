@@ -19,8 +19,8 @@ use tracing::{debug, info};
 
 use crate::adapter::{BenchmarkAdapter, BenchmarkAdapterError, IngestOptions, IngestReport};
 use crate::normalize::{
-    issue_id_from_instance_id, issue_title_from_problem_statement, parse_created_at,
-    LIVE_SOURCE_URL,
+    issue_id_from_instance_id, issue_title_from_problem_statement, official_pytest_entrypoint,
+    parse_created_at, LIVE_SOURCE_URL,
 };
 use crate::raw::{apply_filters, read_jsonl, RawSweBenchRecord};
 use crate::writer::ManifestWriter;
@@ -130,10 +130,7 @@ pub fn record_to_task(
     let issue_id = issue_id_from_instance_id(&raw.instance_id);
     let issue_title = issue_title_from_problem_statement(&raw.problem_statement);
     let created_at = parse_created_at(&raw.instance_id, raw, ingest_now)?;
-    let official_test_entrypoint = format!(
-        "python -m swebench.harness.run_evaluation --instance_ids {} --dataset_name SWE-bench-Live",
-        raw.instance_id
-    );
+    let official_test_entrypoint = official_pytest_entrypoint(raw);
 
     let mut labels: Vec<String> = vec!["live".into(), format!("repo:{}", raw.repo)];
     if let Some(v) = raw.version.as_deref() {
@@ -181,7 +178,9 @@ mod tests {
             "base_commit": "1234567abcdef",
             "problem_statement": "Scheduler race condition\n\nDetails...",
             "docker_image": "swebenchlive/apache__airflow-41234:sha-abc",
-            "created_at": "2024-08-10T09:00:00Z"
+            "created_at": "2024-08-10T09:00:00Z",
+            "FAIL_TO_PASS": ["tests/foo.py::test_new_behavior"],
+            "PASS_TO_PASS": ["tests/foo.py::test_stable_behavior"]
         }))
         .unwrap()
     }
@@ -193,6 +192,10 @@ mod tests {
             t.environment_ref,
             "swebenchlive/apache__airflow-41234:sha-abc"
         );
+        assert!(t.official_test_entrypoint.starts_with("python -m pytest"));
+        assert!(t
+            .official_test_entrypoint
+            .contains("python -m pytest tests/foo.py::test_new_behavior"));
         assert!(t.labels.contains(&"live".into()));
         assert!(t.labels.contains(&"repo:apache/airflow".into()));
     }
