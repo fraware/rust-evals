@@ -125,8 +125,9 @@ Choose one mode per submission.
       manifests, count pinned with ``--expect-manifest-count 500``).
 - [x] Contract tests for pytest selector parsing:
       `tests/python/test_verified_pytest_targets.py` (tier-2 ``pytest``).
-- [x] Subprocess CLI tests for preflight, audit, diagnose, triage, and all
-      ``check_evidence_quality`` modes:
+- [x] Subprocess CLI tests for preflight, audit, diagnose, triage, tier-1 runner,
+      all ``check_evidence_quality`` modes, and **failure paths** (exit code 2 /
+      ``ok: false``) so gates cannot silently weaken:
       `tests/python/test_evidence_cli_scripts.py`.
 - [x] Tier-1 evidence checks (local and ``ci-tier1-fast``):
       `ci/scripts/run_evidence_tier1_checks.py`.

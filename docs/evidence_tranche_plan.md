@@ -206,7 +206,11 @@ Tier 3 and release-tag workflow must pass on the same tag.
   ``runs/released/rust_proof_subset_v1/results_fast``, ``preflight_verified_selectors.py --strict``
   on ``l0l1_pass_hunt_v1``, ``audit_verified_manifest_entrypoints.py --strict``
   over 500 manifests). ``ci-tier2-medium`` runs ``ruff check ci/scripts``
-  together with the existing Python package lint.
+  together with the existing Python package lint and ``pytest``, including
+  subprocess tests that assert ``check_evidence_quality`` exits **2** with
+  ``ok: false`` on representative failure shapes (harness rate, degenerate
+  agent vectors, live ties / tau / delta, thin L2, rust invalid rows and
+  semantic minima).
 - **Local** runs use the same command from the repository root (no Rust build).
   Add or reorder checks in ``ci/scripts/run_evidence_tier1_checks.py`` only;
   the workflow invokes that script so CI and local stay aligned.
