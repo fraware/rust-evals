@@ -110,3 +110,16 @@ Choose one mode per submission.
       developer machine
       (`eval-ladder demo run --out runs/demo --tasks 2`; see
       `docs/operational_runbook.md#reproducibility-demo-milestone-k`).
+
+## Evidence tranche quality gates
+
+- [x] Machine-checkable gate script for empirical tranche quality:
+      `ci/scripts/check_evidence_quality.py`.
+- [x] L1 harness-error clustering for triage:
+      `ci/scripts/triage_l1_harness_errors.py` (see evidence tranche plan).
+- [x] Execution playbook for remaining tranche:
+      `docs/evidence_tranche_plan.md`.
+- [ ] Verified flagship gate passing (non-degenerate, low harness error).
+- [ ] Live comparative gate passing (non-tied ranking signal).
+- [ ] L2 expansion gate passing (sufficient passed-from + fail attribution).
+- [ ] Rust proof-subset gate passing (8/8 ok, L3/L4 residual examples).
