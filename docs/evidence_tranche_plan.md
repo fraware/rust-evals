@@ -32,6 +32,9 @@ python ci/scripts/diagnose_batch_summary.py \
   --summary runs/released/agent_panel_v2/results/batch_summary.json
 ```
 
+Add ``--fail-on-warnings`` so the process exits non-zero when thresholds are
+breached (useful in scripted gates).
+
 When ``diagnose_batch_summary`` flags a high ``L1_HARNESS_ERROR`` rate, cluster
 ``stderr.log`` signatures for the affected run directory:
 
@@ -206,3 +209,8 @@ Tier 3 and release-tag workflow must pass on the same tag.
 - It also runs ``audit_verified_manifest_entrypoints.py --strict`` over all
   ``benchmarks/verified/manifests`` JSON files (entrypoint shape, environment
   ref pattern, no ``..`` in commands).
+- **Local parity** with that tier-1 evidence job (no Rust build): run
+  ``python ci/scripts/run_evidence_tier1_checks.py`` from the repository root.
+  When you change the GitHub workflow steps, update that script in lockstep.
+- ``diagnose_batch_summary.py`` supports ``--fail-on-warnings`` (exit code 2)
+  for strict automation when harness or L3 dominance thresholds are exceeded.

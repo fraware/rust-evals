@@ -128,6 +128,9 @@ Choose one mode per submission.
 - [x] Subprocess CLI tests for preflight, audit, diagnose, triage, and all
       ``check_evidence_quality`` modes:
       `tests/python/test_evidence_cli_scripts.py`.
+- [x] Local tier-1 evidence parity runner: `ci/scripts/run_evidence_tier1_checks.py`.
+- [x] Optional strict exit for batch diagnostics:
+      `ci/scripts/diagnose_batch_summary.py --fail-on-warnings`.
 - [x] Execution playbook for remaining tranche:
       `docs/evidence_tranche_plan.md`.
 - [ ] Verified flagship gate passing (non-degenerate, low harness error).

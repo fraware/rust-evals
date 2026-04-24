@@ -291,6 +291,41 @@ def _live_row(
     }
 
 
+def test_diagnose_batch_summary_fail_on_warnings(
+    repo_root: Path, tmp_path: Path
+) -> None:
+    summary_path = tmp_path / "batch_summary.json"
+    summary = {
+        "entries": [
+            {
+                "entry_id": "a__t",
+                "status": "ok",
+                "levels": {
+                    "l0": {"status": "pass", "primary_reason": "PASS"},
+                    "l1": {
+                        "status": "fail",
+                        "primary_reason": "L1_HARNESS_ERROR",
+                    },
+                },
+            }
+        ]
+    }
+    summary_path.write_text(json.dumps(summary) + "\n", encoding="utf-8")
+
+    proc = _run_script(
+        repo_root,
+        "ci/scripts/diagnose_batch_summary.py",
+        [
+            "--summary",
+            str(summary_path),
+            "--l1-harness-threshold",
+            "0.10",
+            "--fail-on-warnings",
+        ],
+    )
+    assert proc.returncode == 2, proc.stderr + proc.stdout
+
+
 def test_diagnose_batch_summary_emits_metrics_and_warnings(
     repo_root: Path, tmp_path: Path
 ) -> None:

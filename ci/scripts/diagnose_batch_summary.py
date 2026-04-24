@@ -2,7 +2,9 @@
 """Diagnose dominant failure modes in a batch_summary.json.
 
 Use this before expensive reruns to identify harness or policy pathologies
-(for example L1_HARNESS_ERROR dominance or single-code L3 collapse).
+(for example L1_HARNESS_ERROR dominance or single-code L3 collapse). With
+``--fail-on-warnings``, exit code is 2 when any warning is emitted (default is
+always 0 so the report can be inspected interactively).
 """
 
 from __future__ import annotations
@@ -43,6 +45,11 @@ def main() -> int:
     ap.add_argument("--summary", type=Path, required=True, help="path to batch_summary.json")
     ap.add_argument("--l1-harness-threshold", type=float, default=0.10)
     ap.add_argument("--l3-dominant-threshold", type=float, default=0.80)
+    ap.add_argument(
+        "--fail-on-warnings",
+        action="store_true",
+        help="exit with code 2 when any diagnostic warning is emitted",
+    )
     args = ap.parse_args()
 
     summary = _load(args.summary)
@@ -86,6 +93,8 @@ def main() -> int:
         )
 
     print(json.dumps(report, indent=2, sort_keys=True))
+    if args.fail_on_warnings and report["warnings"]:
+        return 2
     return 0
 
 
