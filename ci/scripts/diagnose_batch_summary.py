@@ -13,11 +13,11 @@ import argparse
 import json
 from collections import Counter
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 
 def _load(path: Path) -> dict[str, Any]:
-    return json.loads(path.read_text(encoding="utf-8"))
+    return cast(dict[str, Any], json.loads(path.read_text(encoding="utf-8")))
 
 
 def _code(entry: dict[str, Any], level: str) -> str:
@@ -68,7 +68,8 @@ def main() -> int:
     l1_harness_rate = l1_harness / total
     l3_dom = (max(l3_codes.values()) / sum(l3_codes.values())) if l3_codes else 0.0
 
-    report = {
+    warnings: list[str] = []
+    report: dict[str, Any] = {
         "total_entries": total,
         "l0_codes": dict(l0_codes),
         "l1_codes": dict(l1_codes),
@@ -77,23 +78,23 @@ def main() -> int:
             "l1_harness_error_rate": l1_harness_rate,
             "l3_dominant_fail_code_share": l3_dom,
         },
-        "warnings": [],
+        "warnings": warnings,
     }
     if l1_harness_rate > args.l1_harness_threshold:
-        report["warnings"].append(
+        warnings.append(
             "L1_HARNESS_ERROR rate "
             f"{l1_harness_rate:.3f} exceeds threshold "
             f"{args.l1_harness_threshold:.3f}"
         )
     if l3_dom > args.l3_dominant_threshold:
-        report["warnings"].append(
+        warnings.append(
             "L3 dominant fail-code share "
             f"{l3_dom:.3f} exceeds threshold "
             f"{args.l3_dominant_threshold:.3f}"
         )
 
     print(json.dumps(report, indent=2, sort_keys=True))
-    if args.fail_on_warnings and report["warnings"]:
+    if args.fail_on_warnings and warnings:
         return 2
     return 0
 

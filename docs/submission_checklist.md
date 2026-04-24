@@ -126,9 +126,11 @@ Choose one mode per submission.
 - [x] Contract tests for pytest selector parsing:
       `tests/python/test_verified_pytest_targets.py` (tier-2 ``pytest``).
 - [x] Subprocess CLI tests for preflight, audit, diagnose, triage, tier-1 runner,
-      all ``check_evidence_quality`` modes, and **failure paths** (exit code 2 /
-      ``ok: false``) so gates cannot silently weaken:
-      `tests/python/test_evidence_cli_scripts.py`.
+      release manifest writer, all ``check_evidence_quality`` modes, and
+      **failure paths** (exit code 2 / ``ok: false``) so gates cannot silently
+      weaken: `tests/python/test_evidence_cli_scripts.py`.
+- [x] Strict ``mypy`` on ``packages/python/benchmark_compat/src`` and
+      ``ci/scripts`` (tier-2 ``mypy``; paths listed in root ``pyproject.toml``).
 - [x] Tier-1 evidence checks (local and ``ci-tier1-fast``):
       `ci/scripts/run_evidence_tier1_checks.py`.
 - [x] Optional strict exit for batch diagnostics:

@@ -69,7 +69,7 @@ check_untyped_defs = true
 no_implicit_optional = true
 pretty = true
 show_error_codes = true
-files = ["packages/python/benchmark_compat/src"]
+files = ["packages/python/benchmark_compat/src", "ci/scripts"]
 
 [tool.ruff]
 line-length = 100

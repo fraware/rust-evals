@@ -205,8 +205,10 @@ Tier 3 and release-tag workflow must pass on the same tag.
   ``ci/scripts``, structural ``rust-proof`` on tracked
   ``runs/released/rust_proof_subset_v1/results_fast``, ``preflight_verified_selectors.py --strict``
   on ``l0l1_pass_hunt_v1``, ``audit_verified_manifest_entrypoints.py --strict``
-  over 500 manifests). ``ci-tier2-medium`` runs ``ruff check ci/scripts``
-  together with the existing Python package lint and ``pytest``, including
+  over 500 manifests). ``ci-tier2-medium`` runs ``ruff check`` on
+  ``packages/python`` and ``ci/scripts``, strict ``mypy`` on
+  ``packages/python/benchmark_compat/src`` and ``ci/scripts`` (see root
+  ``pyproject.toml``), and ``pytest``, including
   subprocess tests that assert ``check_evidence_quality`` exits **2** with
   ``ok: false`` on representative failure shapes (harness rate, degenerate
   agent vectors, live ties / tau / delta, thin L2, rust invalid rows and

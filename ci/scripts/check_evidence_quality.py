@@ -11,8 +11,9 @@ from __future__ import annotations
 import argparse
 import json
 from collections import Counter, defaultdict
+from collections.abc import Callable
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 
 def _load_json(path: Path) -> Any:
@@ -20,7 +21,10 @@ def _load_json(path: Path) -> Any:
 
 
 def _load_batch_summary(run_dir: Path) -> dict[str, Any]:
-    return _load_json(run_dir / "batch_summary.json")
+    data = _load_json(run_dir / "batch_summary.json")
+    if not isinstance(data, dict):
+        raise TypeError("batch_summary.json top-level value must be an object")
+    return cast(dict[str, Any], data)
 
 
 def _level(entry: dict[str, Any], key: str) -> dict[str, Any]:
@@ -358,7 +362,8 @@ def _build_parser() -> argparse.ArgumentParser:
 def main() -> int:
     parser = _build_parser()
     args = parser.parse_args()
-    return args.func(args)
+    handler = cast(Callable[[argparse.Namespace], int], args.func)
+    return handler(args)
 
 
 if __name__ == "__main__":

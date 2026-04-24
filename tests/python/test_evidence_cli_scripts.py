@@ -541,6 +541,28 @@ def test_run_evidence_tier1_checks_passes_on_repo(repo_root: Path) -> None:
     assert "all steps passed" in proc.stderr
 
 
+def test_write_release_artifact_manifest_stdout_and_out(
+    repo_root: Path, tmp_path: Path
+) -> None:
+    out_path = tmp_path / "release_manifest.json"
+    proc = _run_script(
+        repo_root,
+        "ci/scripts/write_release_artifact_manifest.py",
+        ["--repo-root", str(repo_root), "--out", str(out_path)],
+    )
+    assert proc.returncode == 0, proc.stdout + proc.stderr
+    manifest = json.loads(proc.stdout)
+    assert manifest["schema_version"] == 1
+    assert "generated_at_utc" in manifest
+    assert "files_sha256" in manifest
+    assert "missing_paths" in manifest
+    assert isinstance(manifest["missing_paths"], list)
+    toolchain = "rust-toolchain.toml"
+    assert toolchain in manifest["files_sha256"]
+    assert manifest["files_sha256"][toolchain].startswith("sha256:")
+    assert out_path.read_text(encoding="utf-8") == proc.stdout
+
+
 def test_check_evidence_quality_verified_fails_high_harness_rate(
     repo_root: Path, tmp_path: Path
 ) -> None:
