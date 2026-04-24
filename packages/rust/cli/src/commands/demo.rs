@@ -37,10 +37,12 @@ use std::time::Instant;
 use anyhow::{Context, Result};
 use chrono::{TimeZone, Utc};
 use clap::{Args, Subcommand};
-use eval_ladder_analysis::{load_bundle_dir, paper_export::write_paper_exports, LoadOptions};
+use eval_ladder_analysis::{
+    load_bundle_dir, paper_export::write_paper_exports, AnalysisMode, LoadOptions,
+};
 use eval_ladder_core::{
-    BenchmarkId, BenchmarkLanguage, BenchmarkTask, CandidateId, CandidateResolution, ContextMode,
-    GenerationMetadata, GenerationMode, PatchFormat, TaskId,
+    candidate::ContextMode, BenchmarkId, BenchmarkLanguage, BenchmarkTask, CandidateId,
+    CandidateResolution, GenerationMetadata, GenerationMode, PatchFormat, TaskId,
 };
 use serde::{Deserialize, Serialize};
 use tracing::info;
@@ -139,6 +141,14 @@ pub fn run_demo(args: DemoRunArgs) -> Result<DemoSummary> {
         out: bundles_dir.clone(),
         deterministic_clock: true,
         timeout_secs: 120,
+        short_timeout_secs: None,
+        adaptive_timeouts: false,
+        resume: false,
+        jobs: 1,
+        track: None,
+        l1_strategy: "strict".into(),
+        rust_target_cache_root: None,
+        dedupe_workloads: false,
         seed_tag: "milestone-k-demo".into(),
         strengthening_spec: None,
         strengthening_mode: "full_l2".into(),
@@ -194,7 +204,7 @@ fn run_paper_export(bundles_dir: &Path, paper_dir: &Path) -> Result<()> {
         .with_context(|| format!("creating paper dir {}", paper_dir.display()))?;
     let input = load_bundle_dir(bundles_dir, &LoadOptions::default())
         .with_context(|| format!("loading bundles from {}", bundles_dir.display()))?;
-    write_paper_exports(&input, paper_dir)
+    write_paper_exports(&input, paper_dir, AnalysisMode::Cumulative)
         .with_context(|| format!("writing paper exports to {}", paper_dir.display()))?;
     Ok(())
 }

@@ -12,13 +12,14 @@ use std::time::Duration;
 use anyhow::{bail, Context, Result};
 use clap::{Args, Subcommand};
 use eval_ladder_core::{
-    BenchmarkTask, CandidateResolution, EvaluationLevel, EvaluatorVersion, EVALUATOR_VERSION,
+    BenchmarkId, BenchmarkTask, CandidateResolution, EvaluationLevel, EvaluatorVersion,
+    EVALUATOR_VERSION,
 };
 use eval_ladder_lean::{ExternalProcessChecker, L4Extension, ObligationManifest};
 use eval_ladder_policy::{L3Extension, Policy};
 use eval_ladder_runner::{
-    DeterministicSeed, EvaluationPipeline, FixedClock, LevelExtension, LocalProcessEngine,
-    PipelineInputs, ResourceLimits, SimpleExitCodeScorer, SystemClock,
+    DeterministicSeed, DockerCliEngine, EvaluationPipeline, FixedClock, L1Strategy, LevelExtension,
+    LocalProcessEngine, PipelineInputs, ResourceLimits, SimpleExitCodeScorer, SystemClock,
 };
 use eval_ladder_strengthening::{L2Extension, StrengtheningMode, StrengtheningSpec};
 use tracing::info;
@@ -299,7 +300,6 @@ fn run_candidate(args: CandidateArgs) -> Result<()> {
 
     let staging_root = tempfile::tempdir().context("creating staging tempdir for the pipeline")?;
 
-    let engine = LocalProcessEngine;
     let scorer = SimpleExitCodeScorer;
     let seed = DeterministicSeed::build(
         candidate.candidate_id,
@@ -359,34 +359,41 @@ fn run_candidate(args: CandidateArgs) -> Result<()> {
         extensions.push(ext);
     }
 
-    let outcome = if args.deterministic_clock {
-        let clock = FixedClock::deterministic();
-        EvaluationPipeline::new(&engine, &scorer, &clock).run(PipelineInputs {
-            task: &task,
-            candidate: &candidate,
-            patch_bytes: &patch_bytes,
-            workspace_template: &args.workspace_template,
-            staging_root: staging_root.path(),
-            bundle_dir: &args.bundle_dir,
-            identity_seed: &seed,
-            resource_limits,
-            env: &[],
-            extensions: &extensions,
-        })?
+    let use_docker = matches!(
+        task.benchmark_id,
+        BenchmarkId::SweBenchVerified | BenchmarkId::SweBenchLive
+    ) && !task.environment_ref.starts_with("local:");
+    let inputs = PipelineInputs {
+        task: &task,
+        candidate: &candidate,
+        patch_bytes: &patch_bytes,
+        workspace_template: &args.workspace_template,
+        staging_root: staging_root.path(),
+        bundle_dir: &args.bundle_dir,
+        identity_seed: &seed,
+        resource_limits,
+        env: &[],
+        extensions: &extensions,
+        l1_strategy: L1Strategy::StrictRerun,
+    };
+    let outcome = if use_docker {
+        let engine = DockerCliEngine;
+        if args.deterministic_clock {
+            let clock = FixedClock::deterministic();
+            EvaluationPipeline::new(&engine, &scorer, &clock).run(inputs)?
+        } else {
+            let clock = SystemClock;
+            EvaluationPipeline::new(&engine, &scorer, &clock).run(inputs)?
+        }
     } else {
-        let clock = SystemClock;
-        EvaluationPipeline::new(&engine, &scorer, &clock).run(PipelineInputs {
-            task: &task,
-            candidate: &candidate,
-            patch_bytes: &patch_bytes,
-            workspace_template: &args.workspace_template,
-            staging_root: staging_root.path(),
-            bundle_dir: &args.bundle_dir,
-            identity_seed: &seed,
-            resource_limits,
-            env: &[],
-            extensions: &extensions,
-        })?
+        let engine = LocalProcessEngine;
+        if args.deterministic_clock {
+            let clock = FixedClock::deterministic();
+            EvaluationPipeline::new(&engine, &scorer, &clock).run(inputs)?
+        } else {
+            let clock = SystemClock;
+            EvaluationPipeline::new(&engine, &scorer, &clock).run(inputs)?
+        }
     };
 
     let mut report = serde_json::json!({

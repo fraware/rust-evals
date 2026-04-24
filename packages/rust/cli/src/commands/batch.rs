@@ -27,18 +27,20 @@ use std::fs;
 use std::io::{BufRead, BufReader};
 use std::path::{Path, PathBuf};
 use std::time::Duration;
+use std::{collections::HashMap, thread};
 
 use anyhow::{bail, Context, Result};
 use chrono::{DateTime, Utc};
 use eval_ladder_core::{
-    canonical_json, BenchmarkTask, CandidateResolution, EvaluationLevel, EvaluationStatus,
-    EvaluatorVersion, Sha256Digest, EVALUATOR_VERSION,
+    canonical_json, BenchmarkId, BenchmarkTask, CandidateResolution, EvaluationLevel,
+    EvaluationStatus, EvaluatorVersion, Sha256Digest, EVALUATOR_VERSION,
 };
 use eval_ladder_lean::{ExternalProcessChecker, L4Extension, ObligationManifest};
 use eval_ladder_policy::{L3Extension, Policy};
 use eval_ladder_runner::{
-    DeterministicSeed, EvaluationPipeline, FixedClock, LevelExtension, LocalProcessEngine,
-    PipelineInputs, PipelineOutcome, ResourceLimits, SimpleExitCodeScorer, SystemClock,
+    DeterministicSeed, DockerCliEngine, EnvVar, EvaluationPipeline, FixedClock, L1Strategy,
+    LevelExtension, LocalProcessEngine, PipelineInputs, PipelineOutcome, ResourceLimits,
+    SimpleExitCodeScorer, SystemClock,
 };
 use eval_ladder_strengthening::{L2Extension, StrengtheningMode, StrengtheningSpec};
 use serde::{Deserialize, Serialize};
@@ -84,6 +86,30 @@ pub struct BatchArgs {
     /// Batch-wide wall-clock timeout per container exec, in seconds.
     #[arg(long, default_value_t = 1800)]
     pub timeout_secs: u64,
+    /// Optional short timeout used by adaptive mode.
+    #[arg(long)]
+    pub short_timeout_secs: Option<u64>,
+    /// Adapt per-entry timeout using prior batch_summary reasons in `--out`.
+    #[arg(long, default_value_t = false)]
+    pub adaptive_timeouts: bool,
+    /// Reuse existing successful bundles in `--out` when possible.
+    #[arg(long, default_value_t = false)]
+    pub resume: bool,
+    /// Parallel jobs (entries are parallelized; each entry remains level-serial).
+    #[arg(long, default_value_t = 1)]
+    pub jobs: usize,
+    /// Fast/Heavy workflow preset for level list.
+    #[arg(long)]
+    pub track: Option<String>,
+    /// L1 strategy (`strict` or `smart_rust_reuse`).
+    #[arg(long, default_value = "smart_rust_reuse")]
+    pub l1_strategy: String,
+    /// Optional root for shared rust target cache (CARGO_TARGET_DIR).
+    #[arg(long)]
+    pub rust_target_cache_root: Option<PathBuf>,
+    /// Reuse duplicate workloads (same repo/base_commit/patch) by copying first bundle.
+    #[arg(long, default_value_t = true)]
+    pub dedupe_workloads: bool,
 
     /// Identity-seed tag appended to every deterministic seed. Changes
     /// the `run_id`/`bundle_id` without changing any other input.
@@ -307,6 +333,17 @@ fn parse_levels(input: &str) -> Result<Vec<EvaluationLevel>, BatchError> {
     Ok(out)
 }
 
+fn track_levels(track: &str) -> Result<Vec<EvaluationLevel>, BatchError> {
+    match track {
+        "fast" => parse_levels("L3,L4"),
+        "heavy" => parse_levels("L0,L1"),
+        "full" => parse_levels("L0,L1,L2,L3,L4"),
+        other => Err(BatchError::Levels(format!(
+            "--track must be one of fast|heavy|full, got {other}"
+        ))),
+    }
+}
+
 /// Batch-wide resources that are loaded once and shared across every
 /// entry.
 struct BatchExtensions<'a> {
@@ -425,7 +462,10 @@ fn build_extensions(res: &BatchBackingResources, network_accessed: bool) -> Batc
 }
 
 fn validate_level_flag_combination(args: &BatchArgs) -> Result<Vec<EvaluationLevel>, BatchError> {
-    let levels = parse_levels(&args.levels)?;
+    let levels = match args.track.as_deref() {
+        Some(t) => track_levels(t)?,
+        None => parse_levels(&args.levels)?,
+    };
     let wants_l2 = levels.contains(&EvaluationLevel::L2Strengthened);
     let wants_l3 = levels.contains(&EvaluationLevel::L3PolicyConformant);
     let wants_l4 = levels.contains(&EvaluationLevel::L4Semantic);
@@ -511,7 +551,14 @@ fn run_entry(
     let (task, candidate, patch_bytes) = match load_result {
         Ok(t) => t,
         Err(e) => {
-            return invalid_row(entry, None, levels, format!("BATCH_LOAD_FAILED: {e:#}"));
+            return invalid_row(
+                entry,
+                None,
+                serde_json::json!({
+                    "l0": {"status": EvaluationStatus::Invalid, "primary_reason": "BATCH_ENTRY_INVALID"},
+                }),
+                format!("BATCH_LOAD_FAILED: {e:#}"),
+            );
         }
     };
 
@@ -531,17 +578,48 @@ fn run_entry(
         entry,
         extensions,
         args,
+        args.timeout_secs,
     );
 
     match pipeline_result {
         Ok(outcome) => ok_row(entry, &bundle_name, &outcome, levels),
-        Err(e) => invalid_row(
-            entry,
-            Some(bundle_name),
-            levels,
-            format!("BATCH_PIPELINE_FAILED: {e:#}"),
-        ),
+        Err(e) => {
+            let detail = format!("{e:#}");
+            invalid_row(
+                entry,
+                Some(bundle_name),
+                classify_invalid_levels(levels, &detail),
+                format!("BATCH_PIPELINE_FAILED: {detail}"),
+            )
+        }
     }
+}
+
+fn run_entry_isolated(
+    entry: &PanelEntry,
+    out_dir: &Path,
+    levels: &[EvaluationLevel],
+    args: &BatchArgs,
+    timeout_secs: u64,
+) -> BatchEntryRow {
+    let resources = match load_backing_resources(args) {
+        Ok(r) => r,
+        Err(e) => {
+            return invalid_row(
+                entry,
+                entry.bundle_name.clone(),
+                serde_json::json!({
+                    "l0": {"status": EvaluationStatus::Invalid, "primary_reason": "BATCH_ENTRY_INVALID"},
+                }),
+                format!("BATCH_RESOURCE_FAILED: {e:#}"),
+            );
+        }
+    };
+    let extensions = build_extensions(&resources, args.network_accessed);
+    let ext_refs = extensions.as_level_extensions();
+    let mut args_override = args.clone();
+    args_override.timeout_secs = timeout_secs;
+    run_entry(entry, out_dir, levels, &ext_refs, &args_override)
 }
 
 fn run_pipeline(
@@ -552,6 +630,7 @@ fn run_pipeline(
     entry: &PanelEntry,
     extensions: &[&dyn LevelExtension],
     args: &BatchArgs,
+    timeout_secs: u64,
 ) -> Result<PipelineOutcome> {
     if !entry.workspace_template.exists() {
         bail!(
@@ -561,7 +640,6 @@ fn run_pipeline(
     }
     let staging_root =
         tempfile::tempdir().context("creating staging tempdir for the batch pipeline")?;
-    let engine = LocalProcessEngine;
     let scorer = SimpleExitCodeScorer;
     let seed = DeterministicSeed::build(
         candidate.candidate_id,
@@ -572,8 +650,25 @@ fn run_pipeline(
     let resource_limits = ResourceLimits {
         cpu_limit: None,
         memory_limit: None,
-        wall_timeout: Some(Duration::from_secs(args.timeout_secs)),
+        wall_timeout: Some(Duration::from_secs(timeout_secs)),
     };
+    let l1_strategy = parse_l1_strategy(&args.l1_strategy)?;
+    let mut env: Vec<EnvVar> = Vec::new();
+    if task.benchmark_id == BenchmarkId::RustSweBench {
+        let root = args
+            .rust_target_cache_root
+            .clone()
+            .unwrap_or_else(|| args.out.join(".cargo_target_cache"));
+        let cache = root
+            .join(task.repo_name.replace('/', "__"))
+            .join(task.base_commit.as_str());
+        fs::create_dir_all(&cache)
+            .with_context(|| format!("creating rust target cache dir {}", cache.display()))?;
+        env.push(EnvVar {
+            name: "CARGO_TARGET_DIR".to_owned(),
+            value: cache.display().to_string(),
+        });
+    }
 
     let inputs = PipelineInputs {
         task,
@@ -584,16 +679,33 @@ fn run_pipeline(
         bundle_dir,
         identity_seed: &seed,
         resource_limits,
-        env: &[],
+        env: &env,
         extensions,
+        l1_strategy,
     };
 
-    let outcome = if args.deterministic_clock {
-        let clock = FixedClock::deterministic();
-        EvaluationPipeline::new(&engine, &scorer, &clock).run(inputs)
+    let use_docker = matches!(
+        task.benchmark_id,
+        BenchmarkId::SweBenchVerified | BenchmarkId::SweBenchLive
+    ) && !task.environment_ref.starts_with("local:");
+    let outcome = if use_docker {
+        let engine = DockerCliEngine;
+        if args.deterministic_clock {
+            let clock = FixedClock::deterministic();
+            EvaluationPipeline::new(&engine, &scorer, &clock).run(inputs)
+        } else {
+            let clock = SystemClock;
+            EvaluationPipeline::new(&engine, &scorer, &clock).run(inputs)
+        }
     } else {
-        let clock = SystemClock;
-        EvaluationPipeline::new(&engine, &scorer, &clock).run(inputs)
+        let engine = LocalProcessEngine;
+        if args.deterministic_clock {
+            let clock = FixedClock::deterministic();
+            EvaluationPipeline::new(&engine, &scorer, &clock).run(inputs)
+        } else {
+            let clock = SystemClock;
+            EvaluationPipeline::new(&engine, &scorer, &clock).run(inputs)
+        }
     }
     .map_err(anyhow::Error::new)?;
     Ok(outcome)
@@ -647,11 +759,9 @@ fn ok_row(
 fn invalid_row(
     entry: &PanelEntry,
     bundle_name: Option<String>,
-    _levels: &[EvaluationLevel],
+    levels_obj: serde_json::Value,
     error_message: String,
 ) -> BatchEntryRow {
-    // Emit a placeholder "invalid" verdict per requested level so the
-    // summary has stable shape regardless of whether the pipeline ran.
     let bundle_name = bundle_name
         .or_else(|| entry.bundle_name.clone())
         .or_else(|| entry.entry_id.clone())
@@ -660,9 +770,6 @@ fn invalid_row(
         .entry_id
         .clone()
         .unwrap_or_else(|| bundle_name.clone());
-    let levels_obj = serde_json::json!({
-        "l0": {"status": EvaluationStatus::Invalid, "primary_reason": "BATCH_ENTRY_INVALID"},
-    });
     BatchEntryRow {
         entry_id,
         bundle_name,
@@ -673,6 +780,97 @@ fn invalid_row(
         bundle_hash: None,
         error: Some(error_message),
     }
+}
+
+fn classify_invalid_levels(levels: &[EvaluationLevel], detail: &str) -> serde_json::Value {
+    let lower = detail.to_ascii_lowercase();
+    let image_or_backend_unavailable =
+        lower.contains("image not found") || lower.contains("no container backend is available");
+
+    if image_or_backend_unavailable {
+        let mut map = serde_json::Map::new();
+        for lvl in levels {
+            let key = lvl.short_code().to_ascii_lowercase();
+            let primary = match lvl {
+                EvaluationLevel::L0Official => "L0_OFFICIAL_INVALID",
+                EvaluationLevel::L1TrustedRerun => "L1_HARNESS_ERROR",
+                EvaluationLevel::L2Strengthened => "L2_ORACLE_UNAVAILABLE",
+                EvaluationLevel::L3PolicyConformant => "PV_TRACE_INCOMPLETE",
+                EvaluationLevel::L4Semantic => "L4_EXTRACTION_FAILED",
+            };
+            map.insert(
+                key,
+                serde_json::json!({"status": EvaluationStatus::Invalid, "primary_reason": primary}),
+            );
+        }
+        return serde_json::Value::Object(map);
+    }
+
+    serde_json::json!({
+        "l0": {"status": EvaluationStatus::Invalid, "primary_reason": "BATCH_ENTRY_INVALID"},
+    })
+}
+
+fn parse_l1_strategy(s: &str) -> Result<L1Strategy, BatchError> {
+    match s {
+        "strict" => Ok(L1Strategy::StrictRerun),
+        "smart_rust_reuse" => Ok(L1Strategy::SmartRustReuse),
+        other => Err(BatchError::Extensions(format!(
+            "--l1-strategy must be strict|smart_rust_reuse, got {other}"
+        ))),
+    }
+}
+
+fn has_level_result(row: &BatchEntryRow, level: EvaluationLevel) -> bool {
+    let key = level.short_code().to_ascii_lowercase();
+    row.levels
+        .as_object()
+        .is_some_and(|m| m.get(&key).is_some())
+}
+
+fn parse_existing_summary(out_dir: &Path) -> Option<BatchSummary> {
+    let p = out_dir.join(BATCH_SUMMARY_FILE);
+    let bytes = fs::read(p).ok()?;
+    serde_json::from_slice::<BatchSummary>(&bytes).ok()
+}
+
+fn workload_key_for_entry(entry: &PanelEntry) -> Option<String> {
+    let task_bytes = fs::read(&entry.task).ok()?;
+    let task: BenchmarkTask = serde_json::from_slice(&task_bytes).ok()?;
+    let patch = if entry.patch.exists() {
+        fs::read(&entry.patch).ok()?
+    } else {
+        Vec::new()
+    };
+    let patch_hash = eval_ladder_core::digest(&patch);
+    Some(format!(
+        "{}|{}|{}",
+        task.repo_name, task.base_commit, patch_hash
+    ))
+}
+
+fn copy_dir_recursive(src: &Path, dst: &Path) -> Result<()> {
+    if dst.exists() {
+        fs::remove_dir_all(dst).with_context(|| format!("removing existing {}", dst.display()))?;
+    }
+    fs::create_dir_all(dst).with_context(|| format!("creating {}", dst.display()))?;
+    for entry in walkdir::WalkDir::new(src) {
+        let entry = entry?;
+        let rel = entry.path().strip_prefix(src)?;
+        if rel.as_os_str().is_empty() {
+            continue;
+        }
+        let out = dst.join(rel);
+        if entry.file_type().is_dir() {
+            fs::create_dir_all(&out)?;
+        } else if entry.file_type().is_file() {
+            if let Some(parent) = out.parent() {
+                fs::create_dir_all(parent)?;
+            }
+            fs::copy(entry.path(), &out)?;
+        }
+    }
+    Ok(())
 }
 
 /// Top-level entrypoint: `eval-ladder evaluate batch`.
@@ -693,7 +891,19 @@ pub fn run_batch(args: BatchArgs) -> Result<()> {
         "evaluate batch: running pipeline"
     );
 
-    // Batch-wide resources and extensions (loaded once).
+    let existing_summary = if args.resume || args.adaptive_timeouts {
+        parse_existing_summary(&args.out)
+    } else {
+        None
+    };
+    let mut existing_rows: HashMap<String, BatchEntryRow> = HashMap::new();
+    if let Some(s) = &existing_summary {
+        for row in &s.entries {
+            existing_rows.insert(row.bundle_name.clone(), row.clone());
+        }
+    }
+
+    // Batch-wide resources and extensions (loaded once) for single-job path.
     let resources = load_backing_resources(&args)?;
     let extensions = build_extensions(&resources, args.network_accessed);
     let ext_refs = extensions.as_level_extensions();
@@ -707,18 +917,121 @@ pub fn run_batch(args: BatchArgs) -> Result<()> {
         Some(Utc::now())
     };
 
+    let default_short_timeout = args
+        .short_timeout_secs
+        .unwrap_or((args.timeout_secs / 6).max(60));
     let mut rows: Vec<BatchEntryRow> = Vec::with_capacity(panel.len());
-    for (i, entry) in panel.iter().enumerate() {
-        info!(idx = i + 1, total = panel.len(), "batch entry");
-        let row = run_entry(entry, &args.out, &levels, &ext_refs, &args);
-        if row.status == BatchEntryStatus::Invalid {
-            warn!(
-                entry_id = %row.entry_id,
-                error = row.error.as_deref().unwrap_or("?"),
-                "batch entry invalid; continuing"
-            );
+    let mut seen_workloads: HashMap<String, String> = HashMap::new();
+    let jobs = args.jobs.max(1);
+    for (chunk_idx, chunk) in panel.chunks(jobs).enumerate() {
+        let mut handles = Vec::with_capacity(chunk.len());
+        for (offset, entry) in chunk.iter().enumerate() {
+            let i = chunk_idx * jobs + offset;
+            info!(idx = i + 1, total = panel.len(), "batch entry");
+            let bundle_name = entry.bundle_name.clone().unwrap_or_else(|| {
+                entry
+                    .entry_id
+                    .clone()
+                    .unwrap_or_else(|| "unknown".to_owned())
+            });
+            let bundle_dir = args.out.join(&bundle_name);
+
+            if args.resume
+                && bundle_dir.join("run_manifest.json").exists()
+                && existing_rows.get(&bundle_name).is_some_and(|r| {
+                    r.status == BatchEntryStatus::Ok
+                        && levels.iter().all(|lvl| has_level_result(r, *lvl))
+                })
+            {
+                if let Some(row) = existing_rows.get(&bundle_name) {
+                    rows.push(row.clone());
+                    continue;
+                }
+            }
+
+            if args.dedupe_workloads {
+                if let Some(key) = workload_key_for_entry(entry) {
+                    if let Some(source_bundle) = seen_workloads.get(&key) {
+                        let source_dir = args.out.join(source_bundle);
+                        if source_dir.join("run_manifest.json").exists() {
+                            let _ = copy_dir_recursive(&source_dir, &bundle_dir);
+                            if let Some(src_row) = existing_rows
+                                .get(source_bundle)
+                                .or_else(|| rows.iter().find(|r| &r.bundle_name == source_bundle))
+                            {
+                                let mut cloned = src_row.clone();
+                                cloned.bundle_name = bundle_name.clone();
+                                cloned.entry_id = entry
+                                    .entry_id
+                                    .clone()
+                                    .unwrap_or_else(|| bundle_name.clone());
+                                rows.push(cloned);
+                                continue;
+                            }
+                        }
+                    } else {
+                        seen_workloads.insert(key, bundle_name.clone());
+                    }
+                }
+            }
+
+            let mut timeout_secs = args.timeout_secs;
+            if args.adaptive_timeouts {
+                if let Some(prev) = existing_rows.get(&bundle_name) {
+                    let l0_reason = prev
+                        .levels
+                        .get("l0")
+                        .and_then(|v| v.get("primary_reason"))
+                        .and_then(serde_json::Value::as_str)
+                        .unwrap_or("");
+                    if matches!(
+                        l0_reason,
+                        "L0_OFFICIAL_FAIL" | "L1_HARNESS_ERROR" | "PV_EDIT_SCOPE"
+                    ) {
+                        timeout_secs = default_short_timeout;
+                    }
+                }
+            }
+            if jobs == 1 {
+                let mut args_override = args.clone();
+                args_override.timeout_secs = timeout_secs;
+                let row = run_entry(entry, &args.out, &levels, &ext_refs, &args_override);
+                if row.status == BatchEntryStatus::Invalid {
+                    warn!(
+                        entry_id = %row.entry_id,
+                        error = row.error.as_deref().unwrap_or("?"),
+                        "batch entry invalid; continuing"
+                    );
+                }
+                rows.push(row);
+            } else {
+                let entry_cloned = entry.clone();
+                let out = args.out.clone();
+                let levels_cloned = levels.clone();
+                let args_cloned = args.clone();
+                handles.push(thread::spawn(move || {
+                    run_entry_isolated(
+                        &entry_cloned,
+                        &out,
+                        &levels_cloned,
+                        &args_cloned,
+                        timeout_secs,
+                    )
+                }));
+            }
         }
-        rows.push(row);
+        for h in handles {
+            if let Ok(row) = h.join() {
+                if row.status == BatchEntryStatus::Invalid {
+                    warn!(
+                        entry_id = %row.entry_id,
+                        error = row.error.as_deref().unwrap_or("?"),
+                        "batch entry invalid; continuing"
+                    );
+                }
+                rows.push(row);
+            }
+        }
     }
 
     rows.sort_by(|a, b| a.bundle_name.cmp(&b.bundle_name));
@@ -887,6 +1200,14 @@ mod tests {
             out,
             deterministic_clock: true,
             timeout_secs: 60,
+            short_timeout_secs: None,
+            adaptive_timeouts: false,
+            resume: false,
+            jobs: 1,
+            track: None,
+            l1_strategy: "strict".into(),
+            rust_target_cache_root: None,
+            dedupe_workloads: false,
             seed_tag: "milestone-h".into(),
             strengthening_spec: None,
             strengthening_mode: "full_l2".into(),

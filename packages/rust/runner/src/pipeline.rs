@@ -59,7 +59,7 @@ use crate::container::{ContainerEngine, ContainerEngineError, EnvVar, ExecSpec, 
 use crate::extension::{ExtensionContext, ExtensionError, LevelExtension};
 use crate::identity::{DeterministicSeed, RunIdentity};
 use crate::patch::{apply_patch, PatchApplyError, PatchApplyOutcome};
-use crate::scorer::Scorer;
+use crate::scorer::{Scorer, ScorerVerdict};
 use crate::workspace::{prepare_workspace, WorkspaceError};
 
 /// Declarative inputs for one pipeline invocation.
@@ -90,6 +90,19 @@ pub struct PipelineInputs<'a> {
     /// Post-L1 extensions to run in order (L2 / L3 / L4). Empty means
     /// L0+L1 only, which is the Milestone C surface.
     pub extensions: &'a [&'a dyn LevelExtension],
+    /// L1 execution strategy.
+    pub l1_strategy: L1Strategy,
+}
+
+/// Strategy for producing L1.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum L1Strategy {
+    /// Always run a second execution for L1.
+    StrictRerun,
+    /// For rust-native cargo workloads, reuse L0 verdict for non-pass
+    /// outcomes to avoid duplicate compile/test cost.
+    SmartRustReuse,
 }
 
 /// Pipeline outputs. All `EvaluationResult`s are also serialized into
@@ -318,33 +331,76 @@ where
         )?;
 
         // --- L1 trusted rerun -----------------------------------------
-        let workspace_l1 = inputs.staging_root.join("workspace_l1");
-        prepare_workspace(inputs.workspace_template, &workspace_l1)?;
-        let patch_outcome_l1 = apply_patch(&workspace_l1, inputs.patch_bytes)?;
-
         let l1_started_at = self.clock.now();
-        let l1_spec = ExecSpec::new(
-            image_ref.clone(),
-            &workspace_l1,
-            command.clone(),
-            inputs.env.to_vec(),
-            inputs.resource_limits.clone(),
-        );
-        let l1_exec = self.engine.exec(&l1_spec)?;
-        let l1_finished_at = self.clock.now();
-        let l1_rerun_verdict = self.scorer.score(&l1_exec);
+        let should_reuse_l0 = matches!(inputs.l1_strategy, L1Strategy::SmartRustReuse)
+            && inputs.task.benchmark_id == BenchmarkId::RustSweBench
+            && command.first().is_some_and(|c| c == "cargo")
+            && l0_verdict.outcome != crate::artifact::RunOutcome::Pass;
 
-        let l1_verdict = reconcile_l1(&l0_verdict, &l1_rerun_verdict, patch_outcome_l1);
+        let (
+            l1_verdict,
+            l1_finished_at,
+            l1_timed_out,
+            l1_exit_code,
+            l1_patch_outcome,
+            l1_rerun_primary,
+        ) = if should_reuse_l0 {
+            let now = self.clock.now();
+            (
+                ScorerVerdict {
+                    outcome: l0_verdict.outcome.clone(),
+                    primary_reason: FailureReason::L1_HARNESS_ERROR.as_str().to_owned(),
+                    secondary_reasons: vec![
+                        l0_verdict.primary_reason.clone(),
+                        "L1_REUSED_FROM_L0".to_owned(),
+                    ],
+                    metrics: json!({
+                        "rerun_agreement": true,
+                        "rerun_skipped": true,
+                        "reason": "smart_rust_reuse_nonpass",
+                        "l0_metrics": l0_verdict.metrics,
+                    }),
+                },
+                now,
+                None,
+                None,
+                patch_outcome_l0,
+                Some("L1_REUSED_FROM_L0".to_owned()),
+            )
+        } else {
+            let workspace_l1 = inputs.staging_root.join("workspace_l1");
+            prepare_workspace(inputs.workspace_template, &workspace_l1)?;
+            let patch_outcome_l1 = apply_patch(&workspace_l1, inputs.patch_bytes)?;
+            let l1_spec = ExecSpec::new(
+                image_ref.clone(),
+                &workspace_l1,
+                command.clone(),
+                inputs.env.to_vec(),
+                inputs.resource_limits.clone(),
+            );
+            let l1_exec = self.engine.exec(&l1_spec)?;
+            let l1_finished_at = self.clock.now();
+            let l1_rerun_verdict = self.scorer.score(&l1_exec);
+            let l1_verdict = reconcile_l1(&l0_verdict, &l1_rerun_verdict, patch_outcome_l1);
+            (
+                l1_verdict,
+                l1_finished_at,
+                Some(l1_exec.timed_out),
+                Some(l1_exec.exit_code),
+                patch_outcome_l1,
+                Some(l1_rerun_verdict.primary_reason),
+            )
+        };
         trace.append_at(
             EventType::OfficialEvalFinished, // second official invocation
             json!({
                 "level": EvaluationLevel::L1TrustedRerun,
-                "rerun_outcome": l1_rerun_verdict.outcome,
-                "rerun_primary_reason": l1_rerun_verdict.primary_reason,
+                "rerun_primary_reason": l1_rerun_primary,
                 "reconciled_outcome": l1_verdict.outcome,
                 "reconciled_primary_reason": l1_verdict.primary_reason,
-                "timed_out": l1_exec.timed_out,
-                "exit_code": l1_exec.exit_code,
+                "timed_out": l1_timed_out,
+                "exit_code": l1_exit_code,
+                "l1_strategy": inputs.l1_strategy,
             }),
             l1_finished_at,
         )?;
@@ -422,7 +478,8 @@ where
             "command": command,
             "resource_limits": inputs.resource_limits,
             "patch_apply_outcome_l0": patch_outcome_l0,
-            "patch_apply_outcome_l1": patch_outcome_l1,
+            "patch_apply_outcome_l1": l1_patch_outcome,
+            "l1_strategy": inputs.l1_strategy,
         });
         write_canonical_json(
             &inputs.bundle_dir.join("container_metadata.json"),
@@ -592,10 +649,11 @@ fn ensure_bundle_dir_ready(dir: &Path) -> Result<(), PipelineError> {
 }
 
 fn split_entrypoint(s: &str) -> Result<Vec<String>, PipelineError> {
-    // Whitespace splitting is the SWE-bench convention for the
-    // `official_test_entrypoint` string. It intentionally does not
-    // support shell features (quoting, redirection, env substitution).
-    let parts: Vec<String> = s.split_whitespace().map(str::to_owned).collect();
+    // Prefer shell-like tokenization so adapters can pass quoted arguments
+    // (for example `sh -lc "<script>"`). Fall back to plain whitespace
+    // splitting for backward compatibility on malformed quoting.
+    let parts: Vec<String> =
+        shell_words::split(s).unwrap_or_else(|_| s.split_whitespace().map(str::to_owned).collect());
     if parts.is_empty() {
         return Err(PipelineError::MissingEntrypoint);
     }
@@ -789,6 +847,7 @@ mod tests {
             },
             env: &[],
             extensions: &[],
+            l1_strategy: L1Strategy::StrictRerun,
         }
     }
 
@@ -878,6 +937,19 @@ mod tests {
         assert_eq!(
             h1, h2,
             "rerun must produce an identical bundle_hash: Milestone C acceptance"
+        );
+    }
+
+    #[test]
+    fn split_entrypoint_supports_quoted_script() {
+        let cmd = split_entrypoint("sh -lc \"echo hello world\"").unwrap();
+        assert_eq!(
+            cmd,
+            vec![
+                "sh".to_owned(),
+                "-lc".to_owned(),
+                "echo hello world".to_owned()
+            ]
         );
     }
 }

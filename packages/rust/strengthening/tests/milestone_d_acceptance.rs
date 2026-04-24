@@ -30,8 +30,9 @@ use eval_ladder_core::{
 };
 use eval_ladder_evidence::verify_bundle;
 use eval_ladder_runner::{
-    DeterministicSeed, EvaluationPipeline, FixedClock, LevelExtension, LocalProcessEngine,
-    PipelineInputs, ResourceLimits, SimpleExitCodeScorer, EVAL_LADDER_NAMESPACE,
+    DeterministicSeed, EvaluationPipeline, FixedClock, L1Strategy, LevelExtension,
+    LocalProcessEngine, PipelineInputs, ResourceLimits, SimpleExitCodeScorer,
+    EVAL_LADDER_NAMESPACE,
 };
 use eval_ladder_strengthening::{
     AugmentedTestSpec, CommandSpec, L2Extension, RegressionSpec, StrengtheningMode,
@@ -162,6 +163,7 @@ fn run_once(tag: &str) -> RunRecord {
             },
             env: &[],
             extensions,
+            l1_strategy: L1Strategy::StrictRerun,
         })
         .expect("pipeline must produce a bundle");
 

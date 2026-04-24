@@ -46,14 +46,14 @@ pub mod workspace;
 pub use artifact::{RunArtifact, RunOutcome};
 pub use clock::{Clock, FixedClock, SystemClock};
 pub use container::{
-    ContainerEngine, ContainerEngineError, EnvVar, ExecOutcome, ExecSpec, LocalProcessEngine,
-    NoopEngine, ResourceLimits,
+    ContainerEngine, ContainerEngineError, DockerCliEngine, EnvVar, ExecOutcome, ExecSpec,
+    LocalProcessEngine, NoopEngine, ResourceLimits,
 };
 pub use extension::{ExtensionContext, ExtensionError, LevelExtension};
 pub use identity::{DeterministicSeed, RunIdentity, EVAL_LADDER_NAMESPACE};
 pub use patch::{apply_patch, PatchApplyError, PatchApplyOutcome};
 pub use pipeline::{
-    EvaluationPipeline, PipelineError, PipelineInputs, PipelineOutcome, RunManifest,
+    EvaluationPipeline, L1Strategy, PipelineError, PipelineInputs, PipelineOutcome, RunManifest,
 };
 pub use prepare::{PreparedRun, PreparedRunError};
 pub use runner::{BenchmarkRunner, RunnerError, StrengtheningRules};

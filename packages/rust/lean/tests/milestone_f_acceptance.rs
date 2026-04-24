@@ -38,8 +38,9 @@ use eval_ladder_lean::{
     L4_RESULT_FILE,
 };
 use eval_ladder_runner::{
-    DeterministicSeed, EvaluationPipeline, FixedClock, LevelExtension, LocalProcessEngine,
-    PipelineInputs, ResourceLimits, SimpleExitCodeScorer, EVAL_LADDER_NAMESPACE,
+    DeterministicSeed, EvaluationPipeline, FixedClock, L1Strategy, LevelExtension,
+    LocalProcessEngine, PipelineInputs, ResourceLimits, SimpleExitCodeScorer,
+    EVAL_LADDER_NAMESPACE,
 };
 use tempfile::tempdir;
 use uuid::Uuid;
@@ -178,6 +179,7 @@ fn run_pipeline_with_checker<C: LeanChecker>(
             },
             env: &[],
             extensions: &extensions,
+            l1_strategy: L1Strategy::StrictRerun,
         })
         .expect("pipeline must produce a bundle")
 }
