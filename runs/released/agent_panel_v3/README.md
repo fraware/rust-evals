@@ -13,6 +13,15 @@ python ci/scripts/diagnose_batch_summary.py \
   --summary runs/released/agent_panel_v3/results_verified_v4/batch_summary.json
 ```
 
+Official pytest paths vs materialized workspaces (run after ``build_agent_panel_v3``):
+
+```bash
+python ci/scripts/preflight_verified_selectors.py \
+  --panel runs/released/agent_panel_v3/panel.jsonl \
+  --strict \
+  --min-tasks 8
+```
+
 Harness-error clustering (stderr signatures):
 
 ```bash

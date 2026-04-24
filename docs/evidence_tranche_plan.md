@@ -40,6 +40,17 @@ python ci/scripts/triage_l1_harness_errors.py \
   --run-dir runs/released/agent_panel_v3/results_verified_v4
 ```
 
+After materializing per-task ``workspace_template`` trees for a Verified panel,
+confirm that manifest ``official_test_entrypoint`` paths exist on disk (catches
+pytest ``not found`` / ``file not found`` before Docker):
+
+```bash
+python ci/scripts/preflight_verified_selectors.py \
+  --panel runs/released/agent_panel_v3/panel.jsonl \
+  --strict \
+  --min-tasks 8
+```
+
 Materialize a stronger panel candidate:
 
 ```bash
@@ -182,3 +193,5 @@ Tier 3 and release-tag workflow must pass on the same tag.
   ``ci/scripts`` plus the structural ``rust-proof`` gate on tracked
   ``runs/released/rust_proof_subset_v1/results_fast``; ``ci-tier2-medium``
   runs ``ruff check ci/scripts`` together with the existing Python package lint.
+- The same tier-1 job runs ``preflight_verified_selectors.py --strict`` on the
+  tracked ``l0l1_pass_hunt_v1`` panel so selector regression is caught in CI.

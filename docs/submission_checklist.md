@@ -117,6 +117,9 @@ Choose one mode per submission.
       `ci/scripts/check_evidence_quality.py`.
 - [x] L1 harness-error clustering for triage:
       `ci/scripts/triage_l1_harness_errors.py` (see evidence tranche plan).
+- [x] Preflight of ``official_test_entrypoint`` selectors vs materialized
+      workspaces: `ci/scripts/preflight_verified_selectors.py` (also enforced in
+      tier-1 CI on the ``l0l1_pass_hunt_v1`` panel).
 - [x] Execution playbook for remaining tranche:
       `docs/evidence_tranche_plan.md`.
 - [ ] Verified flagship gate passing (non-degenerate, low harness error).

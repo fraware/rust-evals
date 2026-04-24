@@ -42,6 +42,13 @@ jobs:
             --min-l3-pass-l4-fail 0 \
             --min-all-level-pass 0
 
+      - name: Preflight Verified pytest selectors (tracked l0l1 panel)
+        run: |
+          python ci/scripts/preflight_verified_selectors.py \
+            --panel runs/released/l0l1_pass_hunt_v1/panel.jsonl \
+            --strict \
+            --min-tasks 8
+
   rust:
     name: Rust fmt / clippy / test / schema validate
     runs-on: ubuntu-latest
