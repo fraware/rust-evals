@@ -563,6 +563,81 @@ def test_write_release_artifact_manifest_stdout_and_out(
     assert out_path.read_text(encoding="utf-8") == proc.stdout
 
 
+def test_write_release_artifact_manifest_require_all_succeeds_on_repo(
+    repo_root: Path, tmp_path: Path
+) -> None:
+    out_path = tmp_path / "release_manifest_strict.json"
+    proc = _run_script(
+        repo_root,
+        "ci/scripts/write_release_artifact_manifest.py",
+        ["--repo-root", str(repo_root), "--require-all-files", "--out", str(out_path)],
+    )
+    assert proc.returncode == 0, proc.stdout + proc.stderr
+    manifest = json.loads(proc.stdout)
+    assert manifest["missing_paths"] == []
+    assert len(manifest["files_sha256"]) == 7
+
+
+def test_write_release_artifact_manifest_require_all_fails_without_out_write(
+    repo_root: Path, tmp_path: Path
+) -> None:
+    incomplete = tmp_path / "partial_repo"
+    incomplete.mkdir()
+    (incomplete / "rust-toolchain.toml").write_text(
+        '[toolchain]\nchannel = "1.70.0"\n', encoding="utf-8"
+    )
+    out_path = tmp_path / "should_not_exist.json"
+    proc = _run_script(
+        repo_root,
+        "ci/scripts/write_release_artifact_manifest.py",
+        [
+            "--repo-root",
+            str(incomplete),
+            "--require-all-files",
+            "--out",
+            str(out_path),
+        ],
+    )
+    assert proc.returncode == 2, proc.stdout + proc.stderr
+    assert proc.stdout == ""
+    err = json.loads(proc.stderr)
+    assert err["error"] == "missing_required_paths"
+    assert len(err["missing_paths"]) >= 1
+    assert not out_path.exists()
+
+
+def test_audit_strict_fails_on_expect_manifest_count_mismatch(
+    repo_root: Path, tmp_path: Path
+) -> None:
+    mdir = tmp_path / "manifests_two"
+    mdir.mkdir()
+    for i in (1, 2):
+        tid = f"tinybench__case-{i}"
+        (mdir / f"{tid}.json").write_text(
+            json.dumps(
+                _tiny_manifest(tid, "python -m pytest tests/test_a.py::x")
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+
+    proc = _run_script(
+        repo_root,
+        "ci/scripts/audit_verified_manifest_entrypoints.py",
+        [
+            "--manifest-dir",
+            str(mdir),
+            "--strict",
+            "--expect-manifest-count",
+            "3",
+        ],
+    )
+    assert proc.returncode == 2, proc.stdout + proc.stderr
+    report = json.loads(proc.stdout)
+    assert report["ok"] is False
+    assert any("manifest count" in f for f in report["failures"])
+
+
 def test_check_evidence_quality_verified_fails_high_harness_rate(
     repo_root: Path, tmp_path: Path
 ) -> None:

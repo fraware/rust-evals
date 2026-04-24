@@ -6,7 +6,9 @@ document is **not** a full software bill of materials; it pins the evaluator
 core, Lean obligation surface, and curated proof subset so reviewers can
 diff releases without hashing the entire tree.
 
-Writes to stdout and optionally to ``--out``.
+Writes to stdout and optionally to ``--out``. With ``--require-all-files``,
+missing fingerprint paths yield exit code **2**, a JSON error on stderr only,
+and no stdout or ``--out`` write (so tag CI cannot archive a partial manifest).
 """
 
 from __future__ import annotations
@@ -49,6 +51,14 @@ def main() -> int:
         default=None,
         help="optional path to write the same JSON (UTF-8, sorted keys)",
     )
+    ap.add_argument(
+        "--require-all-files",
+        action="store_true",
+        help=(
+            "fail with exit code 2 if any fingerprinted path is missing; "
+            "stderr only on failure (for release/tag CI)"
+        ),
+    )
     args = ap.parse_args()
     root: Path = args.repo_root.resolve()
 
@@ -80,6 +90,17 @@ def main() -> int:
         "files_sha256": dict(sorted(files.items())),
         "missing_paths": missing,
     }
+
+    if args.require_all_files and missing:
+        print(
+            json.dumps(
+                {"error": "missing_required_paths", "missing_paths": missing},
+                indent=2,
+                sort_keys=True,
+            ),
+            file=sys.stderr,
+        )
+        return 2
 
     text = json.dumps(manifest, sort_keys=True, indent=2) + "\n"
     sys.stdout.write(text)

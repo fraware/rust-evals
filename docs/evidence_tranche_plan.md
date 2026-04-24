@@ -192,6 +192,12 @@ cargo audit
 
 Tier 3 and release-tag workflow must pass on the same tag.
 
+The ``release-tag`` workflow runs
+``python ci/scripts/write_release_artifact_manifest.py --require-all-files``
+so a sparse or partial tree cannot produce a passing manifest artifact; omit
+``--require-all-files`` only when inspecting checkouts that intentionally lack
+Lean or proof-subset paths.
+
 ## Notes
 
 - Every gate prints JSON with pass/fail and detailed metrics.
