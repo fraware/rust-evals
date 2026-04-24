@@ -178,3 +178,7 @@ Tier 3 and release-tag workflow must pass on the same tag.
 - Verified ``results_verified_v4`` has been observed to fail the harness-rate
   and distinct-agent gates until L1 stderr clusters above are driven down; see
   ``runs/released/agent_panel_v3/README.md`` for triage commands.
+- On every push/PR, ``ci-tier1-fast`` runs ``python -m compileall`` on
+  ``ci/scripts`` plus the structural ``rust-proof`` gate on tracked
+  ``runs/released/rust_proof_subset_v1/results_fast``; ``ci-tier2-medium``
+  runs ``ruff check ci/scripts`` together with the existing Python package lint.

@@ -19,6 +19,29 @@ env:
   RUSTFLAGS: -D warnings
 
 jobs:
+  evidence-tranche-scripts:
+    name: Evidence scripts (syntax + structural rust-proof gate)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Syntax-check CI Python utilities
+        run: python -m compileall -q ci/scripts
+
+      - name: Structural rust-proof gate (tracked results_fast)
+        run: |
+          python ci/scripts/check_evidence_quality.py rust-proof \
+            --run-dir runs/released/rust_proof_subset_v1/results_fast \
+            --expected-entries 8 \
+            --min-l3-pass-l4-fail 0 \
+            --min-all-level-pass 0
+
   rust:
     name: Rust fmt / clippy / test / schema validate
     runs-on: ubuntu-latest

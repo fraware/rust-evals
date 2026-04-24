@@ -11,6 +11,9 @@ import argparse
 import datetime as _dt
 import hashlib
 import json
+import shutil
+import stat
+import subprocess
 import sys
 import uuid
 from collections.abc import Iterable
@@ -99,17 +102,39 @@ def _select_tasks(
     max_tasks: int,
     min_agents_with_submission: int,
 ) -> list[str]:
-    candidates = sorted(p.stem for p in VERIFIED_MANIFESTS.glob("*.json"))
-    scored: list[tuple[str, int, int]] = []
-    for task_id in candidates:
+    candidates = sorted(VERIFIED_MANIFESTS.glob("*.json"))
+    scored_by_repo: dict[str, list[tuple[str, int, int]]] = {}
+    for manifest_path in candidates:
+        task_id = manifest_path.stem
         with_patch, resolved = _task_score(task_id, results)
         if with_patch < min_agents_with_submission:
             continue
         if resolved == 0:
             continue
-        scored.append((task_id, with_patch, resolved))
-    scored.sort(key=lambda t: (t[2], t[1], t[0]), reverse=True)
-    return [task for task, _, _ in scored[:max_tasks]]
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        repo_name = str(manifest.get("repo_name", "unknown"))
+        scored_by_repo.setdefault(repo_name, []).append((task_id, with_patch, resolved))
+
+    for _repo, scored in scored_by_repo.items():
+        scored.sort(key=lambda t: (t[2], t[1], t[0]), reverse=True)
+
+    # Round-robin selection across repositories to avoid single-repo collapse.
+    selected: list[str] = []
+    repos = sorted(scored_by_repo.keys())
+    while repos and len(selected) < max_tasks:
+        next_repos: list[str] = []
+        for repo in repos:
+            if len(selected) >= max_tasks:
+                break
+            queue = scored_by_repo[repo]
+            if not queue:
+                continue
+            task_id, _with_patch, _resolved = queue.pop(0)
+            selected.append(task_id)
+            if queue:
+                next_repos.append(repo)
+        repos = next_repos
+    return selected
 
 
 def _fetch_patch(
@@ -122,6 +147,48 @@ def _fetch_patch(
         return None
     resp.raise_for_status()
     return resp.content
+
+
+def _force_writable(func, path, _exc) -> None:
+    p = Path(path)
+    p.chmod(stat.S_IWRITE)
+    func(path)
+
+
+def _robust_rmtree(path: Path) -> None:
+    if path.exists():
+        shutil.rmtree(path, onerror=_force_writable)
+
+
+def _materialize_workspace(panel_root: Path, task_id: str, repo_name: str, base_commit: str) -> str:
+    ws_root = panel_root / "workspaces"
+    ws = ws_root / task_id
+    if ws.exists():
+        return f"workspaces/{task_id}/"
+    ws.mkdir(parents=True, exist_ok=True)
+
+    tmp = REPO_ROOT / f".tmp-agent-panel-v3-{task_id.replace('/', '_')}"
+    _robust_rmtree(tmp)
+    subprocess.run(["git", "init", str(tmp)], check=True, cwd=REPO_ROOT)
+    subprocess.run(
+        ["git", "remote", "add", "origin", f"https://github.com/{repo_name}.git"],
+        check=True,
+        cwd=tmp,
+    )
+    subprocess.run(["git", "fetch", "--depth", "1", "origin", base_commit], check=True, cwd=tmp)
+    subprocess.run(["git", "checkout", "--detach", "FETCH_HEAD"], check=True, cwd=tmp)
+
+    for item in tmp.iterdir():
+        if item.name == ".git":
+            continue
+        dst = ws / item.name
+        if item.is_dir():
+            shutil.copytree(item, dst, dirs_exist_ok=True)
+        else:
+            shutil.copy2(item, dst)
+
+    _robust_rmtree(tmp)
+    return f"workspaces/{task_id}/"
 
 
 def build_panel(
@@ -163,6 +230,13 @@ def build_panel(
             agent_patch_dir.mkdir(parents=True, exist_ok=True)
             for task_id in tasks:
                 task_manifest = VERIFIED_MANIFESTS / f"{task_id}.json"
+                manifest = json.loads(task_manifest.read_text(encoding="utf-8"))
+                workspace_template = _materialize_workspace(
+                    panel_root=panel_root,
+                    task_id=task_id,
+                    repo_name=manifest["repo_name"],
+                    base_commit=manifest["base_commit"],
+                )
                 patch_bytes = _fetch_patch(client, agent["slug"], task_id)
                 if patch_bytes is None:
                     entries.append(
@@ -223,7 +297,7 @@ def build_panel(
                     "patch": str(
                         patch_path.relative_to(panel_root)
                     ).replace("\\", "/"),
-                    "workspace_template": "workspaces/verified_shared/",
+                    "workspace_template": workspace_template,
                     "bundle_name": f"{aid}__{task_id}",
                     "entry_id": f"{aid}__{task_id}",
                 }

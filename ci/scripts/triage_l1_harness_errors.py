@@ -36,37 +36,55 @@ def _stderr_path(run_dir: Path, bundle_name: str) -> Path:
 
 
 def _classify_bucket(text: str) -> str:
-    lower = text.lower()
     if not text.strip():
         return "empty_stderr"
-    if "no module named pytest" in lower:
-        return "missing_pytest"
-    if "cannot import name '_c_internal_utils'" in lower or (
-        "matplotlib" in lower and "partially initialized module" in lower
-    ):
-        return "matplotlib_native_extension_unbuilt"
-    if "sklearn" in lower and "__check_build" in lower:
-        return "sklearn_native_build_missing"
-    if "astropy" in lower and (
-        "extension modules" in lower or "file not found:" in lower
-    ):
-        return "astropy_extension_or_selector"
-    if "numpy.ndarray size changed" in lower or "binary incompatibility" in lower:
-        return "numpy_abi_mismatch"
-    if "error: not found:" in lower or "no match in any of" in lower:
-        return "pytest_selector_not_found"
-    if "modulenotfounderror" in lower or "importerror" in lower:
-        return "import_error"
-    if "cannot connect to the docker" in lower or "docker daemon" in lower:
-        return "docker_daemon"
-    if "pull access denied" in lower or "manifest unknown" in lower:
-        return "image_pull"
-    if "timed out" in lower or "deadline exceeded" in lower:
-        return "timeout_hint"
-    if "permission denied" in lower or "access is denied" in lower:
-        return "permission"
-    if "unittest.loader._failedtest" in lower and "attributeerror" in lower:
-        return "unittest_missing_method"
+    lower = text.lower()
+    # Ordered rules: first match wins (specific before generic).
+    rules: list[tuple[bool, str]] = [
+        ("no module named pytest" in lower, "missing_pytest"),
+        (
+            "cannot import name '_c_internal_utils'" in lower
+            or (
+                "matplotlib" in lower and "partially initialized module" in lower
+            ),
+            "matplotlib_native_extension_unbuilt",
+        ),
+        ("sklearn" in lower and "__check_build" in lower, "sklearn_native_build_missing"),
+        (
+            "astropy" in lower
+            and ("extension modules" in lower or "file not found:" in lower),
+            "astropy_extension_or_selector",
+        ),
+        (
+            "numpy.ndarray size changed" in lower or "binary incompatibility" in lower,
+            "numpy_abi_mismatch",
+        ),
+        (
+            "error: not found:" in lower or "no match in any of" in lower,
+            "pytest_selector_not_found",
+        ),
+        ("modulenotfounderror" in lower or "importerror" in lower, "import_error"),
+        (
+            "cannot connect to the docker" in lower or "docker daemon" in lower,
+            "docker_daemon",
+        ),
+        (
+            "pull access denied" in lower or "manifest unknown" in lower,
+            "image_pull",
+        ),
+        ("timed out" in lower or "deadline exceeded" in lower, "timeout_hint"),
+        (
+            "permission denied" in lower or "access is denied" in lower,
+            "permission",
+        ),
+        (
+            "unittest.loader._failedtest" in lower and "attributeerror" in lower,
+            "unittest_missing_method",
+        ),
+    ]
+    for condition, bucket in rules:
+        if condition:
+            return bucket
     return "other"
 
 
@@ -112,10 +130,7 @@ def main() -> int:
         if not bundle:
             continue
         sp = _stderr_path(run_dir, bundle)
-        if not sp.is_file():
-            raw = b""
-        else:
-            raw = sp.read_bytes()
+        raw = b"" if not sp.is_file() else sp.read_bytes()
         digest = hashlib.sha256(raw).hexdigest()
         text = raw.decode("utf-8", errors="replace")
         bucket = _classify_bucket(text)
