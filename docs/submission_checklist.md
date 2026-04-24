@@ -127,7 +127,8 @@ Choose one mode per submission.
 - [x] Contract tests for pytest selector parsing:
       `tests/python/test_verified_pytest_targets.py` (tier-2 ``pytest``).
 - [x] Subprocess CLI tests for preflight, audit, diagnose, triage, tier-1 runner,
-      release manifest writer, all ``check_evidence_quality`` modes, and
+      release manifest writer (including ``--require-all-files``), all
+      ``check_evidence_quality`` modes, and
       **failure paths** (exit code 2 / ``ok: false``) so gates cannot silently
       weaken: `tests/python/test_evidence_cli_scripts.py`.
 - [x] Strict ``mypy`` on ``packages/python/benchmark_compat/src`` and
