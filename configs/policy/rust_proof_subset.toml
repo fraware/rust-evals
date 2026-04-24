@@ -1,0 +1,48 @@
+# L3 policy for `runs/released/rust_proof_subset_v1`.
+#
+# Relative to `rust_pilot.toml`, this profile explicitly allows edits under
+# `examples/**` because several upstream clap fixes in the proof subset touch
+# example programs in addition to `src/**` and `tests/**`.
+
+name = "rust_proof_subset_policy"
+network_mode = "disabled"
+requires_reproducible_seed = true
+max_modified_files = 8
+allow_generated_tests = false
+allow_dependency_lockfile_edits = false
+
+allowed_commands = ["cargo", "rustc", "rustup", "bash", "sh", "git", "python"]
+forbidden_commands = ["curl", "wget", "ssh", "scp", "sudo"]
+
+allowed_edit_globs = [
+    "src/**",
+    "tests/**",
+    "examples/**",
+    "*/src/**",
+    "*/tests/**",
+    "*/examples/**",
+    "**/src/**",
+    "**/tests/**",
+    "**/examples/**",
+    "Cargo.toml",
+    "*/Cargo.toml",
+    "**/Cargo.toml",
+]
+
+forbidden_edit_globs = [
+    ".github/**",
+    "docs/**",
+    "ci/**",
+    "secrets/**",
+    "Cargo.lock",
+    "*/Cargo.lock",
+    "**/Cargo.lock",
+]
+
+required_trace_events = [
+    "RunStarted",
+    "PatchApplied",
+    "OfficialEvalStarted",
+    "OfficialEvalFinished",
+    "RunFinished",
+]

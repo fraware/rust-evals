@@ -23,15 +23,16 @@ python packages/python/scripts/build_rust_proof_subset_panel.py `
 
 ## Evaluation (L4 batch)
 
-Use the Rust evaluator profile, **rust_pilot**-style L3 policy (wider edit
-globs for `**/src/**`), the proof-subset manifest for L4, and a generous timeout.
+Use the Rust evaluator profile, the proof-subset L3 policy
+(`configs/policy/rust_proof_subset.toml`, which permits `**/examples/**`
+alongside `src/tests`), the proof-subset manifest for L4, and a generous timeout.
 
 ```powershell
 cargo run -p eval-ladder-cli -- evaluate batch `
   --input runs/released/rust_proof_subset_v1/panel.jsonl `
   --config configs/evaluator/rust.toml `
   --levels L0,L1,L3,L4 `
-  --policy configs/policy/rust_pilot.toml `
+  --policy configs/policy/rust_proof_subset.toml `
   --obligations datasets/derived/proof_subset/manifest.jsonl `
   --lean-root packages/lean/EvalLadder `
   --out runs/released/rust_proof_subset_v1/results `

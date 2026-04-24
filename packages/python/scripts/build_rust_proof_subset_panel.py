@@ -101,6 +101,37 @@ def _raw_record(task_id: str) -> dict:
     raise SystemExit(f"task {task_id} not found in {RUST_CACHE}")
 
 
+def _materialize_symlinks(root: Path) -> int:
+    """Replace symlinks under `root` with concrete copies of their targets."""
+    links: list[Path] = []
+    for dirpath, dirnames, filenames in os.walk(root, topdown=True, followlinks=False):
+        base = Path(dirpath)
+        for name in dirnames + filenames:
+            p = base / name
+            if p.is_symlink():
+                links.append(p)
+
+    for link in links:
+        try:
+            raw_target = os.readlink(link)
+        except OSError as exc:
+            raise SystemExit(f"failed to read symlink target for {link}: {exc}") from exc
+        if os.path.isabs(raw_target):
+            target = Path(raw_target)
+        else:
+            target = (link.parent / raw_target).resolve()
+        if not target.exists():
+            raise SystemExit(f"symlink target does not exist for {link}: {target}")
+
+        link.unlink()
+        if target.is_dir():
+            shutil.copytree(target, link)
+        else:
+            shutil.copy2(target, link)
+
+    return len(links)
+
+
 def _prepare_workspace(workspaces_dir: Path, task_id: str, repo: str, base_commit: str) -> Path:
     dest = workspaces_dir / task_id
     _robust_rmtree(dest)
@@ -114,6 +145,9 @@ def _prepare_workspace(workspaces_dir: Path, task_id: str, repo: str, base_commi
         ["git", "-C", str(dest), "checkout", base_commit],
         check=True,
     )
+    materialized_links = _materialize_symlinks(dest)
+    if materialized_links:
+        print(f"[{task_id}] materialized {materialized_links} symlink(s) into plain files/dirs")
     _robust_rmtree(dest / ".git")
     return dest
 
@@ -259,7 +293,10 @@ def build_panel(*, panel_root: Path, proof_manifest: Path) -> int:
         "notes": [
             "UUIDv5 namespace c4d9e1a2-7f3b-5c6d-8e9f-0a1b2c3d4e5f (distinct from rust_pilot_v1).",
             "Task list is derived from datasets/derived/proof_subset/manifest.jsonl.",
-            "Use configs/policy/rust_pilot.toml for L3 edit-scope parity with rust_pilot_v1.",
+            (
+                "Use configs/policy/rust_proof_subset.toml for L3 edit-scope parity "
+                "on src/tests/examples edits."
+            ),
             "Reviewer-facing Lean sketch fidelity notes: docs/proof_subset_sketches.md.",
         ],
     }
