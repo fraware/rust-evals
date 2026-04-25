@@ -97,6 +97,21 @@ cargo run -p eval-ladder-cli -- evaluate batch \
   --deterministic-clock
 ```
 
+**Remediation track (2026-04-25):** a larger materialized panel and sealed
+batch live under ``runs/released/agent_panel_v3_r1/`` (see that directory's
+``README.md``). To reduce degenerate per-agent pass vectors, filter the panel
+to rows where the task is upstream-resolved for that agent:
+
+```bash
+python ci/scripts/filter_panel_upstream_resolved.py \
+  --in runs/released/agent_panel_v3_r1/panel_preflight_clean.jsonl \
+  --out runs/released/agent_panel_v3_r1/panel_resolved_only.jsonl \
+  --summary
+```
+
+Current pass/fail status for all four empirical gates is summarized in
+``docs/evidence_empirical_status.md``.
+
 If a batch is interrupted mid-entry, bundle directories may be left non-empty
 and ``--resume`` can mark later rows invalid. Prefer a fresh ``--out`` path
 (or remove incomplete bundle dirs) before resuming.

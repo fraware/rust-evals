@@ -85,9 +85,10 @@ Choose one mode per submission.
 - [x] `cargo test` passes for all crates.
 - [x] `mypy` clean on `packages/python`.
 - [x] `ruff check` clean on `packages/python`.
-- [ ] `cargo deny check` and `cargo audit` show no high-severity issues.
-      Configured via `deny.toml` and `just deny` / `just audit`; to be
-      re-run immediately before tagging.
+- [x] `cargo deny check` and `cargo audit` show no high-severity issues.
+      Configured via `deny.toml` and `just deny` / `just audit`; re-run clean
+      on 2026-04-25 (deny: warnings only for unused license allow-list entries
+      and duplicate lockfile packages; audit: zero advisories).
 - [x] Every JSON schema validates against its own draft 2020-12
       specification. Pinned by `just validate-schemas` /
       `eval-ladder schema validate`.
@@ -127,10 +128,10 @@ Choose one mode per submission.
 - [x] Contract tests for pytest selector parsing:
       `tests/python/test_verified_pytest_targets.py` (tier-2 ``pytest``).
 - [x] Subprocess CLI tests for preflight, audit, diagnose, triage, tier-1 runner,
-      release manifest writer (including ``--require-all-files``), all
-      ``check_evidence_quality`` modes, and
-      **failure paths** (exit code 2 / ``ok: false``) so gates cannot silently
-      weaken: `tests/python/test_evidence_cli_scripts.py`.
+      upstream-resolved panel filter (``--help`` contract), release manifest
+      writer (including ``--require-all-files``), all ``check_evidence_quality``
+      modes, and **failure paths** (exit code 2 / ``ok: false``) so gates cannot
+      silently weaken: `tests/python/test_evidence_cli_scripts.py`.
 - [x] Strict ``mypy`` on ``packages/python/benchmark_compat/src`` and
       ``ci/scripts`` (tier-2 ``mypy``; paths listed in root ``pyproject.toml``).
 - [x] Tier-1 evidence checks (local and ``ci-tier1-fast``):
@@ -139,7 +140,14 @@ Choose one mode per submission.
       `ci/scripts/diagnose_batch_summary.py --fail-on-warnings`.
 - [x] Execution playbook for remaining tranche:
       `docs/evidence_tranche_plan.md`.
+- [x] Live empirical gate status, sealed batch notes, and remediation commands:
+      `docs/evidence_empirical_status.md` and `runs/released/agent_panel_v3_r1/README.md`.
 - [ ] Verified flagship gate passing (non-degenerate, low harness error).
+      Sealed 51-candidate run under ``runs/released/agent_panel_v3_r1/results_verified_prefclean/``;
+      gate still fails on harness rate and L3 dominance (see empirical status doc).
 - [ ] Live comparative gate passing (non-tied ranking signal).
+      Current export ``paper/exports/live_panel_v1`` ties on live pass rates.
 - [ ] L2 expansion gate passing (sufficient passed-from + fail attribution).
+      Current ``runs/released/l2_verified_v2/results`` slice is too thin.
 - [ ] Rust proof-subset gate passing (8/8 ok, L3/L4 residual examples).
+      Strict semantic minima not met on ``results_fast``; needs full L0-L4 batch.

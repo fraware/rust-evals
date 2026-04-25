@@ -534,6 +534,15 @@ def test_check_evidence_quality_rust_proof_structural_pass(
     assert report["metrics"]["ok_entries"] == 2
 
 
+def test_filter_panel_upstream_resolved_help(repo_root: Path) -> None:
+    proc = _run_script(
+        repo_root,
+        "ci/scripts/filter_panel_upstream_resolved.py",
+        ["--help"],
+    )
+    assert proc.returncode == 0, proc.stderr + proc.stdout
+
+
 def test_run_evidence_tier1_checks_passes_on_repo(repo_root: Path) -> None:
     """Integration: same steps as ci-tier1-fast evidence-tranche-scripts."""
     proc = _run_script(repo_root, "ci/scripts/run_evidence_tier1_checks.py", [])
