@@ -85,6 +85,7 @@ On the development machine used for closure work:
 
 ## CI after SemVer tag
 
-Pushing a `v*.*.*` tag triggers `.github/workflows/release-tag.yml`. Tier-3
-heavy work is scheduled / dispatch-only via `.github/workflows/ci-tier3-heavy.yml`;
-confirm runs on GitHub Actions after tagging.
+Pushing a `v*.*.*` tag triggers `.github/workflows/release-tag.yml` (tags
+`v0.1.0` and `v0.1.1` on `main` as of 2026-04-25). Tier-3 heavy work is
+scheduled / dispatch-only via `.github/workflows/ci-tier3-heavy.yml`; confirm
+runs on GitHub Actions after tagging (`gh` needs auth on local machines).

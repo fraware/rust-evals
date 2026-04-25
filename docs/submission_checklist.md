@@ -92,12 +92,12 @@ Choose one mode per submission.
 - [x] Every JSON schema validates against its own draft 2020-12
       specification. Pinned by `just validate-schemas` /
       `eval-ladder schema validate`.
-- [ ] Tier 3 CI has passed on the tagged release commit. SemVer tag ``v0.1.0``
-      is pushed (triggers `.github/workflows/release-tag.yml`: Lean ``lake build``,
-      ``eval-ladder-lean`` tests, schema validation, and
+- [ ] Tier 3 CI has passed on the tagged release commit. SemVer tags ``v0.1.0``
+      and ``v0.1.1`` are pushed (each triggers `.github/workflows/release-tag.yml`:
+      Lean ``lake build``, ``eval-ladder-lean`` tests, schema validation, and
       ``write_release_artifact_manifest.py --require-all-files`` writing
       ``paper/exports/release/<tag>/artifact_manifest.json``). Confirm green runs
-      on GitHub Actions (``gh run list --workflow=release-tag.yml`` / tier-3
+      on GitHub Actions (``gh run list --workflow=release-tag.yml``; tier-3
       dispatch requires ``gh auth login`` or ``GH_TOKEN`` on this machine).
 
 ## Reviewer ergonomics
