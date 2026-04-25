@@ -270,6 +270,122 @@ def test_check_evidence_quality_verified_minimal_pass(
     assert report["metrics"]["distinct_agent_pass_vectors"] == 2
 
 
+def test_check_evidence_quality_verified_registers_all_fail_agents(
+    repo_root: Path, tmp_path: Path
+) -> None:
+    """Degenerate panels must still attribute rows to agents for distinct-vector math."""
+    run_dir = tmp_path / "verified_all_fail"
+    run_dir.mkdir()
+    summary = {
+        "entries": [
+            {
+                "entry_id": f"{agent}__task__t{i}",
+                "status": "ok",
+                "levels": {
+                    "l0": {"status": "fail", "primary_reason": "L0_OFFICIAL_FAIL"},
+                    "l1": {"status": "fail", "primary_reason": "L1_HARNESS_ERROR"},
+                    "l3": {"status": "fail", "primary_reason": "PV_EDIT_SCOPE"},
+                },
+            }
+            for agent in ("gru", "honeycomb", "sweagent")
+            for i in range(10)
+        ]
+    }
+    (run_dir / "batch_summary.json").write_text(
+        json.dumps(summary) + "\n", encoding="utf-8"
+    )
+
+    proc = _run_script(
+        repo_root,
+        "ci/scripts/check_evidence_quality.py",
+        [
+            "verified",
+            "--run-dir",
+            str(run_dir),
+            "--min-candidates",
+            "30",
+            "--max-l1-harness-error-rate",
+            "1.0",
+            "--min-distinct-agents",
+            "2",
+            "--min-nonzero-agents",
+            "1",
+            "--max-l3-single-reason-share",
+            "0.80",
+        ],
+    )
+    assert proc.returncode == 2, proc.stdout + proc.stderr
+    report = json.loads(proc.stdout)
+    assert report["metrics"]["distinct_agent_pass_vectors"] == 1
+    assert "gru" in report["metrics"]["per_agent_l0_l1_pass"]
+
+
+def test_check_evidence_quality_live_no_crash_when_live_rates_absent(
+    repo_root: Path, tmp_path: Path
+) -> None:
+    """static_vs_live rows with null live_pass_rate must not crash the gate."""
+    export = tmp_path / "paper_live_null_live"
+    export.mkdir()
+    static_vs_live = [
+        {
+            "agent_id": "gru",
+            "level": "L0",
+            "delta": None,
+            "live_evaluated": 0,
+            "live_pass_rate": None,
+            "live_passed": 0,
+            "ratio": None,
+            "static_evaluated": 5,
+            "static_pass_rate": 0.4,
+            "static_passed": 2,
+        },
+        {
+            "agent_id": "honeycomb",
+            "level": "L0",
+            "delta": None,
+            "live_evaluated": 0,
+            "live_pass_rate": None,
+            "live_passed": 0,
+            "ratio": None,
+            "static_evaluated": 5,
+            "static_pass_rate": 0.3,
+            "static_passed": 1,
+        },
+        {
+            "agent_id": "sweagent",
+            "level": "L0",
+            "delta": None,
+            "live_evaluated": 0,
+            "live_pass_rate": None,
+            "live_passed": 0,
+            "ratio": None,
+            "static_evaluated": 5,
+            "static_pass_rate": 0.35,
+            "static_passed": 2,
+        },
+    ]
+    (export / "static_vs_live.json").write_text(
+        json.dumps(static_vs_live) + "\n", encoding="utf-8"
+    )
+    (export / "rank_stability.json").write_text(
+        json.dumps(
+            [{"kendall_tau_b": 1.0, "level_a": "L0", "level_b": "L1", "n_agents": 3}]
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+    proc = _run_script(
+        repo_root,
+        "ci/scripts/check_evidence_quality.py",
+        ["live", "--paper-export-dir", str(export), "--min-agents", "3"],
+    )
+    assert proc.returncode == 2, proc.stdout + proc.stderr
+    report = json.loads(proc.stdout)
+    assert report["ok"] is False
+    assert any("delta" in f.lower() for f in report["failures"])
+
+
 def _live_row(
     agent_id: str,
     level: str,

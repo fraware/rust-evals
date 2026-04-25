@@ -87,6 +87,9 @@ def check_verified(args: argparse.Namespace) -> int:
     )
     for e in entries:
         agent = _agent_from_entry(e)
+        # Touch the bucket even when this row has no passes so all-fail panels
+        # still report distinct pass-count vectors (e.g. three agents at (0,0)).
+        _ = by_agent[agent]
         if _is_pass(_level(e, "l0")):
             by_agent[agent]["l0_pass"] += 1
         if _is_pass(_level(e, "l1")):
@@ -169,18 +172,24 @@ def check_live(args: argparse.Namespace) -> int:
     )
 
     # Compare live pass rates by level; at least one level should be non-tied.
+    # Ignore rows with no live arm (live_pass_rate is null).
     non_tied_levels = 0
-    negative_delta_rows = 0
     for level in levels:
         rows = [r for r in static_vs_live if r["level"] == level]
-        rates = {float(r["live_pass_rate"]) for r in rows}
+        live_rows = [r for r in rows if r.get("live_pass_rate") is not None]
+        if len(live_rows) < 2:
+            continue
+        rates = {float(r["live_pass_rate"]) for r in live_rows}
         if len(rates) > 1:
             non_tied_levels += 1
-        negative_delta_rows += sum(1 for r in rows if float(r["delta"]) < 0.0)
+
+    delta_rows = [r for r in static_vs_live if r.get("delta") is not None]
+    _gate(len(delta_rows) > 0, "no computable static-vs-live delta rows", failures)
+    negative_delta_rows = sum(1 for r in delta_rows if float(r["delta"]) < 0.0)
     _gate(non_tied_levels >= 1, "no non-tied live ranking at any level", failures)
     _gate(
-        negative_delta_rows == len(static_vs_live),
-        "static-vs-live delta is not negative for every row",
+        negative_delta_rows == len(delta_rows),
+        "static-vs-live delta is not negative for every row with a delta",
         failures,
     )
 
@@ -199,7 +208,9 @@ def check_live(args: argparse.Namespace) -> int:
 
     live_rates_by_level: dict[str, list[float]] = defaultdict(list)
     for row in static_vs_live:
-        live_rates_by_level[str(row["level"])].append(float(row["live_pass_rate"]))
+        lpr = row.get("live_pass_rate")
+        if lpr is not None:
+            live_rates_by_level[str(row["level"])].append(float(lpr))
 
     report = {
         "mode": "live",

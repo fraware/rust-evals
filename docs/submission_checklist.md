@@ -144,6 +144,10 @@ Choose one mode per submission.
       `docs/evidence_tranche_plan.md`.
 - [x] Live empirical gate status, sealed batch notes, and remediation commands:
       `docs/evidence_empirical_status.md` and `runs/released/agent_panel_v3_r1/README.md`.
+- [x] Evidence gate script correctness: `check_evidence_quality verified` counts
+      every agent on all-fail panels; `live` mode handles null `live_pass_rate` /
+      `delta` without crashing and scores ties only on rows with live data.
+      Regression coverage in `tests/python/test_evidence_cli_scripts.py`.
 - [ ] Verified flagship gate passing (non-degenerate, low harness error).
       Sealed 51-candidate run under ``runs/released/agent_panel_v3_r1/results_verified_prefclean/``;
       gate still fails on harness rate and L3 dominance (see empirical status doc).

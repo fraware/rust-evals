@@ -23,6 +23,11 @@ python ci/scripts/check_evidence_quality.py verified \
   --max-l3-single-reason-share 0.80
 ```
 
+**Gate script note:** `check_evidence_quality verified` registers every agent
+even when no row has an L0/L1 pass so degenerate panels report
+`distinct_agent_pass_vectors` correctly (regression tests in
+`tests/python/test_evidence_cli_scripts.py`).
+
 **Observed failure modes (latest sealed run):**
 
 - `L1_HARNESS_ERROR` rate above 10 percent (dominant buckets: pytest selector
@@ -39,11 +44,17 @@ python ci/scripts/check_evidence_quality.py verified \
 
 - Export path: `paper/exports/live_panel_v1/`
 - Fails: all agents tie on `live_pass_rate` at L0 and L1 for the shipped slice,
-  and `rank_stability.json` has no non-zero Kendall tau row.
+  and `rank_stability.json` has Kendall tau-b `0.0` for the only observed level
+  pair (`L0` vs `L1`), which the gate treats as non-informative.
+- The gate script skips rows with null `live_pass_rate` for tie detection and
+  requires at least one row with a computable `delta` (no `TypeError` on
+  verified-only paper exports).
 
 **Remediation:** regenerate `static_vs_live` / `rank_stability` from a new
 comparative batch where agents diverge on live-evaluated tasks (panel design +
-rerun), then re-run the gate on the new export directory.
+rerun), then re-run the gate on the new export directory. Prefer a batch that
+also reaches `L3` on the same candidates so rank-stability has additional level
+pairs beyond the symmetric `L0`/`L1` leaderboard.
 
 ## L2 expansion (`check_evidence_quality l2`)
 
