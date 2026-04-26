@@ -38,4 +38,4 @@ records `L4_OBLIGATION_MET` for `clap-rs__clap_5873` in
 For **all eight** manifest tasks with golden patches, workspaces, and L4 in one
 batch, use `runs/released/rust_proof_subset_v1/` (built by
 `packages/python/scripts/build_rust_proof_subset_panel.py`; see that directory’s
-README and `docs/proof_subset_sketches.md` for sketch fidelity).
+README and `docs/proof_subset_policy.md` (Lean sketch fidelity table) for sketch fidelity).

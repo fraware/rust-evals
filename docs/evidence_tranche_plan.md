@@ -13,17 +13,21 @@ Target outcome:
 - L1 harness errors below 10% (target below 5%),
 - L3 failures not dominated by one avoidable packaging artifact.
 
-Run quality gate:
+Run quality gate (strict defaults — headline NeurIPS bar):
 
 ```bash
 python ci/scripts/check_evidence_quality.py verified \
-  --run-dir runs/released/agent_panel_v3/results_verified_v4 \
+  --run-dir runs/released/agent_panel_v3_r1/results_opt \
   --min-candidates 30 \
   --max-l1-harness-error-rate 0.10 \
   --min-distinct-agents 2 \
   --min-nonzero-agents 2 \
   --max-l3-single-reason-share 0.80
 ```
+
+Repository closure (same paths, relaxed thresholds) uses
+``python ci/scripts/check_evidence_quality.py --gate-profile release …``;
+see ``docs/evidence_empirical_status.md``.
 
 Preflight diagnostics before full reruns:
 
@@ -40,7 +44,7 @@ When ``diagnose_batch_summary`` flags a high ``L1_HARNESS_ERROR`` rate, cluster
 
 ```bash
 python ci/scripts/triage_l1_harness_errors.py \
-  --run-dir runs/released/agent_panel_v3/results_verified_v4
+  --run-dir runs/released/agent_panel_v3_r1/results_opt
 ```
 
 After materializing per-task ``workspace_template`` trees for a Verified panel,
@@ -112,6 +116,12 @@ python ci/scripts/filter_panel_upstream_resolved.py \
 Current pass/fail status for all four empirical gates is summarized in
 ``docs/evidence_empirical_status.md``.
 
+For long Docker batches, use the wall-clock checklist and ``just`` recipes in
+``docs/operational_runbook.md`` (Milestone H, “Wall-clock optimizations”). Prefer
+``just …-prewarmed`` recipes (for example ``verified-batch-optimized-prewarmed``) so
+image pulls run before ``evaluate batch``, or run
+``python ci/scripts/prewarm_panel_images.py --panel …`` manually.
+
 If a batch is interrupted mid-entry, bundle directories may be left non-empty
 and ``--resume`` can mark later rows invalid. Prefer a fresh ``--out`` path
 (or remove incomplete bundle dirs) before resuming.
@@ -124,18 +134,20 @@ Target outcome:
 - negative static-vs-live delta remains,
 - rank-stability contains at least one informative non-zero tau row.
 
-Run quality gate:
+Run quality gate (strict):
 
 ```bash
 python ci/scripts/check_evidence_quality.py live \
-  --paper-export-dir paper/exports/live_panel_v1
+  --paper-export-dir paper/exports/live_panel_v1_postbatch
 ```
 
-The live gate expects at least one level where agents are not tied on
+The strict live gate expects at least one level where agents are not tied on
 ``live_pass_rate``, plus a non-zero Kendall tau row in ``rank_stability.json``.
-If every agent ties on the evaluated slice (common when harness failures
-dominate), regenerate the comparative panel or widen the live stratum until
-``live_pass_rate_unique_counts_by_level`` in the gate JSON shows spread.
+If every agent ties on the evaluated slice (common when patches are symmetric
+across agents), either **regenerate the comparative panel** so agents diverge
+on live-evaluated tasks, or use the documented **release** path
+(``--gate-profile release`` or ``--symmetric-live-ok`` when every ``delta`` is
+strictly negative) per ``docs/evidence_empirical_status.md``.
 
 ## Priority 3 - L2 expansion slice
 
@@ -157,7 +169,9 @@ python ci/scripts/check_evidence_quality.py l2 \
 
 Use a run directory whose batch actually contains enough L1 passes and L2
 attempts; small exploratory slices will not meet the defaults above until you
-expand the L2 panel.
+expand the L2 panel. For a **deduplicated merge** of multiple small summaries
+(``batch_summary.json`` only), see ``ci/scripts/merge_l2_batch_summaries.py`` and
+``runs/released/l2_verified_merged_v1/`` (release-profile gate only).
 
 ## Priority 4 - Rust proof-subset empirical usefulness
 
@@ -192,9 +206,9 @@ python ci/scripts/check_evidence_quality.py rust-proof \
   --min-all-level-pass 0
 ```
 
-If ``results_v3`` shows ``invalid`` rows from stale bundle directories, rerun
-with a clean ``--out`` (or remove the listed bundle dirs) so the summary can
-reach 8/8 ok.
+If a proof-subset ``--out`` directory shows ``invalid`` rows from stale bundle
+directories, rerun with a clean ``--out`` (or remove the listed bundle dirs) so
+the summary can reach 8/8 ok.
 
 ## Priority 5 - Release closure
 
@@ -215,12 +229,17 @@ Lean or proof-subset paths.
 
 ## Notes
 
+- ``check_evidence_quality`` supports ``--gate-profile release`` (global flag
+  before the subcommand) to apply repository-closure thresholds documented in
+  ``docs/evidence_empirical_status.md``. Default remains **strict** for science.
 - Every gate prints JSON with pass/fail and detailed metrics.
 - Exit code is non-zero on gate failure, making this suitable for CI or
   pre-submission checklists.
-- Verified ``results_verified_v4`` has been observed to fail the harness-rate
-  and distinct-agent gates until L1 stderr clusters above are driven down; see
-  ``runs/released/agent_panel_v3/README.md`` for triage commands.
+- Verified ``runs/released/agent_panel_v3_r1/results_opt`` (and the preflight-clean
+  sibling) have been observed to fail the **strict** harness-rate and
+  distinct-agent gates until L1 stderr clusters are driven down; see
+  ``runs/released/agent_panel_v3_r1/README.md`` and ``runs/released/agent_panel_v3/README.md``
+  for triage commands.
 - On every push/PR, ``ci-tier1-fast`` runs
   ``python ci/scripts/run_evidence_tier1_checks.py`` (``compileall`` on
   ``ci/scripts``, structural ``rust-proof`` on tracked

@@ -1,7 +1,8 @@
 # Operational runbook
 
 This runbook covers day-to-day operation of `eval-ladder`: local development,
-batch evaluation, CI tiers, and release hygiene.
+batch evaluation, CI tiers, and release hygiene. For a map of all technical
+docs (scope, ladder, architecture, evidence gates), see [`docs/README.md`](README.md).
 
 ## Prerequisites
 
@@ -456,6 +457,10 @@ eval-ladder analyze paper-export --run-dir <run_dir> --out-dir <out_dir>
 eval-ladder analyze paper-export --run-dir <run_dir> --out-dir <out_dir> --analysis-mode raw
 ```
 
+Publication gate commands for the NeurIPS evidence tranches (strict vs
+`--gate-profile release`) are centralized in
+`docs/evidence_empirical_status.md`.
+
 ## Batch evaluation (Milestone H)
 
 `eval-ladder evaluate batch` drives the full L0-L4 pipeline over a
@@ -513,6 +518,110 @@ cargo run --bin eval-ladder -- prove-subset \
 cargo run --bin eval-ladder -- analyze paper-export \
   --run-dir runs/released/agent_panel_v1/results/ \
   --out-dir paper/exports/agent_panel_v1/
+```
+
+### Wall-clock optimizations (long batches)
+
+Use the **release** CLI driver. Long-batch `just` recipes depend on
+`just eval-ladder-cli-release` and run `target/release/eval-ladder` (or
+`eval-ladder.exe` on Windows) directly so each batch avoids `cargo run` startup.
+For one-off invocations you can still use
+`cargo run -p eval-ladder-cli --release -- evaluate …`.
+
+| Knob | Effect |
+| --- | --- |
+| `--rust-target-cache-root <dir>` | Sets `CARGO_TARGET_DIR` for Rust-heavy rows (Verified smart reuse, Rust-SWE-bench). Point at a **stable directory on fast local disk** (for example `runs/released/.eval_ladder_cargo_cache`) so repeated compiles reuse artifacts across batches. |
+| `--dedupe-workloads` | Default **on**; skips redundant Docker work when task+patch+candidate bytes match another row (multi-agent safe after the candidate-aware workload key). |
+| `--resume` | Skips entries whose bundle dirs already completed; safe for interrupted runs. |
+| `--jobs N` | Overlaps **different** panel rows (`N` of 2–4 on a strong host). Reduces wall time when Docker and disk keep up; drop to `1` if the engine thrashes. |
+| `--adaptive-timeouts` + `--short-timeout-secs` | After cheap failure patterns in a prior summary, later rows use shorter per-exec timeouts so bad harness rows fail faster than `--timeout-secs`. |
+| Fewer `--levels` | For **iteration only**, run the minimum ladder you need (Verified headline gate uses `L0,L1,L3`; skip `L4` until you need proof rows). Rust policy iteration: `--track fast` runs **L3,L4 only**; seal with a full `L0,L1,L3,L4` pass when semantics are stable. |
+| Smaller panel | Shrink `panel.jsonl` or tighten `preflight_verified_selectors.py --strict` / `filter_panel_upstream_resolved.py` while debugging harness clusters. |
+| Image prewarm | Run `python ci/scripts/prewarm_panel_images.py --panel <panel.jsonl>` (optional `--parallel N`). Uses the **same SWE-bench image name candidates** as the Rust Docker engine (legacy `org__repo` then `org_1776_repo`). Local hits skip `docker pull`. Pull failures are **non-fatal by default** (compact stderr unless `--strict-pulls`). `cargo://…` and other non-OCI schemes are skipped. |
+
+**`just` recipes** (from the repo root; see `just --list`):
+
+- **`just verified-batch-optimized-prewarmed <panel.jsonl> <out_dir> [jobs] [cache] [prewarm_parallel]`** — pull images for that panel, then Verified `L0,L1,L3` batch (recommended default for wall clock).
+- `just verified-batch-optimized <panel.jsonl> <out_dir> [jobs] [cache]` — same batch without a preceding pull (use if images are already local).
+- **`just live-batch-optimized-prewarmed <out_dir> [jobs] [prewarm_parallel]`** — prewarm `runs/released/live_panel_v1/panel.jsonl`, then Live batch.
+- `just live-batch-optimized <out_dir> [jobs]`
+- **`just rust-proof-batch-fast-prewarmed <out_dir> [prewarm_parallel]`** / **`just rust-proof-batch-seal-prewarmed <out_dir> [jobs] [cache] [prewarm_parallel]`** — Rust proof subset panel, then fast or seal batch.
+- `just rust-proof-batch-fast <out_dir>` — fast L3/L4 iteration
+- `just rust-proof-batch-seal <out_dir> [jobs] [cache]` — full ladder for sealing
+- `just prewarm-panel <panel.jsonl> [parallel]` — pull only (default parallel **4**; best-effort exit code).
+- `just prewarm-panel-strict <panel.jsonl> [parallel]` — same, but `--strict-pulls` (fail if any pull fails).
+
+Also keep Docker Desktop CPU/memory limits reasonable, and place `--out` on
+local SSD (not a network filesystem).
+
+#### Full commands (copy-paste)
+
+From the repository root, after a toolchain or dependency change, build the driver once (optional on first batch: the recipes below already depend on `eval-ladder-cli-release`):
+
+```powershell
+cd C:\path\to\rust-evals
+just eval-ladder-cli-release
+```
+
+**Verified panel (prewarm + batch, recommended):**
+
+```powershell
+just verified-batch-optimized-prewarmed runs\released\agent_panel_v3_r1\panel_preflight_clean.jsonl runs\released\agent_panel_v3_r1\results_opt
+```
+
+That recipe already runs prewarm first; do not also run `python ci/scripts/prewarm_panel_images.py` in the same workflow unless you want a standalone pull step.
+
+**Verified panel (batch only, images already local):**
+
+```powershell
+just verified-batch-optimized runs\released\agent_panel_v3_r1\panel_preflight_clean.jsonl runs\released\agent_panel_v3_r1\results_opt
+```
+
+**Live panel:**
+
+```powershell
+just live-batch-optimized-prewarmed runs\released\live_panel_v1\results_opt
+```
+
+**Rust proof subset — fast iteration then seal:**
+
+```powershell
+just rust-proof-batch-fast-prewarmed runs\released\rust_proof_subset_v1\results_fast
+just rust-proof-batch-seal-prewarmed runs\released\rust_proof_subset_v1\results_seal
+```
+
+**Prewarm only (custom `evaluate batch` afterward):**
+
+```powershell
+python ci/scripts/prewarm_panel_images.py --panel runs\released\live_panel_v1\panel.jsonl --parallel 4
+```
+
+**Bash / WSL / Linux** (same flags; use forward slashes):
+
+```bash
+cd /path/to/rust-evals
+just eval-ladder-cli-release
+just verified-batch-optimized-prewarmed runs/released/agent_panel_v3_r1/panel_preflight_clean.jsonl runs/released/agent_panel_v3_r1/results_opt
+just live-batch-optimized-prewarmed runs/released/live_panel_v1/results_opt
+just rust-proof-batch-fast-prewarmed runs/released/rust_proof_subset_v1/results_fast
+just rust-proof-batch-seal-prewarmed runs/released/rust_proof_subset_v1/results_seal
+```
+
+**Without `just`** (equivalent to `verified-batch-optimized` after `cargo build -p eval-ladder-cli --release`; Windows: `target\release\eval-ladder.exe`):
+
+```bash
+cargo build -q -p eval-ladder-cli --release
+./target/release/eval-ladder evaluate batch \
+  --input runs/released/agent_panel_v3_r1/panel_preflight_clean.jsonl \
+  --config configs/evaluator/verified.toml \
+  --levels L0,L1,L3 \
+  --policy configs/policy/default_policy.toml \
+  --out runs/released/agent_panel_v3_r1/results_opt \
+  --timeout-secs 3600 --short-timeout-secs 900 \
+  --adaptive-timeouts --resume --jobs 2 \
+  --l1-strategy smart_rust_reuse \
+  --rust-target-cache-root runs/released/.eval_ladder_cargo_cache \
+  --seed-tag verified-batch-opt --deterministic-clock
 ```
 
 ### Resilience contract

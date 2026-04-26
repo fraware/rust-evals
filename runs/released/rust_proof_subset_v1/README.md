@@ -116,7 +116,7 @@ checker is independent of cargo.
 
 ## Reviewer notes on Lean sketches
 
-See `docs/proof_subset_sketches.md` for explicit **fidelity gaps** between the
+See `docs/proof_subset_policy.md` (**Lean sketch fidelity** table) for explicit **fidelity gaps** between the
 seven lightweight Lean obligations and full crate semantics. The `5873`
 obligation is the primary semantic anchor; sketches exist to stress the L4
 machinery across eight distinct `task_id` keys without claiming end-to-end

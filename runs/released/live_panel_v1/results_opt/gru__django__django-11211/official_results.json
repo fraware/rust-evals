@@ -1,0 +1,1 @@
+{"artifacts":[],"candidate_id":"450c69bd-75b6-55ca-b453-99dfd876196f","evaluator_version":"0.1.0","finished_at":"2025-01-01T00:00:00.004Z","level":"L0","metrics":{"exit_code":1},"primary_reason":"L0_OFFICIAL_FAIL","schema_version":1,"secondary_reasons":[],"started_at":"2025-01-01T00:00:00.003Z","status":"fail","task_id":"django__django-11211"}

@@ -1,0 +1,4 @@
+<frozen importlib._bootstrap>:228: RuntimeWarning: numpy.ndarray size changed, may indicate binary incompatibility. Expected 80 from C header, got 96 from PyObject
+ERROR: not found: /workspace/astropy/io/fits/tests/test_connect.py::test_is_fits_gh_14305
+(no name '/workspace/astropy/io/fits/tests/test_connect.py::test_is_fits_gh_14305' in any of [<DocTestModulePlus astropy/io/fits/tests/test_connect.py>, <Module astropy/io/fits/tests/test_connect.py>])
+

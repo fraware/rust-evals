@@ -1,7 +1,8 @@
 # Scientific scope
 
 This document records the scientific posture of `eval-ladder`. It is the
-reference for reviewers and should be cited by the paper.
+reference for reviewers and should be cited by the paper. See also
+[`README.md`](README.md) for the full documentation map.
 
 ## Research question
 

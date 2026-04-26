@@ -36,11 +36,17 @@ Thumbs.db
 *.swo
 *~
 
+# Ephemeral local experiment dirs (never commit)
+runs/tmp_*/
+
 # Local run artifacts (released runs live in runs/released and MAY be committed)
 runs/local/**
 !runs/local/.gitkeep
 runs/ci/**
 !runs/ci/.gitkeep
+
+# Shared Cargo target cache for local batch recipes (`just verified-batch-optimized`, etc.)
+runs/released/.eval_ladder_cargo_cache/
 
 # Large benchmark assets pulled from public sources
 datasets/cache/

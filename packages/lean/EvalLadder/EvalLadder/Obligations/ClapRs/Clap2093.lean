@@ -8,7 +8,7 @@
 
 /-
   Reviewer fidelity: uses illustrative strings, not the verbatim default help
-  text from the pinned base commit. See `docs/proof_subset_sketches.md`.
+  text from the pinned base commit. See `docs/proof_subset_policy.md` (Lean sketch fidelity table).
 -/
 
 namespace EvalLadder.Obligations.ClapRs.Clap2093

@@ -1,0 +1,3 @@
+ERROR: not found: /workspace/tests/test_blueprints.py::test_empty_name_not_allowed
+(no name '/workspace/tests/test_blueprints.py::test_empty_name_not_allowed' in any of [<Module tests/test_blueprints.py>])
+

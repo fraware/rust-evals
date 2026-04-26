@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import importlib.util
 import json
 import subprocess
 import sys
@@ -9,6 +10,16 @@ from pathlib import Path
 from typing import Any
 
 import pytest
+
+
+def _load_prewarm_panel_images_module(repo_root: Path) -> Any:
+    path = repo_root / "ci/scripts/prewarm_panel_images.py"
+    spec = importlib.util.spec_from_file_location("_prewarm_panel_images_test", path)
+    if spec is None or spec.loader is None:
+        raise AssertionError("failed to load prewarm_panel_images module spec")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
 
 
 def _run_script(
@@ -556,6 +567,48 @@ def test_check_evidence_quality_live_minimal_pass(
     assert report["metrics"]["non_tied_levels"] >= 1
 
 
+def test_check_evidence_quality_live_symmetric_ok_passes(
+    repo_root: Path, tmp_path: Path
+) -> None:
+    export = tmp_path / "paper_live_sym"
+    export.mkdir()
+    static_vs_live = [
+        _live_row("gru", "L0", 0.50, delta=-0.1),
+        _live_row("honeycomb", "L0", 0.50, delta=-0.1),
+        _live_row("sweagent", "L0", 0.50, delta=-0.1),
+        _live_row("gru", "L1", 0.50, delta=-0.1),
+        _live_row("honeycomb", "L1", 0.50, delta=-0.1),
+        _live_row("sweagent", "L1", 0.50, delta=-0.1),
+    ]
+    (export / "static_vs_live.json").write_text(
+        json.dumps(static_vs_live) + "\n", encoding="utf-8"
+    )
+    (export / "rank_stability.json").write_text(
+        json.dumps(
+            [{"kendall_tau_b": 0.0, "level_a": "L0", "level_b": "L1", "n_agents": 3}]
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+    proc = _run_script(
+        repo_root,
+        "ci/scripts/check_evidence_quality.py",
+        [
+            "live",
+            "--paper-export-dir",
+            str(export),
+            "--min-agents",
+            "3",
+            "--symmetric-live-ok",
+        ],
+    )
+    assert proc.returncode == 0, proc.stderr + proc.stdout
+    report = json.loads(proc.stdout)
+    assert report["ok"] is True
+    assert report["metrics"]["symmetric_live_ok"] is True
+
+
 def test_check_evidence_quality_l2_minimal_pass(
     repo_root: Path, tmp_path: Path
 ) -> None:
@@ -657,6 +710,114 @@ def test_filter_panel_upstream_resolved_help(repo_root: Path) -> None:
         ["--help"],
     )
     assert proc.returncode == 0, proc.stderr + proc.stdout
+
+
+def test_prewarm_panel_images_help(repo_root: Path) -> None:
+    proc = _run_script(
+        repo_root,
+        "ci/scripts/prewarm_panel_images.py",
+        ["--help"],
+    )
+    assert proc.returncode == 0, proc.stderr + proc.stdout
+    assert "--strict-pulls" in proc.stdout
+
+
+def test_prewarm_image_pull_candidates_matches_container_rs(repo_root: Path) -> None:
+    m = _load_prewarm_panel_images_module(repo_root)
+    c = m.image_pull_candidates(
+        "swebench/sweb.eval.x86_64.astropy__astropy-12907:latest"
+    )
+    assert c == [
+        "swebench/sweb.eval.x86_64.astropy__astropy-12907:latest",
+        "swebench/sweb.eval.x86_64.astropy_1776_astropy-12907:latest",
+    ]
+    assert m.image_pull_candidates("ubuntu:22.04") == ["ubuntu:22.04"]
+    assert m.map_legacy_swebench_image("starryzhang/foo:1") is None
+
+
+def test_prewarm_panel_images_dry_run_collects_refs(
+    repo_root: Path, tmp_path: Path
+) -> None:
+    task_dir = tmp_path / "benchmarks" / "verified" / "manifests"
+    task_dir.mkdir(parents=True)
+    task_path = task_dir / "demo__task-1.json"
+    task_path.write_text(
+        json.dumps(
+            {
+                "task_id": "demo__task-1",
+                "benchmark_id": "swe_bench_verified",
+                "environment_ref": "swebench/sweb.eval.x86_64.demo__task-1:latest",
+                "official_test_entrypoint": "python -m pytest -q",
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    panel = tmp_path / "panel.jsonl"
+    rel_task = "benchmarks/verified/manifests/demo__task-1.json"
+    panel.write_text(
+        json.dumps(
+            {
+                "task": rel_task,
+                "candidate": "c.json",
+                "patch": "p.diff",
+                "workspace_template": "w",
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    proc = _run_script(
+        repo_root,
+        "ci/scripts/prewarm_panel_images.py",
+        ["--panel", str(panel), "--dry-run"],
+    )
+    assert proc.returncode == 0, proc.stderr + proc.stdout
+    assert "swebench/sweb.eval.x86_64.demo__task-1:latest" in proc.stdout
+    assert "docker pull targets: 1" in proc.stdout
+
+
+def test_prewarm_panel_images_dry_run_skips_cargo_refs(
+    repo_root: Path, tmp_path: Path
+) -> None:
+    task_dir = tmp_path / "benchmarks" / "rust" / "manifests"
+    task_dir.mkdir(parents=True)
+    task_path = task_dir / "demo__ripgrep.json"
+    task_path.write_text(
+        json.dumps(
+            {
+                "task_id": "demo__ripgrep",
+                "benchmark_id": "rust_swe_bench",
+                "environment_ref": "cargo://BurntSushi/ripgrep@c50b8b4125dc",
+                "official_test_entrypoint": "cargo test -q",
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    panel = tmp_path / "panel.jsonl"
+    rel_task = "benchmarks/rust/manifests/demo__ripgrep.json"
+    panel.write_text(
+        json.dumps(
+            {
+                "task": rel_task,
+                "candidate": "c.json",
+                "patch": "p.diff",
+                "workspace_template": "w",
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    proc = _run_script(
+        repo_root,
+        "ci/scripts/prewarm_panel_images.py",
+        ["--panel", str(panel), "--dry-run"],
+    )
+    assert proc.returncode == 0, proc.stderr + proc.stdout
+    assert "docker pull targets: 0" in proc.stdout
+    assert "skipped (not docker pull targets)" in proc.stderr
+    assert "cargo://BurntSushi/ripgrep@c50b8b4125dc" in proc.stderr
 
 
 def test_run_evidence_tier1_checks_passes_on_repo(repo_root: Path) -> None:

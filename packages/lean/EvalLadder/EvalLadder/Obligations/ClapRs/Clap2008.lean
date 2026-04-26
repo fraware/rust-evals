@@ -8,7 +8,7 @@
 
 /-
   Reviewer fidelity: enum disjointness only; no connection to clap's settings
-  bitset or help pipeline. See `docs/proof_subset_sketches.md`.
+  bitset or help pipeline. See `docs/proof_subset_policy.md` (Lean sketch fidelity table).
 -/
 
 namespace EvalLadder.Obligations.ClapRs.Clap2008

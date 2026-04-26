@@ -297,7 +297,7 @@ def build_panel(*, panel_root: Path, proof_manifest: Path) -> int:
                 "Use configs/policy/rust_proof_subset.toml for L3 edit-scope parity "
                 "on src/tests/examples edits."
             ),
-            "Reviewer-facing Lean sketch fidelity notes: docs/proof_subset_sketches.md.",
+            "Reviewer-facing Lean sketch fidelity notes: docs/proof_subset_policy.md (Lean sketch fidelity table).",
         ],
     }
     (panel_root / "provenance.json").write_text(

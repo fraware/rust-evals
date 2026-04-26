@@ -344,6 +344,17 @@ fn track_levels(track: &str) -> Result<Vec<EvaluationLevel>, BatchError> {
     }
 }
 
+#[inline]
+fn level_ladder_sort_index(level: &EvaluationLevel) -> u8 {
+    match level {
+        EvaluationLevel::L0Official => 0,
+        EvaluationLevel::L1TrustedRerun => 1,
+        EvaluationLevel::L2Strengthened => 2,
+        EvaluationLevel::L3PolicyConformant => 3,
+        EvaluationLevel::L4Semantic => 4,
+    }
+}
+
 /// Batch-wide resources that are loaded once and shared across every
 /// entry.
 struct BatchExtensions<'a> {
@@ -462,10 +473,27 @@ fn build_extensions(res: &BatchBackingResources, network_accessed: bool) -> Batc
 }
 
 fn validate_level_flag_combination(args: &BatchArgs) -> Result<Vec<EvaluationLevel>, BatchError> {
-    let levels = match args.track.as_deref() {
+    let mut levels = match args.track.as_deref() {
         Some(t) => track_levels(t)?,
         None => parse_levels(&args.levels)?,
     };
+    // `--track` presets (e.g. `heavy` = L0,L1) must still expand when batch
+    // extension resources are supplied; otherwise `README` recipes that pair
+    // `--track heavy` with `--policy` / `--obligations` would reject before
+    // launch even when `--levels` lists L3/L4 explicitly (track wins today).
+    use EvaluationLevel::{L2Strengthened, L3PolicyConformant, L4Semantic};
+    if args.strengthening_spec.is_some() && !levels.contains(&L2Strengthened) {
+        levels.push(L2Strengthened);
+    }
+    if args.policy.is_some() && !levels.contains(&L3PolicyConformant) {
+        levels.push(L3PolicyConformant);
+    }
+    if args.obligations.is_some() && !levels.contains(&L4Semantic) {
+        levels.push(L4Semantic);
+    }
+    levels.sort_by_key(level_ladder_sort_index);
+    levels.dedup();
+
     let wants_l2 = levels.contains(&EvaluationLevel::L2Strengthened);
     let wants_l3 = levels.contains(&EvaluationLevel::L3PolicyConformant);
     let wants_l4 = levels.contains(&EvaluationLevel::L4Semantic);
@@ -900,9 +928,15 @@ fn workload_key_for_entry(entry: &PanelEntry) -> Option<String> {
         Vec::new()
     };
     let patch_hash = eval_ladder_core::digest(&patch);
+    // Include candidate bytes so multi-agent panels that share the same
+    // gold patch on the same task (common on SWE-bench Verified) never
+    // dedupe across agents — otherwise `copy_dir_recursive` would clone
+    // the wrong `candidate_resolution.json` into sibling bundle dirs.
+    let candidate_bytes = fs::read(&entry.candidate).ok()?;
+    let candidate_hash = eval_ladder_core::digest(&candidate_bytes);
     Some(format!(
-        "{}|{}|{}",
-        task.repo_name, task.base_commit, patch_hash
+        "{}|{}|{}|{}",
+        task.repo_name, task.base_commit, patch_hash, candidate_hash
     ))
 }
 
@@ -995,12 +1029,14 @@ pub fn run_batch(args: BatchArgs) -> Result<()> {
 
             if args.resume && bundle_dir.join("run_manifest.json").exists() {
                 if let Some(row) = existing_rows.get(&bundle_name).filter(|r| {
-                    r.status == BatchEntryStatus::Ok && levels.iter().all(|lvl| has_level_result(r, *lvl))
+                    r.status == BatchEntryStatus::Ok
+                        && levels.iter().all(|lvl| has_level_result(r, *lvl))
                 }) {
                     rows.push(row.clone());
                     continue;
                 }
-                if let Some(row) = try_row_from_existing_bundle(entry, &bundle_name, &bundle_dir, &levels)
+                if let Some(row) =
+                    try_row_from_existing_bundle(entry, &bundle_name, &bundle_dir, &levels)
                 {
                     rows.push(row);
                     continue;
@@ -1459,5 +1495,78 @@ mod tests {
         .unwrap();
         let err = load_panel(&panel_path).unwrap_err();
         assert!(matches!(err, BatchError::Json { .. }));
+    }
+
+    #[test]
+    fn track_heavy_merges_l3_l4_when_policy_and_obligations_set() {
+        let tmp = TempDir::new().unwrap();
+        let args = BatchArgs {
+            input: tmp.path().join("unused.jsonl"),
+            levels: "L0,L1".into(),
+            config: tmp.path().join("unused.toml"),
+            out: tmp.path().join("out"),
+            deterministic_clock: true,
+            timeout_secs: 60,
+            short_timeout_secs: None,
+            adaptive_timeouts: false,
+            resume: false,
+            jobs: 1,
+            track: Some("heavy".into()),
+            l1_strategy: "strict".into(),
+            rust_target_cache_root: None,
+            dedupe_workloads: false,
+            seed_tag: "t".into(),
+            strengthening_spec: None,
+            strengthening_mode: "full_l2".into(),
+            oracle_patch: None,
+            policy: Some(tmp.path().join("policy.toml")),
+            network_accessed: false,
+            obligations: Some(tmp.path().join("obligations.jsonl")),
+            lean_root: Some(tmp.path().join("lean")),
+        };
+        let levels = validate_level_flag_combination(&args).expect("valid flags");
+        assert!(levels.contains(&EvaluationLevel::L0Official));
+        assert!(levels.contains(&EvaluationLevel::L1TrustedRerun));
+        assert!(levels.contains(&EvaluationLevel::L3PolicyConformant));
+        assert!(levels.contains(&EvaluationLevel::L4Semantic));
+        assert!(!levels.contains(&EvaluationLevel::L2Strengthened));
+    }
+
+    #[test]
+    fn workload_key_differs_when_candidate_json_differs_same_patch() {
+        let tmp = TempDir::new().unwrap();
+        let task_path = tmp.path().join("task.json");
+        let task = fixture_task("wk");
+        fs::write(&task_path, serde_json::to_vec_pretty(&task).unwrap()).unwrap();
+        let patch_path = tmp.path().join("p.diff");
+        fs::write(&patch_path, b"same patch bytes").unwrap();
+        let cand_a = tmp.path().join("a.json");
+        let cand_b = tmp.path().join("b.json");
+        fs::write(&cand_a, br#"{"agent_id":"a"}"#).unwrap();
+        fs::write(&cand_b, br#"{"agent_id":"b"}"#).unwrap();
+        let ws = tmp.path().join("ws");
+        fs::create_dir_all(&ws).unwrap();
+        let entry_a = PanelEntry {
+            task: task_path.clone(),
+            candidate: cand_a,
+            patch: patch_path.clone(),
+            workspace_template: ws.clone(),
+            bundle_name: Some("ba".into()),
+            entry_id: None,
+        };
+        let entry_b = PanelEntry {
+            task: task_path,
+            candidate: cand_b,
+            patch: patch_path,
+            workspace_template: ws,
+            bundle_name: Some("bb".into()),
+            entry_id: None,
+        };
+        let ka = workload_key_for_entry(&entry_a).expect("key a");
+        let kb = workload_key_for_entry(&entry_b).expect("key b");
+        assert_ne!(
+            ka, kb,
+            "agents sharing a gold patch must not share dedupe keys"
+        );
     }
 }

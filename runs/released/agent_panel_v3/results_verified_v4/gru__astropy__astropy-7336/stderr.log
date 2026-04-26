@@ -1,0 +1,2 @@
+WARNING: You appear to be trying to import astropy from within a source checkout without building the extension modules first.  Attempting to (re)build extension modules: [astropy]
+ERROR: file not found: astropy/units/tests/test_quantity_annotations.py::test_return_annotation_none

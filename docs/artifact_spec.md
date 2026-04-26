@@ -2,8 +2,8 @@
 
 This document describes every persisted artifact that `eval-ladder` produces
 or consumes. Each artifact has a JSON schema under `schemas/`. Schemas are
-versioned; an incompatible change requires a `schema_version` bump and a
-changelog entry.
+versioned; incompatible wire or validation changes require a coordinated
+`schema_version` bump and updates to consumers (CLI, analysis, tests).
 
 ## Schema conventions
 

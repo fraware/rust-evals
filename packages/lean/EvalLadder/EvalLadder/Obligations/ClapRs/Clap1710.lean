@@ -11,7 +11,7 @@
 /-
   Reviewer fidelity: only proves inequality of two fixed string literals; it does
   not model clap's subcommand trie, scoring, or error templates. See
-  `docs/proof_subset_sketches.md`.
+  `docs/proof_subset_policy.md` (Lean sketch fidelity table).
 -/
 
 namespace EvalLadder.Obligations.ClapRs.Clap1710

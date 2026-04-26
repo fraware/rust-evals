@@ -1,0 +1,1 @@
+{"artifacts":[],"candidate_id":"7bc27a52-4128-5874-8570-f67c56304a60","evaluator_version":"0.1.0","finished_at":"2025-01-01T00:00:00.004Z","level":"L0","metrics":{"exit_code":4},"primary_reason":"L0_OFFICIAL_FAIL","schema_version":1,"secondary_reasons":[],"started_at":"2025-01-01T00:00:00.003Z","status":"fail","task_id":"pallets__flask-5014"}

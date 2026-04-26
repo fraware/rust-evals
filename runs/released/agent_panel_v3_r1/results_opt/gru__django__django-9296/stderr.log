@@ -1,0 +1,10 @@
+E
+======================================================================
+ERROR: test_paginator_iteration (unittest.loader._FailedTest)
+----------------------------------------------------------------------
+AttributeError: type object 'PaginationTests' has no attribute 'test_paginator_iteration'
+
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+FAILED (errors=1)

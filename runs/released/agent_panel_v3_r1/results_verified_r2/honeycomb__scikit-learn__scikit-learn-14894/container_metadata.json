@@ -1,0 +1,1 @@
+{"command":["python","-m","pytest","sklearn/svm/tests/test_svm.py::test_sparse_fit_support_vectors_empty"],"engine":"other","image_ref":"swebench/sweb.eval.x86_64.scikit-learn_1776_scikit-learn-14894:latest","l1_strategy":"smart_rust_reuse","patch_apply_outcome_l0":"applied","patch_apply_outcome_l1":"applied","resource_limits":{"wall_timeout":{"nanos":0,"secs":3600}}}

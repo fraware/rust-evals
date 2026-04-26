@@ -9,7 +9,7 @@
 
 /-
   Reviewer fidelity: toy two-flag type; does not model clap usage synthesis,
-  wrapping, or blacklist validation order. See `docs/proof_subset_sketches.md`.
+  wrapping, or blacklist validation order. See `docs/proof_subset_policy.md` (Lean sketch fidelity table).
 -/
 
 namespace EvalLadder.Obligations.ClapRs.Clap2075

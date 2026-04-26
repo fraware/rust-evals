@@ -12,7 +12,7 @@
 
 /-
   Reviewer fidelity: generic `List` lemmas only; no model of ripgrep's matcher,
-  `-o` buffering, or line splitting. See `docs/proof_subset_sketches.md`.
+  `-o` buffering, or line splitting. See `docs/proof_subset_policy.md` (Lean sketch fidelity table).
 -/
 
 namespace EvalLadder.Obligations.BurntSushi.Ripgrep454

@@ -8,7 +8,7 @@
 
 /-
   Reviewer fidelity: list-of-`Char` algebra only; not wired to clap's `std::fmt`
-  or platform newline conventions. See `docs/proof_subset_sketches.md`.
+  or platform newline conventions. See `docs/proof_subset_policy.md` (Lean sketch fidelity table).
 -/
 
 namespace EvalLadder.Obligations.ClapRs.Clap1972

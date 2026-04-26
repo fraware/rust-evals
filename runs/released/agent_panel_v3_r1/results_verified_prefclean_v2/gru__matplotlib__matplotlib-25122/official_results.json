@@ -1,0 +1,1 @@
+{"artifacts":[],"candidate_id":"de1d9a4f-4cef-567c-819c-6722b5779ce0","evaluator_version":"0.1.0","finished_at":"2025-01-01T00:00:00.004Z","level":"L0","metrics":{"exit_code":4,"harness_error":true},"primary_reason":"L0_OFFICIAL_INVALID","schema_version":1,"secondary_reasons":[],"started_at":"2025-01-01T00:00:00.003Z","status":"invalid","task_id":"matplotlib__matplotlib-25122"}

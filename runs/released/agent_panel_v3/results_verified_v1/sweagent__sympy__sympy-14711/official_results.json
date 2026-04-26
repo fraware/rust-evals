@@ -1,0 +1,1 @@
+{"artifacts":[],"candidate_id":"5f21fb1e-3390-5df2-9180-bd54a44d0c34","evaluator_version":"0.1.0","finished_at":"2025-01-01T00:00:00.004Z","level":"L0","metrics":{"exit_code":1,"harness_error":true},"primary_reason":"L0_OFFICIAL_INVALID","schema_version":1,"secondary_reasons":[],"started_at":"2025-01-01T00:00:00.003Z","status":"invalid","task_id":"sympy__sympy-14711"}

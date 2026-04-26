@@ -1,0 +1,4 @@
+ImportError while loading conftest '/workspace/fsspec/conftest.py'.
+fsspec/__init__.py:2: in <module>
+    from ._version import __version__  # noqa: F401
+E   ModuleNotFoundError: No module named 'fsspec._version'

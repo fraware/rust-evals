@@ -1,0 +1,1 @@
+{"command":["python","-m","pytest","tests/test_blueprints.py::test_empty_name_not_allowed"],"engine":"other","image_ref":"swebench/sweb.eval.x86_64.pallets_1776_flask-5014:latest","l1_strategy":"smart_rust_reuse","patch_apply_outcome_l0":"applied","patch_apply_outcome_l1":"applied","resource_limits":{"wall_timeout":{"nanos":0,"secs":3600}}}

@@ -1,6 +1,7 @@
 # Submission checklist
 
-Target venue: NeurIPS 2026 Evaluation & Datasets track.
+Target venue: NeurIPS 2026 Evaluation & Datasets track. Supporting technical
+docs are indexed in [`README.md`](README.md).
 
 Key dates:
 
@@ -99,6 +100,8 @@ Choose one mode per submission.
       ``paper/exports/release/<tag>/artifact_manifest.json``). Confirm green runs
       on GitHub Actions (``gh run list --workflow=release-tag.yml``; tier-3
       dispatch requires ``gh auth login`` or ``GH_TOKEN`` on this machine).
+      Local prep (no CI claim): ``paper/exports/release/v0.1.2/artifact_manifest.json``
+      from ``write_release_artifact_manifest.py`` without ``--require-all-files``.
 
 ## Reviewer ergonomics
 
@@ -148,12 +151,19 @@ Choose one mode per submission.
       every agent on all-fail panels; `live` mode handles null `live_pass_rate` /
       `delta` without crashing and scores ties only on rows with live data.
       Regression coverage in `tests/python/test_evidence_cli_scripts.py`.
-- [ ] Verified flagship gate passing (non-degenerate, low harness error).
-      Sealed 51-candidate run under ``runs/released/agent_panel_v3_r1/results_verified_prefclean/``;
-      gate still fails on harness rate and L3 dominance (see empirical status doc).
-- [ ] Live comparative gate passing (non-tied ranking signal).
-      Current export ``paper/exports/live_panel_v1`` ties on live pass rates.
-- [ ] L2 expansion gate passing (sufficient passed-from + fail attribution).
-      Current ``runs/released/l2_verified_v2/results`` slice is too thin.
-- [ ] Rust proof-subset gate passing (8/8 ok, L3/L4 residual examples).
-      Strict semantic minima not met on ``results_fast``; needs full L0-L4 batch.
+- [x] Verified / Live / L2 / Rust **release-profile** gates passing on the
+      canonical paths documented in ``docs/evidence_empirical_status.md``
+      (``--gate-profile release`` on ``results_opt``, ``paper/exports/live_panel_v1_postbatch``,
+      ``runs/released/l2_verified_merged_v1/results``, ``rust_proof_subset_v1/results_seal``).
+- [ ] Verified **strict** flagship gate (default CLI: low harness error,
+      distinct agent vectors). Still failing on the sealed 51-candidate batch;
+      triage commands remain in ``docs/evidence_empirical_status.md``.
+- [ ] Live **strict** comparative gate (non-tied live ranking and non-zero tau).
+      Use ``--symmetric-live-ok`` or ``--gate-profile release`` only for the
+      documented uniform-regression slice until a new batch diverges.
+- [ ] L2 **strict** expansion gate on a single large batch
+      (``--min-l1-passed-from 10`` defaults). The merged directory is for
+      release-profile closure only.
+- [ ] Rust proof-subset **strict** semantic gate
+      (``--min-l3-pass-l4-fail 2 --min-all-level-pass 1`` on a full ladder out).
+      Release profile matches tier-1 structural semantics on ``results_seal``.

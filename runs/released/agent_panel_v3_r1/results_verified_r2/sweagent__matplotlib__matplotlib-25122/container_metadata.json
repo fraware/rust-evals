@@ -1,0 +1,1 @@
+{"command":["python","-m","pytest","lib/matplotlib/tests/test_mlab.py::TestSpectral::test_psd_window_flattop"],"engine":"other","image_ref":"swebench/sweb.eval.x86_64.matplotlib_1776_matplotlib-25122:latest","l1_strategy":"smart_rust_reuse","patch_apply_outcome_l0":"applied","patch_apply_outcome_l1":"applied","resource_limits":{"wall_timeout":{"nanos":0,"secs":3600}}}

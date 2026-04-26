@@ -71,7 +71,7 @@
     "UUIDv5 namespace c4d9e1a2-7f3b-5c6d-8e9f-0a1b2c3d4e5f (distinct from rust_pilot_v1).",
     "Task list is derived from datasets/derived/proof_subset/manifest.jsonl.",
     "Use configs/policy/rust_proof_subset.toml for L3 edit-scope parity on src/tests/examples edits.",
-    "Reviewer-facing Lean sketch fidelity notes: docs/proof_subset_sketches.md."
+    "Reviewer-facing Lean sketch fidelity notes: docs/proof_subset_policy.md (Lean sketch fidelity table)."
   ],
   "panel_id": "rust_proof_subset_v1",
   "proof_subset_manifest": "datasets/derived/proof_subset/manifest.jsonl"

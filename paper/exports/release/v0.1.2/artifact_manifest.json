@@ -1,0 +1,17 @@
+{
+  "files_sha256": {
+    "Cargo.lock": "sha256:cce7a66bf9e09d4c2de49d3c1a7c6f4033b4e045f3477f4c8ac43d4e1776bddc",
+    "Cargo.toml": "sha256:2f196e55077ae2cb07b445c8b9f7ca950b2f9540883e138be3b9549fe7c05085",
+    "datasets/derived/proof_subset/manifest.jsonl": "sha256:d702a5767ca67bc10b3abfdb60ba22ac76c30d24378bea221479f2d65a6812bd",
+    "packages/lean/EvalLadder/EvalLadder.lean": "sha256:5dc9fa9795e9169336f487488f689fc7bda1ee967fecd48f95779609f0590cb5",
+    "packages/lean/EvalLadder/lakefile.lean": "sha256:44f026c35a511bc3715059b37522c1b0a52ea442cea8f7a368800a2502cb3c05",
+    "packages/lean/EvalLadder/lean-toolchain": "sha256:4c0419ef01bc01162d35b0c75f60e4570f429eaa67f380d7c8e7b0d967956091",
+    "rust-toolchain.toml": "sha256:5e9551a6dcf56168bcd5ddaaacdcbbf41f82ed4da09561c607b4ca619e44aab9"
+  },
+  "generated_at_utc": "2026-04-26T21:41:24.374590Z",
+  "git_commit": "72ff2e27d75addba5531897a581ffc583ad392b3",
+  "git_describe": "v0.1.1-1-g72ff2e27",
+  "git_ref": "refs/heads/main",
+  "missing_paths": [],
+  "schema_version": 1
+}

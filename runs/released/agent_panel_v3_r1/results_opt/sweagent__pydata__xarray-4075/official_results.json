@@ -1,0 +1,1 @@
+{"artifacts":[],"candidate_id":"d91ca376-8976-5a75-a6b8-b09ed614e7d9","evaluator_version":"0.1.0","finished_at":"2025-01-01T00:00:00.004Z","level":"L0","metrics":{"exit_code":4},"primary_reason":"L0_OFFICIAL_FAIL","schema_version":1,"secondary_reasons":[],"started_at":"2025-01-01T00:00:00.003Z","status":"fail","task_id":"pydata__xarray-4075"}

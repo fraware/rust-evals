@@ -35,7 +35,7 @@ eval-ladder ingest verified \
 Current repository ingest state:
 
 - `benchmarks/verified/manifests/`: 500 tasks (SWE-bench Verified)
-- `benchmarks/live/manifests/`: 500 tasks (SWE-bench-Live `verified` split)
+- `benchmarks/live/manifests/`: 499 tasks (SWE-bench-Live `verified` split mirror in this checkout)
 - `benchmarks/rust/manifests/`: 239 tasks (Multi-SWE-Bench-Rust mirror)
 
 ## SWE-Bench Verified

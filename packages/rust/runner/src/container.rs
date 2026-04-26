@@ -558,6 +558,7 @@ fn shell_quote_posix(s: &str) -> String {
     format!("'{}'", s.replace('\'', "'\"'\"'"))
 }
 
+// Keep `ci/scripts/prewarm_panel_images.py` in sync when changing candidate logic.
 fn image_pull_candidates(image: &str) -> Vec<String> {
     let mut out = vec![image.to_owned()];
     if let Some(mapped) = map_legacy_swebench_image(image) {

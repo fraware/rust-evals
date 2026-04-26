@@ -1,0 +1,4 @@
+<frozen importlib._bootstrap>:228: RuntimeWarning: numpy.ndarray size changed, may indicate binary incompatibility. Expected 80 from C header, got 96 from PyObject
+ERROR: not found: /workspace/astropy/coordinates/tests/test_sky_coord.py::test_subclass_property_exception_error
+(no name '/workspace/astropy/coordinates/tests/test_sky_coord.py::test_subclass_property_exception_error' in any of [<DocTestModulePlus astropy/coordinates/tests/test_sky_coord.py>, <Module astropy/coordinates/tests/test_sky_coord.py>])
+

@@ -1,0 +1,43 @@
+[1m============================= test session starts ==============================[0m
+platform linux -- Python 3.9.20, pytest-7.4.0, pluggy-1.3.0
+
+Running tests with Astropy version 5.3.dev62+g1a4462d72.d20250910.
+Running tests in astropy/coordinates/tests/test_sky_coord.py::test_subclass_property_exception_error.
+
+Date: 2026-04-26T13:11:10
+
+Platform: Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.35
+
+Executable: /opt/miniconda3/envs/testbed/bin/python
+
+Full Python Version: 
+3.9.20 (main, Oct  3 2024, 07:27:41) 
+[GCC 11.2.0]
+
+encodings: sys: utf-8, locale: UTF-8, filesystem: utf-8
+byteorder: little
+float info: dig: 15, mant_dig: 15
+
+Package versions: 
+Numpy: 1.25.2
+Scipy: not available
+Matplotlib: not available
+h5py: not available
+Pandas: not available
+PyERFA: 2.0.0.3
+Cython: not available
+Scikit-image: not available
+asdf: not available
+pyarrow: not available
+
+Using Astropy options: remote_data: none.
+
+ARCH_ON_CI: undefined
+IS_CRON: undefined
+
+rootdir: /workspace
+configfile: setup.cfg
+plugins: filter-subpackage-0.1.2, remotedata-0.4.0, hypothesis-6.82.6, openfiles-0.5.0, arraydiff-0.5.0, doctestplus-1.0.0, xdist-3.3.1, astropy-header-0.2.2, astropy-0.10.0, cov-4.1.0, mock-3.11.1
+collected 0 items
+
+[33m============================ [33mno tests ran[0m[33m in 2.84s[0m[33m =============================[0m

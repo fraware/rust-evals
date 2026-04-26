@@ -13,7 +13,7 @@
 /-
   Reviewer fidelity: the sketch uses `Fin 4` and inequality as mutual exclusion;
   it does not model clap's `ArgGroup`, override, or positional semantics. See
-  `docs/proof_subset_sketches.md` at the repository root.
+  `docs/proof_subset_policy.md` (Lean sketch fidelity table) at the repository root.
 -/
 
 namespace EvalLadder.Obligations.ClapRs.Clap1624

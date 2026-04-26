@@ -1,0 +1,6 @@
+============================= test session starts ==============================
+platform linux -- Python 3.9.20, pytest-6.0.0rc2.dev85+g422685d0b, py-1.11.0, pluggy-0.13.1
+rootdir: /workspace, configfile: pyproject.toml
+collected 0 items
+
+============================ no tests ran in 0.12s =============================

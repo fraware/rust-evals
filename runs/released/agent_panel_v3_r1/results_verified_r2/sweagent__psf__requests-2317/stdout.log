@@ -1,0 +1,89 @@
+============================= test session starts ==============================
+platform linux -- Python 3.9.20, pytest-7.4.4, pluggy-1.0.0
+rootdir: /workspace
+collected 7 items
+
+=============================== warnings summary ===============================
+requests/packages/urllib3/connectionpool.py:80
+  /workspace/requests/packages/urllib3/connectionpool.py:80: DeprecationWarning: invalid escape sequence \*
+    """
+
+requests/packages/urllib3/connectionpool.py:403
+  /workspace/requests/packages/urllib3/connectionpool.py:403: DeprecationWarning: invalid escape sequence \*
+    """
+
+requests/packages/urllib3/connectionpool.py:734
+  /workspace/requests/packages/urllib3/connectionpool.py:734: DeprecationWarning: invalid escape sequence \*
+    """
+
+requests/packages/urllib3/_collections.py:1
+requests/packages/urllib3/_collections.py:1
+  /workspace/requests/packages/urllib3/_collections.py:1: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated since Python 3.3, and in 3.10 it will stop working
+    from collections import Mapping, MutableMapping
+
+requests/packages/urllib3/poolmanager.py:32
+  /workspace/requests/packages/urllib3/poolmanager.py:32: DeprecationWarning: invalid escape sequence \*
+    """
+
+requests/models.py:777
+  /workspace/requests/models.py:777: DeprecationWarning: invalid escape sequence \*
+    """Returns the json-encoded content of a response, if any.
+
+requests/api.py:53
+  /workspace/requests/api.py:53: DeprecationWarning: invalid escape sequence \*
+    """Sends a GET request. Returns :class:`Response` object.
+
+requests/api.py:64
+  /workspace/requests/api.py:64: DeprecationWarning: invalid escape sequence \*
+    """Sends a OPTIONS request. Returns :class:`Response` object.
+
+requests/api.py:75
+  /workspace/requests/api.py:75: DeprecationWarning: invalid escape sequence \*
+    """Sends a HEAD request. Returns :class:`Response` object.
+
+requests/api.py:86
+  /workspace/requests/api.py:86: DeprecationWarning: invalid escape sequence \*
+    """Sends a POST request. Returns :class:`Response` object.
+
+requests/api.py:98
+  /workspace/requests/api.py:98: DeprecationWarning: invalid escape sequence \*
+    """Sends a PUT request. Returns :class:`Response` object.
+
+requests/api.py:109
+  /workspace/requests/api.py:109: DeprecationWarning: invalid escape sequence \*
+    """Sends a PATCH request. Returns :class:`Response` object.
+
+requests/api.py:120
+  /workspace/requests/api.py:120: DeprecationWarning: invalid escape sequence \*
+    """Sends a DELETE request. Returns :class:`Response` object.
+
+requests/sessions.py:462
+  /workspace/requests/sessions.py:462: DeprecationWarning: invalid escape sequence \*
+    """Sends a GET request. Returns :class:`Response` object.
+
+requests/sessions.py:472
+  /workspace/requests/sessions.py:472: DeprecationWarning: invalid escape sequence \*
+    """Sends a OPTIONS request. Returns :class:`Response` object.
+
+requests/sessions.py:482
+  /workspace/requests/sessions.py:482: DeprecationWarning: invalid escape sequence \*
+    """Sends a HEAD request. Returns :class:`Response` object.
+
+requests/sessions.py:492
+  /workspace/requests/sessions.py:492: DeprecationWarning: invalid escape sequence \*
+    """Sends a POST request. Returns :class:`Response` object.
+
+requests/sessions.py:503
+  /workspace/requests/sessions.py:503: DeprecationWarning: invalid escape sequence \*
+    """Sends a PUT request. Returns :class:`Response` object.
+
+requests/sessions.py:513
+  /workspace/requests/sessions.py:513: DeprecationWarning: invalid escape sequence \*
+    """Sends a PATCH request. Returns :class:`Response` object.
+
+requests/sessions.py:523
+  /workspace/requests/sessions.py:523: DeprecationWarning: invalid escape sequence \*
+    """Sends a DELETE request. Returns :class:`Response` object.
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+============================= 21 warnings in 1.40s =============================

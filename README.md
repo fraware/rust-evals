@@ -41,7 +41,7 @@ datasets/            # Public-source links and the curated proof subset manifest
 tasks/               # Candidate resolutions and derived task artifacts.
 runs/                # Released, local, and CI run outputs.
 tests/               # Rust, Python, and integration fixtures.
-docs/                # Architecture, scope, runbooks, submission checklist.
+docs/                # Architecture, scope, runbooks, evidence gates; start at docs/README.md.
 ci/                  # GitHub Actions workflows and helper scripts.
 paper/               # Tables, figures, and exports for the submission.
 ```
@@ -52,7 +52,10 @@ GitHub Actions workflows are defined in `.github/workflows/` and appear in the
 repository Actions tab:
 
 - `ci-tier1-fast` (`push`, `pull_request` on `main`): Rust `fmt`, `clippy`,
-  workspace tests, schema validation.
+  workspace tests, schema validation, and
+  `python ci/scripts/run_evidence_tier1_checks.py` (Python `compileall` on
+  `ci/scripts`, structural `rust-proof` on `results_fast`, Verified preflight,
+  manifest entrypoint audit).
 - `ci-tier2-medium` (`push`, `pull_request` on `main`): Python lint/type/test
   plus Rust integration tests.
 - `ci-tier3-heavy` (`workflow_dispatch`, weekly `schedule`): heavy fixture
@@ -153,6 +156,12 @@ eval-ladder demo run --out runs/demo --tasks 2
 The repository ships several release-track run directories under
 `runs/released/`:
 
+- `runs/released/agent_panel_v3_r1/`: NeurIPS **Verified flagship** remediation
+  panel (51 preflight-clean candidates x 3 agents); canonical sealed summary under
+  `results_opt/`; gates and exports documented in `docs/evidence_empirical_status.md`
+  and `runs/released/agent_panel_v3_r1/README.md`.
+- `runs/released/l2_verified_merged_v1/`: deduplicated merge of small L2 slices
+  (`ci/scripts/merge_l2_batch_summaries.py`) for release-profile gating only.
 - `runs/released/agent_panel_v1/`: panel artifacts (candidates, patches,
   panel metadata, per-task workspaces) and a completed Docker-backed
   evaluator run for 3 agents x 5 Verified tasks:
@@ -176,7 +185,7 @@ The repository ships several release-track run directories under
   design, with optimized rerun workflow (`--resume`, `--jobs`, adaptive
   timeouts, shared `CARGO_TARGET_DIR`, fast/heavy tracks) documented in
   the panel README (`build_rust_proof_subset_panel.py`; see directory README and
-  `docs/proof_subset_sketches.md`).
+  `docs/proof_subset_policy.md`, section **Lean sketch fidelity**).
 - `runs/released/rust_pilot_v1/`: Rust-native pilot run for
   `clap-rs__clap_5873` (`LocalProcessEngine`, no Docker) with
   `evaluate batch` levels `L0,L1,L3,L4`. The frozen `batch_summary`

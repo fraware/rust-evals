@@ -1,0 +1,1 @@
+{"artifacts":[],"candidate_id":"2342dcfd-05f1-5eed-815c-38322096db3e","evaluator_version":"0.1.0","finished_at":"2025-01-01T00:00:00.004Z","level":"L0","metrics":{"exit_code":0},"primary_reason":"PASS","schema_version":1,"secondary_reasons":[],"started_at":"2025-01-01T00:00:00.003Z","status":"pass","task_id":"sphinx-doc__sphinx-9698"}

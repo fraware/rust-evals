@@ -1,5 +1,7 @@
 # Evaluation ladder
 
+Documentation index: [`README.md`](README.md).
+
 The evaluation ladder defines five evaluator levels, L0 through L4. Each level
 has a precise definition, a set of inputs, a set of checks, and a stable code
 for each failure reason. Evaluator output is a verdict per level per

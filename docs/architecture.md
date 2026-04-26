@@ -1,9 +1,10 @@
 # Architecture
 
-This document describes the architecture of `eval-ladder`. It is normative:
-every crate and CLI command should be explainable in terms of the abstractions
-defined here. Changes to this document require a changelog entry and a schema
-version bump where applicable.
+This document describes the architecture of `eval-ladder`. Treat it as the
+authoritative map of crates and data flow: every major CLI surface and persisted
+artifact should be explainable in terms of these abstractions. When behavior or
+on-disk contracts change materially, update this document and any affected JSON
+schema versions together.
 
 ## Design premise
 

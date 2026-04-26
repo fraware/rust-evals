@@ -1,0 +1,3 @@
+ERROR: not found: /workspace/tests/test_pylint_runners.py::test_pylint_run_jobs_equal_zero_dont_crash_with_cpu_fraction
+(no name '/workspace/tests/test_pylint_runners.py::test_pylint_run_jobs_equal_zero_dont_crash_with_cpu_fraction' in any of [<Module tests/test_pylint_runners.py>])
+

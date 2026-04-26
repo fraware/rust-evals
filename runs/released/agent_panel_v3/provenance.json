@@ -1,0 +1,287 @@
+{
+  "agents": [
+    {
+      "agent_id": "sweagent",
+      "generation_mode": "agent_loop",
+      "model_id": "claude-3-5-sonnet-20241022",
+      "slug": "20240620_sweagent_claude3.5sonnet"
+    },
+    {
+      "agent_id": "gru",
+      "generation_mode": "agent_loop",
+      "model_id": "gru-2024-08-24",
+      "slug": "20240824_gru"
+    },
+    {
+      "agent_id": "honeycomb",
+      "generation_mode": "agent_loop",
+      "model_id": "honeycomb-2024-08-20",
+      "slug": "20240820_honeycomb"
+    }
+  ],
+  "entries": [
+    {
+      "agent": "sweagent",
+      "patch_sha256": "54a687cd004b67800b89d00a8dce99e9fc433b051709a37abcf848c599bf1d68",
+      "status": "ok",
+      "task": "astropy__astropy-7671",
+      "upstream_resolved": true
+    },
+    {
+      "agent": "sweagent",
+      "patch_sha256": "d8741682f30ba9dd23efbe0efabeb28f9863f8d27d7f7d3f69c29679721b786d",
+      "status": "ok",
+      "task": "django__django-9296",
+      "upstream_resolved": true
+    },
+    {
+      "agent": "sweagent",
+      "patch_sha256": "a6a99775057a26114b60250fb785a505e5e659e18492a1e57ec5e642c276951c",
+      "status": "ok",
+      "task": "matplotlib__matplotlib-25122",
+      "upstream_resolved": true
+    },
+    {
+      "agent": "sweagent",
+      "patch_sha256": "eed75b0e1a04c748c3ce43f90b103c3cfa2a94ad6f8a27c58078797052f7c1b4",
+      "status": "ok",
+      "task": "pallets__flask-5014",
+      "upstream_resolved": false
+    },
+    {
+      "agent": "sweagent",
+      "patch_sha256": "97da4e68f12b81b638e984ba0e0db2ab1a97eb2f6034414d0364b38f49377c9e",
+      "status": "ok",
+      "task": "psf__requests-2317",
+      "upstream_resolved": true
+    },
+    {
+      "agent": "sweagent",
+      "patch_sha256": "c65c293983bfdbfd82e069946e13461d2572e7b35e999467e8862b466b4a96e0",
+      "status": "ok",
+      "task": "pydata__xarray-4629",
+      "upstream_resolved": true
+    },
+    {
+      "agent": "sweagent",
+      "patch_sha256": "484921a7901f91ae7e9421da13fdacad9c141b05b336c191d3c153e4cc856947",
+      "status": "ok",
+      "task": "pylint-dev__pylint-6903",
+      "upstream_resolved": true
+    },
+    {
+      "agent": "sweagent",
+      "patch_sha256": "1c139ed24489aaa3ec8f01b591b2b38080977a54fc5dfda3a2cbc38a403418f3",
+      "status": "ok",
+      "task": "pytest-dev__pytest-7982",
+      "upstream_resolved": true
+    },
+    {
+      "agent": "sweagent",
+      "patch_sha256": "2a170bea4d0a693704c03ffe97e20a28a20054082ded452912167c95db15cd5d",
+      "status": "ok",
+      "task": "scikit-learn__scikit-learn-9288",
+      "upstream_resolved": true
+    },
+    {
+      "agent": "sweagent",
+      "patch_sha256": "f342278723b488f7da2f217f30eb964580fc37bf6050088da334131391387903",
+      "status": "ok",
+      "task": "sphinx-doc__sphinx-9711",
+      "upstream_resolved": false
+    },
+    {
+      "agent": "sweagent",
+      "patch_sha256": "3799b75cf3b1d85f6afbec498b4a8d9ce39f48694a29ddb0c59dcaf21c557e1f",
+      "status": "ok",
+      "task": "sympy__sympy-24539",
+      "upstream_resolved": true
+    },
+    {
+      "agent": "sweagent",
+      "patch_sha256": "1b20a3973510ca025e5950069cc858105f2dfa063248403610b907dce90b426b",
+      "status": "ok",
+      "task": "astropy__astropy-7336",
+      "upstream_resolved": true
+    },
+    {
+      "agent": "gru",
+      "patch_sha256": "a0a71ad2a5c85c43e4de99483bfb12cd4baa23b47fc6ba879f0daa7b8a3818a5",
+      "status": "ok",
+      "task": "astropy__astropy-7671",
+      "upstream_resolved": true
+    },
+    {
+      "agent": "gru",
+      "patch_sha256": "fcd6495b974f3bb4af3d084171c0547c953f6d65f48daf41514b522eb20b035a",
+      "status": "ok",
+      "task": "django__django-9296",
+      "upstream_resolved": true
+    },
+    {
+      "agent": "gru",
+      "patch_sha256": "f4a745a66507270538b00c01816bb966c12adb0518b599e7606c994e709fce01",
+      "status": "ok",
+      "task": "matplotlib__matplotlib-25122",
+      "upstream_resolved": true
+    },
+    {
+      "agent": "gru",
+      "patch_sha256": "530cf7e775458a8cd64db26f665cefd08a005b49c7ff5f9f3a9aa8b2fbefb77b",
+      "status": "ok",
+      "task": "pallets__flask-5014",
+      "upstream_resolved": true
+    },
+    {
+      "agent": "gru",
+      "patch_sha256": "d57bc71ef4293d7ee4a7b1c4dfdca943f5f28949bf6858309cd226e592b5f950",
+      "status": "ok",
+      "task": "psf__requests-2317",
+      "upstream_resolved": true
+    },
+    {
+      "agent": "gru",
+      "patch_sha256": "cc30a4de6932cb13c73ecfd9577b35eb03be3017e981c4ec61eabf96858efb13",
+      "status": "ok",
+      "task": "pydata__xarray-4629",
+      "upstream_resolved": true
+    },
+    {
+      "agent": "gru",
+      "patch_sha256": "3ed013f2fb81e67dffd1e0003030691d5d072ac86d14f7d20c81bc85add7e5e7",
+      "status": "ok",
+      "task": "pylint-dev__pylint-6903",
+      "upstream_resolved": true
+    },
+    {
+      "agent": "gru",
+      "patch_sha256": "bf1ad2eef30dea5e2fe4a567783948e3c25e67d8e8f220c3e6ddaedfe9c3d25b",
+      "status": "ok",
+      "task": "pytest-dev__pytest-7982",
+      "upstream_resolved": true
+    },
+    {
+      "agent": "gru",
+      "patch_sha256": "88690b8341234883dc47f22d3a3808abfba1e596a1f30334a72febd3a77a993b",
+      "status": "ok",
+      "task": "scikit-learn__scikit-learn-9288",
+      "upstream_resolved": true
+    },
+    {
+      "agent": "gru",
+      "patch_sha256": "c33cbd196da908c88c4b1c0f0caba6b76183e76f48553640390bf2847ab7a245",
+      "status": "ok",
+      "task": "sphinx-doc__sphinx-9711",
+      "upstream_resolved": true
+    },
+    {
+      "agent": "gru",
+      "patch_sha256": "335078e46f18d9ead5fb5d2714fa16438b853e048113e2fc75de52bb87f17d77",
+      "status": "ok",
+      "task": "sympy__sympy-24539",
+      "upstream_resolved": true
+    },
+    {
+      "agent": "gru",
+      "patch_sha256": "ab1fc3e2c344bb158b405604e9d34c8ad59cbe7613c4fbf26dc77cdc4b257748",
+      "status": "ok",
+      "task": "astropy__astropy-7336",
+      "upstream_resolved": true
+    },
+    {
+      "agent": "honeycomb",
+      "patch_sha256": "0ab19009a251aa291d949077e519f1a0812e2bdb33aa5774e82c73d01dc765db",
+      "status": "ok",
+      "task": "astropy__astropy-7671",
+      "upstream_resolved": true
+    },
+    {
+      "agent": "honeycomb",
+      "patch_sha256": "8a1a2ab39ef5aab042aceda07f0493b30b6c8effc727d72eba621c0365a7abcd",
+      "status": "ok",
+      "task": "django__django-9296",
+      "upstream_resolved": true
+    },
+    {
+      "agent": "honeycomb",
+      "patch_sha256": "d90258463035a063dbabb8e861cfcd2f9ddd84f94bff5bd81fd920e8cc34cf28",
+      "status": "ok",
+      "task": "matplotlib__matplotlib-25122",
+      "upstream_resolved": true
+    },
+    {
+      "agent": "honeycomb",
+      "patch_sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+      "status": "ok",
+      "task": "pallets__flask-5014",
+      "upstream_resolved": false
+    },
+    {
+      "agent": "honeycomb",
+      "patch_sha256": "687109164255f30d8e4247e3239e67027c096240ed36b4f52316cc120d983a4a",
+      "status": "ok",
+      "task": "psf__requests-2317",
+      "upstream_resolved": true
+    },
+    {
+      "agent": "honeycomb",
+      "patch_sha256": "134ff9f4a4ce3891b1f1e326d543c4479c162d113d8612b1029baffb07d42147",
+      "status": "ok",
+      "task": "pydata__xarray-4629",
+      "upstream_resolved": true
+    },
+    {
+      "agent": "honeycomb",
+      "patch_sha256": "56e4fe18fc9756b364ba79540502f1a8eaa99ae18d03bab27850376c473fe73e",
+      "status": "ok",
+      "task": "pylint-dev__pylint-6903",
+      "upstream_resolved": true
+    },
+    {
+      "agent": "honeycomb",
+      "patch_sha256": "77421dbc66ea255805e150e0c77bf706b5d57d6b34d5bbdcbcb9e38c0c1525d6",
+      "status": "ok",
+      "task": "pytest-dev__pytest-7982",
+      "upstream_resolved": true
+    },
+    {
+      "agent": "honeycomb",
+      "patch_sha256": "f28a5e21b4bb6fe703926c8881dda149e3194f4dd24092d30da99fb79d843e15",
+      "status": "ok",
+      "task": "scikit-learn__scikit-learn-9288",
+      "upstream_resolved": true
+    },
+    {
+      "agent": "honeycomb",
+      "patch_sha256": "c2cfc4dec0c790cb87a122dca503494087e7d58c0828462577c23e7dc3c2c79f",
+      "status": "ok",
+      "task": "sphinx-doc__sphinx-9711",
+      "upstream_resolved": true
+    },
+    {
+      "agent": "honeycomb",
+      "patch_sha256": "b76767fff171f5338508fbd7f7af40a2292ae2bf90e6e8b35fd3313d48dd76f9",
+      "status": "ok",
+      "task": "sympy__sympy-24539",
+      "upstream_resolved": true
+    },
+    {
+      "agent": "honeycomb",
+      "patch_sha256": "50932594f401fda8f63621fb097bd682e980d30d73940ce10cef8ac7eb5beca8",
+      "status": "ok",
+      "task": "astropy__astropy-7336",
+      "upstream_resolved": true
+    }
+  ],
+  "n_entries": 36,
+  "panel_id": "agent_panel_v3",
+  "selection": {
+    "max_tasks": 12,
+    "min_agents_with_submission": 2,
+    "policy": "resolved>=1 and multi-agent patch availability"
+  },
+  "sources": {
+    "leaderboard": "https://github.com/SWE-bench/experiments/tree/main/evaluation/verified",
+    "patch_bucket": "https://swe-bench-submissions.s3.amazonaws.com/verified/"
+  }
+}

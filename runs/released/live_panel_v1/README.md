@@ -37,6 +37,13 @@ Prerequisites: Docker, ingested manifests under `benchmarks/live/manifests/` and
 `benchmarks/verified/manifests/`, and images reachable for every task in the
 panel.
 
+Workload deduplication keys include the **candidate JSON bytes** as well as the
+task and patch hash, so three agents that share an identical gold patch on the
+same Verified task still get **distinct** sealed bundles (each keeps its own
+`candidate_resolution.json`). Re-run batches produced before that fix if
+`analyze paper-export` ever shows fewer than three `agent_id` values in
+`static_vs_live.json`.
+
 ```powershell
 cargo run -p eval-ladder-cli -- evaluate batch `
   --levels L0,L1 `

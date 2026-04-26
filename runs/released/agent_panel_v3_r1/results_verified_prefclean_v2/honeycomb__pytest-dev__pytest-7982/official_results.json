@@ -1,0 +1,1 @@
+{"artifacts":[],"candidate_id":"aa9a96fe-688b-5f19-b54b-703b6e8677a8","evaluator_version":"0.1.0","finished_at":"2025-01-01T00:00:00.004Z","level":"L0","metrics":{"exit_code":4},"primary_reason":"L0_OFFICIAL_FAIL","schema_version":1,"secondary_reasons":[],"started_at":"2025-01-01T00:00:00.003Z","status":"fail","task_id":"pytest-dev__pytest-7982"}
