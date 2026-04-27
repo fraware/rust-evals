@@ -1,0 +1,112 @@
+{
+  "rust_real_manifest": {
+    "assessment": {
+      "note": "Computed from the real-manifest sealed summary only; synthetic paper-semantics replay is intentionally excluded.",
+      "strict_semantic_minima_met": false
+    },
+    "input_summary": "runs\\released\\rust_proof_subset_v1\\results_seal\\batch_summary.json",
+    "metrics": {
+      "all_level_pass": 0,
+      "l3_pass_l4_fail": 0,
+      "l4_reason_counts": {
+        "L4_OBLIGATION_MET": 8
+      },
+      "total_entries": 8
+    },
+    "per_entry": [
+      {
+        "entry_id": "golden_agent__BurntSushi__ripgrep_454",
+        "l3_status": "pass",
+        "l4_reason": "L4_OBLIGATION_MET",
+        "l4_status": "pass"
+      },
+      {
+        "entry_id": "golden_agent__clap-rs__clap_1624",
+        "l3_status": "pass",
+        "l4_reason": "L4_OBLIGATION_MET",
+        "l4_status": "pass"
+      },
+      {
+        "entry_id": "golden_agent__clap-rs__clap_1710",
+        "l3_status": "pass",
+        "l4_reason": "L4_OBLIGATION_MET",
+        "l4_status": "pass"
+      },
+      {
+        "entry_id": "golden_agent__clap-rs__clap_1972",
+        "l3_status": "pass",
+        "l4_reason": "L4_OBLIGATION_MET",
+        "l4_status": "pass"
+      },
+      {
+        "entry_id": "golden_agent__clap-rs__clap_2008",
+        "l3_status": "pass",
+        "l4_reason": "L4_OBLIGATION_MET",
+        "l4_status": "pass"
+      },
+      {
+        "entry_id": "golden_agent__clap-rs__clap_2075",
+        "l3_status": "pass",
+        "l4_reason": "L4_OBLIGATION_MET",
+        "l4_status": "pass"
+      },
+      {
+        "entry_id": "golden_agent__clap-rs__clap_2093",
+        "l3_status": "pass",
+        "l4_reason": "L4_OBLIGATION_MET",
+        "l4_status": "pass"
+      },
+      {
+        "entry_id": "golden_agent__clap-rs__clap_5873",
+        "l3_status": "pass",
+        "l4_reason": "L4_OBLIGATION_MET",
+        "l4_status": "pass"
+      }
+    ]
+  },
+  "verified": {
+    "assessment": {
+      "note": "This is an offline inventory bound from existing summaries only. Failure means strict candidate volume cannot be met from currently observed stable task-agent pass pairs without adding new tasks and/or new candidates.",
+      "supports_min_candidates_without_new_tasks": false
+    },
+    "inventory": {
+      "agent_pair_counts": {
+        "gru": 7,
+        "honeycomb": 7,
+        "sweagent": 7
+      },
+      "l1_pass_observations": 185,
+      "max_rows_if_single_candidate_per_task": 21,
+      "task_pair_counts": {
+        "astropy__astropy-12907": 3,
+        "astropy__astropy-7671": 3,
+        "django__django-7530": 3,
+        "networkx__networkx-8013": 3,
+        "pydata__xarray-2905": 3,
+        "pylint-dev__pylint-7277": 3,
+        "sphinx-doc__sphinx-9698": 3
+      },
+      "tasks_passing_for_all_public_agents": [
+        "astropy__astropy-12907",
+        "astropy__astropy-7671",
+        "django__django-7530",
+        "networkx__networkx-8013",
+        "pydata__xarray-2905",
+        "pylint-dev__pylint-7277",
+        "sphinx-doc__sphinx-9698"
+      ],
+      "unique_task_agent_pairs": 21,
+      "unique_tasks_by_agent": {
+        "gru": 7,
+        "honeycomb": 7,
+        "sweagent": 7
+      },
+      "unique_tasks_with_any_public_agent_pass": 7
+    },
+    "strict_thresholds": {
+      "max_harness_errors_allowed_at_min_candidates": 3,
+      "max_l1_harness_error_rate": 0.1,
+      "min_candidates": 30
+    }
+  }
+}

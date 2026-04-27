@@ -1302,3 +1302,25 @@ def test_build_live_panel_v2_py_compile(repo_root: Path) -> None:
         check=False,
     )
     assert proc.returncode == 0, proc.stderr
+
+
+def test_analyze_strict_feasibility_help(repo_root: Path) -> None:
+    proc = _run_script(
+        repo_root,
+        "ci/scripts/analyze_strict_feasibility.py",
+        ["--help"],
+    )
+    assert proc.returncode == 0, proc.stderr
+    assert "offline" in proc.stdout.lower() and "strict" in proc.stdout.lower()
+
+
+def test_analyze_strict_feasibility_py_compile(repo_root: Path) -> None:
+    path = repo_root / "ci/scripts/analyze_strict_feasibility.py"
+    proc = subprocess.run(
+        [sys.executable, "-m", "py_compile", str(path)],
+        cwd=repo_root,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert proc.returncode == 0, proc.stderr

@@ -110,6 +110,12 @@ The repository now includes one sealed, verified Rust-native pilot run at
   one task and L0/L1 timed out; final claims remain tied to the full panel
   releases.
 
+For current strict-gate readiness without rerunning long batches, see
+`paper/exports/strict_feasibility_report.json` (produced by
+`ci/scripts/analyze_strict_feasibility.py`). That report is the canonical
+offline bound used to decide whether headline strict claims are currently
+supported by in-repo evidence inventory.
+
 ## Non-goals
 
 - Producing our own coding agents. We evaluate externally produced patches.

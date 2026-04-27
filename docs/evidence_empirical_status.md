@@ -68,6 +68,23 @@ python ci/scripts/triage_l1_harness_errors.py \
   --run-dir runs/released/agent_panel_v3_r1/results_opt
 ```
 
+**Offline feasibility bound (no reruns):**
+
+```bash
+python ci/scripts/analyze_strict_feasibility.py
+```
+
+Current report: `paper/exports/strict_feasibility_report.json`.
+
+- Public-agent L1-pass inventory from all in-repo summaries yields
+  `7` tasks with pass evidence for all three public agents
+  (`gru`, `honeycomb`, `sweagent`).
+- This implies a current upper bound of `21` rows if taking one candidate per
+  task-agent pair, below strict Verified `--min-candidates 30`.
+- Conclusion: strict flagship is currently blocked by candidate/task inventory;
+  further progress requires adding new L1-stable task families and/or new
+  candidate rows, not additional reruns of the same panel mix.
+
 ## Live comparative (`check_evidence_quality live`)
 
 - **v2 panel (asymmetric live patches):** `runs/released/live_panel_v2/`.
@@ -136,6 +153,15 @@ python ci/scripts/check_evidence_quality.py rust-proof \
   --min-l3-pass-l4-fail 2 \
   --min-all-level-pass 1
 ```
+
+**Offline real-manifest status (no reruns):**
+
+- `paper/exports/strict_feasibility_report.json` confirms the sealed
+  real-manifest run has `l3_pass_l4_fail=0`, `all_level_pass=0`,
+  and `L4_OBLIGATION_MET` on all 8 entries.
+- Therefore strict Rust semantic minima are not currently met on natural
+  evidence. The synthetic paper-semantics replay remains a mechanism test only,
+  not a substitute for headline empirical claims.
 
 **Release (structural seal on full ladder output):**
 

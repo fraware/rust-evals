@@ -154,8 +154,10 @@ Choose one mode per submission.
       (``--gate-profile release`` on ``results_opt``, ``paper/exports/live_panel_v1_postbatch``,
       ``runs/released/l2_verified_merged_v1/results``, ``rust_proof_subset_v1/results_seal``).
 - [ ] Verified **strict** flagship gate (default CLI: low harness error,
-      distinct agent vectors). Still failing on the sealed 51-candidate batch;
-      triage commands remain in ``docs/evidence_empirical_status.md``.
+      distinct agent vectors). Still failing on the sealed batches; offline
+      bound in ``paper/exports/strict_feasibility_report.json`` shows current
+      public-agent L1-pass inventory supports only ``21`` one-candidate rows
+      across shared stable tasks (below strict ``min_candidates=30``).
 - [x] Live **strict** comparative gate (non-tied live ranking and non-zero tau)
       passes on ``paper/exports/live_panel_v2_postbatch`` from
       ``runs/released/live_panel_v2/results_opt``.
@@ -165,4 +167,6 @@ Choose one mode per submission.
       ``L2_AUG_TESTS_FAIL`` + ``L2_REGRESSION_FAIL``).
 - [ ] Rust proof-subset **strict** semantic gate
       (``--min-l3-pass-l4-fail 2 --min-all-level-pass 1`` on a full ladder out).
+      Real-manifest sealed output currently has ``l3_pass_l4_fail=0`` and
+      ``all_level_pass=0`` (see ``paper/exports/strict_feasibility_report.json``).
       Release profile matches tier-1 structural semantics on ``results_seal``.
