@@ -160,8 +160,14 @@ The repository ships several release-track run directories under
   panel (51 preflight-clean candidates x 3 agents); canonical sealed summary under
   `results_opt/`; gates and exports documented in `docs/evidence_empirical_status.md`
   and `runs/released/agent_panel_v3_r1/README.md`.
+- `runs/released/agent_panel_verified_flagship_v1/`: headline cleanup slice (33
+  candidates) with deny-only L3 policy and shared v3_r1 workspaces; see directory
+  README and `just verified-flagship-batch-optimized-prewarmed`.
 - `runs/released/l2_verified_merged_v1/`: deduplicated merge of small L2 slices
   (`ci/scripts/merge_l2_batch_summaries.py`) for release-profile gating only.
+- `runs/released/l2_verified_flagship_v1/`: strict-pass headline L2 expansion
+  (66 merged entries from two strengthening families) with canonical merged
+  summary in `results/` and reproducibility commands in the directory README.
 - `runs/released/agent_panel_v1/`: panel artifacts (candidates, patches,
   panel metadata, per-task workspaces) and a completed Docker-backed
   evaluator run for 3 agents x 5 Verified tasks:
@@ -180,6 +186,10 @@ The repository ships several release-track run directories under
 - `runs/released/live_panel_v1/`: 39-entry static-vs-live panel (8 Live + 5
   Verified anchors, 3 agents), `L0,L1` batch, `verify run-dir`, and paper
   exports including `static_vs_live` (see `runs/released/live_panel_v1/README.md`).
+- `runs/released/live_panel_v2/`: same task inventory as v1 with an asymmetric
+  live patch matrix across agents; canonical `results_opt/` + paper export pass
+  strict live evidence gates (see `packages/python/scripts/build_live_panel_v2.py`
+  and `just live-batch-v2-optimized-prewarmed`).
 - `runs/released/rust_proof_subset_v1/`: eight-task golden panel aligned with
   `datasets/derived/proof_subset/manifest.jsonl` for end-to-end L0–L4 batch
   design, with optimized rerun workflow (`--resume`, `--jobs`, adaptive

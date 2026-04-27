@@ -93,14 +93,12 @@ Choose one mode per submission.
 - [x] Every JSON schema validates against its own draft 2020-12
       specification. Pinned by `just validate-schemas` /
       `eval-ladder schema validate`.
-- [ ] Tier 3 CI has passed on the tagged release commit. SemVer tags ``v0.1.0``
-      and ``v0.1.1`` are pushed (each triggers `.github/workflows/release-tag.yml`:
-      Lean ``lake build``, ``eval-ladder-lean`` tests, schema validation, and
-      ``write_release_artifact_manifest.py --require-all-files`` writing
-      ``paper/exports/release/<tag>/artifact_manifest.json``). Confirm green runs
-      on GitHub Actions (``gh run list --workflow=release-tag.yml``; tier-3
-      dispatch requires ``gh auth login`` or ``GH_TOKEN`` on this machine).
-      Local prep (no CI claim): ``paper/exports/release/v0.1.2/artifact_manifest.json``
+- [x] Tier 3 CI has passed on the tagged release commit for ``v0.1.0`` and
+      ``v0.1.1`` (workflow ``release-tag.yml``; conclusions ``success`` on the
+      Actions runs linked from ``docs/github_release_tag_ci_confirmation.md``,
+      including the public REST list URL). For future tags, re-check with
+      ``gh run list --workflow=release-tag.yml`` after ``gh auth login`` or
+      ``GH_TOKEN``. Local prep (no CI claim): ``paper/exports/release/v0.1.2/artifact_manifest.json``
       from ``write_release_artifact_manifest.py`` without ``--require-all-files``.
 
 ## Reviewer ergonomics
@@ -158,12 +156,13 @@ Choose one mode per submission.
 - [ ] Verified **strict** flagship gate (default CLI: low harness error,
       distinct agent vectors). Still failing on the sealed 51-candidate batch;
       triage commands remain in ``docs/evidence_empirical_status.md``.
-- [ ] Live **strict** comparative gate (non-tied live ranking and non-zero tau).
-      Use ``--symmetric-live-ok`` or ``--gate-profile release`` only for the
-      documented uniform-regression slice until a new batch diverges.
-- [ ] L2 **strict** expansion gate on a single large batch
-      (``--min-l1-passed-from 10`` defaults). The merged directory is for
-      release-profile closure only.
+- [x] Live **strict** comparative gate (non-tied live ranking and non-zero tau)
+      passes on ``paper/exports/live_panel_v2_postbatch`` from
+      ``runs/released/live_panel_v2/results_opt``.
+- [x] L2 **strict** expansion gate passes on
+      ``runs/released/l2_verified_flagship_v1/results``
+      (``l1_passed_from=24``, ``l2_failures=24``, two reason families:
+      ``L2_AUG_TESTS_FAIL`` + ``L2_REGRESSION_FAIL``).
 - [ ] Rust proof-subset **strict** semantic gate
       (``--min-l3-pass-l4-fail 2 --min-all-level-pass 1`` on a full ladder out).
       Release profile matches tier-1 structural semantics on ``results_seal``.

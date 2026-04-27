@@ -1,0 +1,14 @@
+---
+parsed_sample:
+  - destination: "10.191.129.114"
+    response_stream:
+      - "!!!!!"
+    rtt_avg: "1"
+    rtt_max: "1"
+    rtt_min: "1"
+    sent_qty: "5"
+    sent_type: "100-byte ICMP Echos"
+    source: ""
+    success_pct: "100"
+    success_qty: "5"
+    timeout: "2"

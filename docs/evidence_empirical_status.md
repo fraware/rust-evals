@@ -29,6 +29,13 @@ Commands below use the repository root. All exited **2** except where noted.
 
 ## Verified flagship (`check_evidence_quality verified`)
 
+**Headline cleanup panel (materialised, awaiting fresh `results_opt`):**
+
+- `runs/released/agent_panel_verified_flagship_v1/` — drops matplotlib,
+  scikit-learn, and pytest-dev tasks from v3_r1, reuses its workspaces, and is
+  meant to be evaluated with `configs/evaluator/verified_headline.toml` (deny-only
+  L3 edit scope). See that directory’s README and `just verified-flagship-batch-optimized-prewarmed`.
+
 **Canonical run directory (optimized batch, identical summary to prefclean):**
 
 - `runs/released/agent_panel_v3_r1/results_opt/`
@@ -63,11 +70,14 @@ python ci/scripts/triage_l1_harness_errors.py \
 
 ## Live comparative (`check_evidence_quality live`)
 
-- Regenerated export from `runs/released/live_panel_v1/results_opt`:
-  `paper/exports/live_panel_v1_postbatch/` (`eval-ladder analyze paper-export …`).
-- **Strict:** still fails on tied live rates and zero tau (symmetric agents on
-  the evaluated slice).
-- **Release:** passes when every `delta` row is strictly negative:
+- **v2 panel (asymmetric live patches):** `runs/released/live_panel_v2/`.
+- Canonical export: `paper/exports/live_panel_v2_postbatch/`.
+- `runs/released/live_panel_v2/results_opt` integrity: `verify run-dir` reports
+  `31 ok / 0 invalid`.
+- **Strict:** passes on v2 (non-tied live rates and non-zero Kendall tau).
+- **Release:** also passes (strictly negative deltas preserved).
+- Historical strict-failing export from v1 remains at:
+  `paper/exports/live_panel_v1_postbatch/`.
 
 ```bash
 python ci/scripts/check_evidence_quality.py --gate-profile release live \
@@ -84,35 +94,38 @@ python ci/scripts/check_evidence_quality.py live \
 
 ## L2 expansion (`check_evidence_quality l2`)
 
-**Merged canonical run directory** (deduped `batch_summary.json` only):
+**Canonical strict-pass run directory:**
 
-- `runs/released/l2_verified_merged_v1/results/` — see
-  `runs/released/l2_verified_merged_v1/README.md` and
-  `ci/scripts/merge_l2_batch_summaries.py`.
+- `runs/released/l2_verified_flagship_v1/results/` (merged from
+  `results_astropy` + `results_regression_fail`).
 
-**Strict (original plan defaults):**
+**Strict gate (default thresholds):**
 
 ```bash
 python ci/scripts/check_evidence_quality.py l2 \
-  --run-dir runs/released/l2_verified_merged_v1/results
+  --run-dir runs/released/l2_verified_flagship_v1/results
 ```
 
-**Release:**
+Current strict metrics (`ok: true`):
 
-```bash
-python ci/scripts/check_evidence_quality.py --gate-profile release l2 \
-  --run-dir runs/released/l2_verified_merged_v1/results
-```
+- `total_entries=66`
+- `l1_passed_from=24`
+- `l2_failures=24`
+- `l2_reason_counts={L2_AUG_TESTS_FAIL: 12, L2_REGRESSION_FAIL: 12}`
 
-Release thresholds: `--min-l1-passed-from 2 --min-l2-failures 2 --min-l2-reason-families 1`.
-
-Paper export: `paper/exports/l2_verified_merged_v1/`.
+Historical release-profile merge remains at:
+`runs/released/l2_verified_merged_v1/results/`.
 
 ## Rust proof-subset (`check_evidence_quality rust-proof`)
 
 - **Structural / tier-1:** `results_fast` with explicit `--min-l3-pass-l4-fail 0`
   (see `ci/scripts/run_evidence_tier1_checks.py`).
 - **Seal directory:** `runs/released/rust_proof_subset_v1/results_seal/`
+- **Paper semantics replay (L3 pass / L4 fail exemplars + all-level pass):**
+  `docs/rust_proof_paper_semantics_replay.md` and
+  `datasets/derived/proof_subset/manifest_paper_semantics_l4_counterexample.jsonl`
+  with `just rust-proof-batch-seal-paper-semantics` writing to a **separate**
+  `--out` directory (do not overwrite `results_seal`).
 
 **Strict semantic target (future batch):**
 
@@ -149,5 +162,5 @@ python ci/scripts/write_release_artifact_manifest.py \
 ```
 
 Pushing a new `v*.*.*` tag still requires a green
-`.github/workflows/release-tag.yml` run on GitHub (confirm with
-`gh run list --workflow=release-tag.yml` after `gh auth login`).
+`.github/workflows/release-tag.yml` run on GitHub; see
+`docs/github_release_tag_ci_confirmation.md`.

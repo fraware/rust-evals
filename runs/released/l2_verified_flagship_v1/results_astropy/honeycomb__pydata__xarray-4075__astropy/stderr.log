@@ -1,0 +1,6 @@
+ERROR: not found: /workspace/xarray/tests/test_weighted.py::test_weighted_mean_bool
+(no name '/workspace/xarray/tests/test_weighted.py::test_weighted_mean_bool' in any of [<Module test_weighted.py>])
+
+ERROR: not found: /workspace/xarray/tests/test_weighted.py::test_weighted_sum_of_weights_bool
+(no name '/workspace/xarray/tests/test_weighted.py::test_weighted_sum_of_weights_bool' in any of [<Module test_weighted.py>])
+

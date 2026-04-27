@@ -88,6 +88,15 @@ cargo run -p eval-ladder-cli -- evaluate batch `
 
 Then `verify run-dir` and `analyze paper-export` as for other released panels.
 
+### Paper-semantics ladder (strict rust-proof gate)
+
+For two controlled **L3 pass / L4 fail** exemplars plus unchanged rows for an
+**all-level pass** story, replay with
+`datasets/derived/proof_subset/manifest_paper_semantics_l4_counterexample.jsonl`
+(see `docs/rust_proof_paper_semantics_replay.md` and
+`just rust-proof-batch-seal-paper-semantics`). Use a fresh `--out` directory so
+the audit `results_seal` tree is not overwritten.
+
 ### 4) Seal and export (required for release evidence)
 
 ```powershell

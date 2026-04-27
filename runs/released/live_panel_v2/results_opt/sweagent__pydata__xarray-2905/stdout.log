@@ -1,0 +1,38 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.15, pytest-7.4.0, pluggy-1.5.0
+rootdir: /workspace
+configfile: setup.cfg
+plugins: xdist-3.6.1, env-1.1.5, cov-5.0.0, hypothesis-6.114.0
+collected 1 item
+
+xarray/tests/test_variable.py .                                          [100%]
+
+=============================== warnings summary ===============================
+xarray/__init__.py:1
+  /workspace/xarray/__init__.py:1: DeprecationWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html
+    import pkg_resources
+
+xarray/core/dask_array_compat.py:61
+xarray/core/dask_array_compat.py:61
+  /workspace/xarray/core/dask_array_compat.py:61: DeprecationWarning: distutils Version classes are deprecated. Use packaging.version instead.
+    if LooseVersion(dask_version) > LooseVersion("2.9.0"):
+
+xarray/core/pdcompat.py:45
+  /workspace/xarray/core/pdcompat.py:45: DeprecationWarning: distutils Version classes are deprecated. Use packaging.version instead.
+    if LooseVersion(pd.__version__) < "0.25.0":
+
+../opt/miniconda3/envs/testbed/lib/python3.10/site-packages/setuptools/_distutils/version.py:345
+  /opt/miniconda3/envs/testbed/lib/python3.10/site-packages/setuptools/_distutils/version.py:345: DeprecationWarning: distutils Version classes are deprecated. Use packaging.version instead.
+    other = LooseVersion(other)
+
+xarray/tests/__init__.py:59
+xarray/tests/__init__.py:59
+xarray/tests/__init__.py:59
+xarray/tests/__init__.py:59
+xarray/tests/__init__.py:59
+xarray/tests/__init__.py:59
+  /workspace/xarray/tests/__init__.py:59: DeprecationWarning: distutils Version classes are deprecated. Use packaging.version instead.
+    return version.LooseVersion(vstring)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+======================= 1 passed, 11 warnings in 10.54s ========================

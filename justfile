@@ -117,12 +117,26 @@ verified-batch-optimized-prewarmed panel out jobs='2' cache='runs/released/.eval
     python ci/scripts/prewarm_panel_images.py --panel {{panel}} --parallel {{prewarm_parallel}}
     just verified-batch-optimized {{panel}} {{out}} {{jobs}} {{cache}}
 
+verified-flagship-batch-optimized out jobs='2' cache='runs/released/.eval_ladder_cargo_cache': eval-ladder-cli-release
+    {{eval-ladder-bin}} evaluate batch --input runs/released/agent_panel_verified_flagship_v1/panel.jsonl --config configs/evaluator/verified_headline.toml --levels L0,L1,L3 --policy configs/policy/swe_bench_verified_headline.toml --out {{out}} --timeout-secs 3600 --short-timeout-secs 900 --adaptive-timeouts --resume --jobs {{jobs}} --l1-strategy smart_rust_reuse --rust-target-cache-root {{cache}} --seed-tag verified-flagship-v1 --deterministic-clock
+
+verified-flagship-batch-optimized-prewarmed out jobs='2' cache='runs/released/.eval_ladder_cargo_cache' prewarm_parallel='4':
+    python ci/scripts/prewarm_panel_images.py --panel runs/released/agent_panel_verified_flagship_v1/panel.jsonl --parallel {{prewarm_parallel}}
+    just verified-flagship-batch-optimized {{out}} {{jobs}} {{cache}}
+
 live-batch-optimized out jobs='2': eval-ladder-cli-release
     {{eval-ladder-bin}} evaluate batch --levels L0,L1 --input runs/released/live_panel_v1/panel.jsonl --config configs/evaluator/default.toml --out {{out}} --timeout-secs 5400 --short-timeout-secs 900 --adaptive-timeouts --resume --jobs {{jobs}} --seed-tag live-panel-opt --deterministic-clock
 
 live-batch-optimized-prewarmed out jobs='2' prewarm_parallel='4':
     python ci/scripts/prewarm_panel_images.py --panel runs/released/live_panel_v1/panel.jsonl --parallel {{prewarm_parallel}}
     just live-batch-optimized {{out}} {{jobs}}
+
+live-batch-v2-optimized out jobs='2': eval-ladder-cli-release
+    {{eval-ladder-bin}} evaluate batch --levels L0,L1 --input runs/released/live_panel_v2/panel.jsonl --config configs/evaluator/default.toml --out {{out}} --timeout-secs 5400 --short-timeout-secs 900 --adaptive-timeouts --resume --jobs {{jobs}} --seed-tag live-panel-v2-opt --deterministic-clock
+
+live-batch-v2-optimized-prewarmed out jobs='2' prewarm_parallel='4':
+    python ci/scripts/prewarm_panel_images.py --panel runs/released/live_panel_v2/panel.jsonl --parallel {{prewarm_parallel}}
+    just live-batch-v2-optimized {{out}} {{jobs}}
 
 rust-proof-batch-fast out: eval-ladder-cli-release
     {{eval-ladder-bin}} evaluate batch --input runs/released/rust_proof_subset_v1/panel.jsonl --config configs/evaluator/rust.toml --track fast --policy configs/policy/rust_proof_subset.toml --obligations datasets/derived/proof_subset/manifest.jsonl --lean-root packages/lean/EvalLadder --out {{out}} --resume --jobs 2 --adaptive-timeouts --short-timeout-secs 180 --rust-target-cache-root runs/released/rust_proof_subset_v1/.cargo_target_cache --timeout-secs 14400 --deterministic-clock
@@ -137,6 +151,9 @@ rust-proof-batch-seal out jobs='2' cache='runs/released/rust_proof_subset_v1/.ca
 rust-proof-batch-seal-prewarmed out jobs='2' cache='runs/released/rust_proof_subset_v1/.cargo_target_cache' prewarm_parallel='4':
     python ci/scripts/prewarm_panel_images.py --panel runs/released/rust_proof_subset_v1/panel.jsonl --parallel {{prewarm_parallel}}
     just rust-proof-batch-seal {{out}} {{jobs}} {{cache}}
+
+rust-proof-batch-seal-paper-semantics out jobs='2' cache='runs/released/rust_proof_subset_v1/.cargo_target_cache': eval-ladder-cli-release
+    {{eval-ladder-bin}} evaluate batch --input runs/released/rust_proof_subset_v1/panel.jsonl --config configs/evaluator/rust.toml --track heavy --levels L0,L1,L3,L4 --policy configs/policy/rust_proof_subset.toml --obligations datasets/derived/proof_subset/manifest_paper_semantics_l4_counterexample.jsonl --lean-root packages/lean/EvalLadder --out {{out}} --resume --jobs {{jobs}} --adaptive-timeouts --short-timeout-secs 180 --rust-target-cache-root {{cache}} --timeout-secs 14400 --deterministic-clock
 
 # `prewarm-panel` is best-effort (matches script default). Use `prewarm-panel-strict` for CI gates.
 prewarm-panel panel parallel='4':

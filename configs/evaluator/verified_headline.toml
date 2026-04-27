@@ -1,0 +1,10 @@
+# Verified evaluator profile for headline SWE-Bench agent panels.
+#
+# Uses deny-only edit scope (`configs/policy/swe_bench_verified_headline.toml`)
+# so L3 is not dominated by `PV_EDIT_SCOPE` artifacts from narrow allow-lists.
+
+name = "verified_headline"
+policy_path = "configs/policy/swe_bench_verified_headline.toml"
+strengthening_mode = "tests_plus_diff"
+manifest_dir = "benchmarks/verified/manifests"
+output_dir = "runs/local/verified_headline"

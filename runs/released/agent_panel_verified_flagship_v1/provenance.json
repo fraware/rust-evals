@@ -1,0 +1,17 @@
+{
+  "dropped_panel_lines": 18,
+  "excluded_task_prefixes": [
+    "matplotlib__",
+    "scikit-learn__",
+    "pytest-dev__"
+  ],
+  "kept_panel_lines": 33,
+  "notes": [
+    "Patches and candidates are copied from v3_r1; workspaces are reused in-place via ../agent_panel_v3_r1/workspaces/<task_id>/ (no duplicate checkouts).",
+    "Evaluate with configs/evaluator/verified_headline.toml (see README)."
+  ],
+  "panel_id": "agent_panel_verified_flagship_v1",
+  "schema_version": 1,
+  "source_panel_root": "runs/released/agent_panel_v3_r1",
+  "unique_tasks": 11
+}

@@ -1,0 +1,38 @@
+# Headline Verified policy for SWE-Bench agent panels.
+#
+# The default policy (`default_policy.toml`) restricts edits to `src/**`,
+# `lib/**`, and `tests/**`. Many Verified instances touch top-level package
+# trees (`astropy/`, `django/`, `sympy/`, …) that are not covered by those
+# globs, which inflates `PV_EDIT_SCOPE` for otherwise valid agent patches.
+#
+# For headline Verified batches we therefore use **deny-only** edit scope:
+# `allowed_edit_globs` is empty, so only `forbidden_edit_globs` constrain
+# paths. CI and documentation still forbid `.github/`, `docs/`, `ci/`, and
+# `secrets/` edits.
+
+name = "swe_bench_verified_headline"
+network_mode = "disabled"
+requires_reproducible_seed = true
+max_modified_files = 32
+allow_generated_tests = false
+allow_dependency_lockfile_edits = false
+
+allowed_commands = ["python", "pytest", "bash", "sh", "git", "pip", "cargo", "rustc"]
+forbidden_commands = ["curl", "wget", "ssh", "scp", "sudo"]
+
+allowed_edit_globs = []
+
+forbidden_edit_globs = [
+    ".github/**",
+    "docs/**",
+    "ci/**",
+    "secrets/**",
+]
+
+required_trace_events = [
+    "RunStarted",
+    "PatchApplied",
+    "OfficialEvalStarted",
+    "OfficialEvalFinished",
+    "RunFinished",
+]

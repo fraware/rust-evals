@@ -1,0 +1,3 @@
+ERROR: not found: /workspace/xarray/tests/test_merge.py::TestMergeFunction::test_merge_attrs_override_copy
+(no name '/workspace/xarray/tests/test_merge.py::TestMergeFunction::test_merge_attrs_override_copy' in any of [<Module test_merge.py>])
+

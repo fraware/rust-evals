@@ -1,0 +1,18 @@
+#!/bin/bash -ex
+
+case "${1}" in
+    install)
+        pip install uv
+        git clone --depth=1 https://github.com/mitmproxy/mitmproxy
+        cd mitmproxy
+        git rev-parse HEAD
+        uv pip install --system --group dev -e .
+        ;;
+    run)
+        cd mitmproxy
+        pytest test
+        ;;
+    *)
+        exit 1
+        ;;
+esac

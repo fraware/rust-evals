@@ -1,0 +1,283 @@
+{
+  "agents": [
+    {
+      "agent_id": "gru",
+      "model_id": "gru-2024-08-24"
+    },
+    {
+      "agent_id": "honeycomb",
+      "model_id": "honeycomb-2024-08-20"
+    },
+    {
+      "agent_id": "sweagent",
+      "model_id": "claude-3-5-sonnet-20241022"
+    }
+  ],
+  "entries": [
+    {
+      "agent_id": "gru",
+      "benchmark_id": "swe_bench_live",
+      "patch_sha256": "fce0383e2085700ad3de712cdd1ebfac885f9abf1d8aa47057d28e6710bbff8c",
+      "patch_source": "dataset_patch",
+      "task_id": "Pyomo__pyomo-3588"
+    },
+    {
+      "agent_id": "gru",
+      "benchmark_id": "swe_bench_live",
+      "patch_sha256": "e81d11c10f75edba38209ca90fd69df271971c1b4b816e0353e2c39fab05268e",
+      "patch_source": "dataset_patch",
+      "task_id": "networkx__networkx-8013"
+    },
+    {
+      "agent_id": "gru",
+      "benchmark_id": "swe_bench_live",
+      "patch_sha256": "3835b1b79f73259132035e8424a527ae426e590fef5e8e012847b11696c1b601",
+      "patch_source": "dataset_patch",
+      "task_id": "networktocode__ntc-templates-2118"
+    },
+    {
+      "agent_id": "gru",
+      "benchmark_id": "swe_bench_live",
+      "patch_sha256": "1237f50e91a28f6cb150f3250c31bd6c8e6785c2a1974e4222314ba0918dee36",
+      "patch_source": "dataset_patch",
+      "task_id": "jlowin__fastmcp-279"
+    },
+    {
+      "agent_id": "gru",
+      "benchmark_id": "swe_bench_live",
+      "patch_sha256": "dc9dda7e97c2fe000ae12306544b1a629933072e142ec685d3274d313823c373",
+      "patch_source": "dataset_patch",
+      "task_id": "apify__crawlee-python-1181"
+    },
+    {
+      "agent_id": "gru",
+      "benchmark_id": "swe_bench_live",
+      "patch_sha256": "671ae7d81bf2bb4a3299297f616ea8ea22c42830406757e8f483e195a14f93a8",
+      "patch_source": "dataset_patch",
+      "task_id": "pyca__cryptography-12812"
+    },
+    {
+      "agent_id": "gru",
+      "benchmark_id": "swe_bench_live",
+      "patch_sha256": "68519d4a6aa2f01bb666dffab1245b0d23bfd4df2b8ef176b02ffed3da8046a6",
+      "patch_source": "dataset_patch",
+      "task_id": "feature-engine__feature_engine-856"
+    },
+    {
+      "agent_id": "gru",
+      "benchmark_id": "swe_bench_live",
+      "patch_sha256": "803ae7b7b041a24bb078e217e42703ab691df38ca65d20c69cdb91774dda1872",
+      "patch_source": "dataset_patch",
+      "task_id": "fsspec__filesystem_spec-1829"
+    },
+    {
+      "agent_id": "honeycomb",
+      "benchmark_id": "swe_bench_live",
+      "patch_sha256": "677985ccfd62aa7f5515ef6307cf031b31e670806fbb0ed3edb21f5dd7e92209",
+      "patch_source": "dataset_test_patch_slice",
+      "task_id": "Pyomo__pyomo-3588"
+    },
+    {
+      "agent_id": "honeycomb",
+      "benchmark_id": "swe_bench_live",
+      "patch_sha256": "2b2286440b154eea352d2d2b99f2ef6840490edf4494c07e2702a788bcedce05",
+      "patch_source": "dataset_test_patch_slice",
+      "task_id": "networkx__networkx-8013"
+    },
+    {
+      "agent_id": "honeycomb",
+      "benchmark_id": "swe_bench_live",
+      "patch_sha256": "9580320e718cba6e4a7e3e09950028d0b221fb30af1bc8ba716956eda70964da",
+      "patch_source": "dataset_test_patch_slice",
+      "task_id": "networktocode__ntc-templates-2118"
+    },
+    {
+      "agent_id": "honeycomb",
+      "benchmark_id": "swe_bench_live",
+      "patch_sha256": "5fe3e95e74594a1476d197a4ca37e6bc6878c1a3c77c83d9aa387a32939b96ee",
+      "patch_source": "dataset_test_patch_slice",
+      "task_id": "jlowin__fastmcp-279"
+    },
+    {
+      "agent_id": "sweagent",
+      "benchmark_id": "swe_bench_live",
+      "patch_sha256": "61d0260b0ed4ab3297df3340785c65d0dd43109a5d06f72cc2d43b695fa65a6c",
+      "patch_source": "dataset_test_patch_slice",
+      "task_id": "apify__crawlee-python-1181"
+    },
+    {
+      "agent_id": "sweagent",
+      "benchmark_id": "swe_bench_live",
+      "patch_sha256": "0364f45a36c153dabf99cdb5b4eb912652903a0f211585937b95b1f5c84eaa37",
+      "patch_source": "dataset_test_patch_slice",
+      "task_id": "pyca__cryptography-12812"
+    },
+    {
+      "agent_id": "sweagent",
+      "benchmark_id": "swe_bench_live",
+      "patch_sha256": "634713407148afe00907a1a9a54c8748dccbd1954859ffac8af0d903551a96dc",
+      "patch_source": "dataset_test_patch_slice",
+      "task_id": "feature-engine__feature_engine-856"
+    },
+    {
+      "agent_id": "sweagent",
+      "benchmark_id": "swe_bench_live",
+      "patch_sha256": "a1d23208b2c92e6a1fb28cc48c1d84be367ca45308853802646b511f22adc19c",
+      "patch_source": "dataset_test_patch_slice",
+      "task_id": "fsspec__filesystem_spec-1829"
+    },
+    {
+      "agent_id": "gru",
+      "benchmark_id": "swe_bench_verified",
+      "patch_sha256": "0f3e44432ed8540e9526edff4f83793948a2f139fc3971b67c30043c1eb7964a",
+      "patch_source": "dataset_patch",
+      "task_id": "astropy__astropy-12907"
+    },
+    {
+      "agent_id": "honeycomb",
+      "benchmark_id": "swe_bench_verified",
+      "patch_sha256": "0f3e44432ed8540e9526edff4f83793948a2f139fc3971b67c30043c1eb7964a",
+      "patch_source": "dataset_patch",
+      "task_id": "astropy__astropy-12907"
+    },
+    {
+      "agent_id": "sweagent",
+      "benchmark_id": "swe_bench_verified",
+      "patch_sha256": "0f3e44432ed8540e9526edff4f83793948a2f139fc3971b67c30043c1eb7964a",
+      "patch_source": "dataset_patch",
+      "task_id": "astropy__astropy-12907"
+    },
+    {
+      "agent_id": "gru",
+      "benchmark_id": "swe_bench_verified",
+      "patch_sha256": "4bf05606ff37d427b5d1eff27a61b41489785d022c234933fbc8879cad5fd762",
+      "patch_source": "dataset_patch",
+      "task_id": "pydata__xarray-2905"
+    },
+    {
+      "agent_id": "honeycomb",
+      "benchmark_id": "swe_bench_verified",
+      "patch_sha256": "4bf05606ff37d427b5d1eff27a61b41489785d022c234933fbc8879cad5fd762",
+      "patch_source": "dataset_patch",
+      "task_id": "pydata__xarray-2905"
+    },
+    {
+      "agent_id": "sweagent",
+      "benchmark_id": "swe_bench_verified",
+      "patch_sha256": "4bf05606ff37d427b5d1eff27a61b41489785d022c234933fbc8879cad5fd762",
+      "patch_source": "dataset_patch",
+      "task_id": "pydata__xarray-2905"
+    },
+    {
+      "agent_id": "gru",
+      "benchmark_id": "swe_bench_verified",
+      "patch_sha256": "57a810467af331eba7c3238bbcd78268a47e96ad75eed3e2aa8b908da99104bc",
+      "patch_source": "dataset_patch",
+      "task_id": "astropy__astropy-14096"
+    },
+    {
+      "agent_id": "honeycomb",
+      "benchmark_id": "swe_bench_verified",
+      "patch_sha256": "57a810467af331eba7c3238bbcd78268a47e96ad75eed3e2aa8b908da99104bc",
+      "patch_source": "dataset_patch",
+      "task_id": "astropy__astropy-14096"
+    },
+    {
+      "agent_id": "sweagent",
+      "benchmark_id": "swe_bench_verified",
+      "patch_sha256": "57a810467af331eba7c3238bbcd78268a47e96ad75eed3e2aa8b908da99104bc",
+      "patch_source": "dataset_patch",
+      "task_id": "astropy__astropy-14096"
+    },
+    {
+      "agent_id": "gru",
+      "benchmark_id": "swe_bench_verified",
+      "patch_sha256": "26e70ac624185594670bdc18cb5e9f3cf38089eaefeb29044d9b76672e2c1b3e",
+      "patch_source": "dataset_patch",
+      "task_id": "astropy__astropy-14309"
+    },
+    {
+      "agent_id": "honeycomb",
+      "benchmark_id": "swe_bench_verified",
+      "patch_sha256": "26e70ac624185594670bdc18cb5e9f3cf38089eaefeb29044d9b76672e2c1b3e",
+      "patch_source": "dataset_patch",
+      "task_id": "astropy__astropy-14309"
+    },
+    {
+      "agent_id": "sweagent",
+      "benchmark_id": "swe_bench_verified",
+      "patch_sha256": "26e70ac624185594670bdc18cb5e9f3cf38089eaefeb29044d9b76672e2c1b3e",
+      "patch_source": "dataset_patch",
+      "task_id": "astropy__astropy-14309"
+    },
+    {
+      "agent_id": "gru",
+      "benchmark_id": "swe_bench_verified",
+      "patch_sha256": "d09c1eff4eb13be7283fdef31426f86222cf8b059623b4b95c4ef8a1d1544a42",
+      "patch_source": "dataset_patch",
+      "task_id": "django__django-11211"
+    },
+    {
+      "agent_id": "honeycomb",
+      "benchmark_id": "swe_bench_verified",
+      "patch_sha256": "d09c1eff4eb13be7283fdef31426f86222cf8b059623b4b95c4ef8a1d1544a42",
+      "patch_source": "dataset_patch",
+      "task_id": "django__django-11211"
+    },
+    {
+      "agent_id": "sweagent",
+      "benchmark_id": "swe_bench_verified",
+      "patch_sha256": "d09c1eff4eb13be7283fdef31426f86222cf8b059623b4b95c4ef8a1d1544a42",
+      "patch_source": "dataset_patch",
+      "task_id": "django__django-11211"
+    }
+  ],
+  "entry_count": 31,
+  "live_task_slices": {
+    "gru": [
+      "Pyomo__pyomo-3588",
+      "networkx__networkx-8013",
+      "networktocode__ntc-templates-2118",
+      "jlowin__fastmcp-279",
+      "apify__crawlee-python-1181",
+      "pyca__cryptography-12812",
+      "feature-engine__feature_engine-856",
+      "fsspec__filesystem_spec-1829"
+    ],
+    "honeycomb": [
+      "Pyomo__pyomo-3588",
+      "networkx__networkx-8013",
+      "networktocode__ntc-templates-2118",
+      "jlowin__fastmcp-279"
+    ],
+    "sweagent": [
+      "apify__crawlee-python-1181",
+      "pyca__cryptography-12812",
+      "feature-engine__feature_engine-856",
+      "fsspec__filesystem_spec-1829"
+    ]
+  },
+  "live_tasks": [
+    "Pyomo__pyomo-3588",
+    "networkx__networkx-8013",
+    "networktocode__ntc-templates-2118",
+    "jlowin__fastmcp-279",
+    "apify__crawlee-python-1181",
+    "pyca__cryptography-12812",
+    "feature-engine__feature_engine-856",
+    "fsspec__filesystem_spec-1829"
+  ],
+  "notes": [
+    "Disjoint live task subsets per agent (8 / 4 / 4 rows) plus gold-vs-test_patch choices so pooled live pass rates can diverge.",
+    "Verified anchors remain gold ``patch`` for every agent."
+  ],
+  "panel_id": "live_panel_v2",
+  "schema_version": 1,
+  "verified_anchor_tasks": [
+    "astropy__astropy-12907",
+    "pydata__xarray-2905",
+    "astropy__astropy-14096",
+    "astropy__astropy-14309",
+    "django__django-11211"
+  ]
+}

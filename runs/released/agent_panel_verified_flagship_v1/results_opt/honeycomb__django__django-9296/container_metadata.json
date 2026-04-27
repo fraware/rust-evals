@@ -1,0 +1,1 @@
+{"command":["python","tests/runtests.py","pagination.tests.PaginationTests.test_paginator_iteration"],"engine":"other","image_ref":"swebench/sweb.eval.x86_64.django_1776_django-9296:latest","l1_strategy":"smart_rust_reuse","patch_apply_outcome_l0":"applied","patch_apply_outcome_l1":"applied","resource_limits":{"wall_timeout":{"nanos":0,"secs":3600}}}

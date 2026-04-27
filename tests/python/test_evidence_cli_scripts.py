@@ -1279,3 +1279,26 @@ def test_check_evidence_quality_rust_proof_fails_semantic_minima(
     report = json.loads(proc.stdout)
     assert report["ok"] is False
     assert any("l3-pass/l4-fail" in f.lower() for f in report["failures"])
+
+
+def test_build_verified_flagship_v1_help(repo_root: Path) -> None:
+    proc = _run_script(
+        repo_root,
+        "packages/python/scripts/build_verified_flagship_v1.py",
+        ["--help"],
+    )
+    assert proc.returncode == 0, proc.stderr
+    assert "high-precision" in proc.stdout.lower() or "flagship" in proc.stdout.lower()
+
+
+def test_build_live_panel_v2_py_compile(repo_root: Path) -> None:
+    """Syntax check without importing (dataclass loader needs __package__)."""
+    path = repo_root / "packages/python/scripts/build_live_panel_v2.py"
+    proc = subprocess.run(
+        [sys.executable, "-m", "py_compile", str(path)],
+        cwd=repo_root,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert proc.returncode == 0, proc.stderr

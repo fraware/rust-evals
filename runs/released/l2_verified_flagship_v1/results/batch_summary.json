@@ -1,0 +1,1466 @@
+{
+  "entries": [
+    {
+      "bundle_hash": "sha256:671bacb35d31a431719ffb4dcbfdceac1f744dba2bf6e863cd27b248e1817d8e",
+      "bundle_name": "gru__astropy__astropy-7671__astropy",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/gru/astropy__astropy-7671.json",
+      "entry_id": "gru__astropy__astropy-7671__astropy",
+      "levels": {
+        "l0": {
+          "primary_reason": "PASS",
+          "status": "pass"
+        },
+        "l1": {
+          "primary_reason": "PASS",
+          "status": "pass"
+        },
+        "l2": {
+          "primary_reason": "L2_AUG_TESTS_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/astropy__astropy-7671.json"
+    },
+    {
+      "bundle_hash": "sha256:13323559b07ada31fb9bc183e612761c51055344f5d8af81b811c1c115ea6fd5",
+      "bundle_name": "gru__django__django-7530__astropy",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/gru/django__django-7530.json",
+      "entry_id": "gru__django__django-7530__astropy",
+      "levels": {
+        "l0": {
+          "primary_reason": "PASS",
+          "status": "pass"
+        },
+        "l1": {
+          "primary_reason": "PASS",
+          "status": "pass"
+        },
+        "l2": {
+          "primary_reason": "L2_AUG_TESTS_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/django__django-7530.json"
+    },
+    {
+      "bundle_hash": "sha256:8743afc3b6cab19039e9f4260a2be4af95714ef44b6b494dbb20f742fff0b8cb",
+      "bundle_name": "gru__django__django-9296__astropy",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/gru/django__django-9296.json",
+      "entry_id": "gru__django__django-9296__astropy",
+      "levels": {
+        "l0": {
+          "primary_reason": "L0_OFFICIAL_FAIL",
+          "status": "fail"
+        },
+        "l1": {
+          "primary_reason": "L1_HARNESS_ERROR",
+          "status": "fail"
+        },
+        "l2": {
+          "primary_reason": "L2_AUG_TESTS_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/django__django-9296.json"
+    },
+    {
+      "bundle_hash": "sha256:9840c71487d6c12d5403fda6f9031490761b5e0e0783219f1516812680f23328",
+      "bundle_name": "gru__pallets__flask-5014__astropy",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/gru/pallets__flask-5014.json",
+      "entry_id": "gru__pallets__flask-5014__astropy",
+      "levels": {
+        "l0": {
+          "primary_reason": "L0_OFFICIAL_FAIL",
+          "status": "fail"
+        },
+        "l1": {
+          "primary_reason": "L1_HARNESS_ERROR",
+          "status": "fail"
+        },
+        "l2": {
+          "primary_reason": "L2_AUG_TESTS_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/pallets__flask-5014.json"
+    },
+    {
+      "bundle_hash": "sha256:d968f3d7fda3c12b7caa389d58f8b1d77224636cce47ac2903e4f2a4658d3ba6",
+      "bundle_name": "gru__psf__requests-1766__astropy",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/gru/psf__requests-1766.json",
+      "entry_id": "gru__psf__requests-1766__astropy",
+      "levels": {
+        "l0": {
+          "primary_reason": "L0_OFFICIAL_FAIL",
+          "status": "fail"
+        },
+        "l1": {
+          "primary_reason": "L1_HARNESS_ERROR",
+          "status": "fail"
+        },
+        "l2": {
+          "primary_reason": "L2_AUG_TESTS_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/psf__requests-1766.json"
+    },
+    {
+      "bundle_hash": "sha256:4d1d3dc18ca9a9a7ef7b5c591152befa1c70d8a10dcd1549a63ada0105721955",
+      "bundle_name": "gru__psf__requests-2317__astropy",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/gru/psf__requests-2317.json",
+      "entry_id": "gru__psf__requests-2317__astropy",
+      "levels": {
+        "l0": {
+          "primary_reason": "L0_OFFICIAL_FAIL",
+          "status": "fail"
+        },
+        "l1": {
+          "primary_reason": "L1_HARNESS_ERROR",
+          "status": "fail"
+        },
+        "l2": {
+          "primary_reason": "L2_AUG_TESTS_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/psf__requests-2317.json"
+    },
+    {
+      "bundle_hash": "sha256:9732dc24424afd94af30cb4eda20718f7c7f94d64d3c9ebdb623f867ac9b9de2",
+      "bundle_name": "gru__pydata__xarray-4075__astropy",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/gru/pydata__xarray-4075.json",
+      "entry_id": "gru__pydata__xarray-4075__astropy",
+      "levels": {
+        "l0": {
+          "primary_reason": "L0_OFFICIAL_FAIL",
+          "status": "fail"
+        },
+        "l1": {
+          "primary_reason": "L1_HARNESS_ERROR",
+          "status": "fail"
+        },
+        "l2": {
+          "primary_reason": "L2_AUG_TESTS_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/pydata__xarray-4075.json"
+    },
+    {
+      "bundle_hash": "sha256:c7141932a752542e7d466fdf27752db35e1acde62ccc3c608af3adec30347835",
+      "bundle_name": "gru__pydata__xarray-4629__astropy",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/gru/pydata__xarray-4629.json",
+      "entry_id": "gru__pydata__xarray-4629__astropy",
+      "levels": {
+        "l0": {
+          "primary_reason": "L0_OFFICIAL_FAIL",
+          "status": "fail"
+        },
+        "l1": {
+          "primary_reason": "L1_HARNESS_ERROR",
+          "status": "fail"
+        },
+        "l2": {
+          "primary_reason": "L2_AUG_TESTS_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/pydata__xarray-4629.json"
+    },
+    {
+      "bundle_hash": "sha256:9511e486d8b435b68d521a0d914cb65cec4ca231650d6f686052d2b10999dd8e",
+      "bundle_name": "gru__pylint-dev__pylint-6903__astropy",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/gru/pylint-dev__pylint-6903.json",
+      "entry_id": "gru__pylint-dev__pylint-6903__astropy",
+      "levels": {
+        "l0": {
+          "primary_reason": "L0_OFFICIAL_FAIL",
+          "status": "fail"
+        },
+        "l1": {
+          "primary_reason": "L1_HARNESS_ERROR",
+          "status": "fail"
+        },
+        "l2": {
+          "primary_reason": "L2_AUG_TESTS_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/pylint-dev__pylint-6903.json"
+    },
+    {
+      "bundle_hash": "sha256:1af18b1f257e0d9112cf663c40e760c887a581ac8607b59303a4e22c754b4b7b",
+      "bundle_name": "gru__pylint-dev__pylint-7277__astropy",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/gru/pylint-dev__pylint-7277.json",
+      "entry_id": "gru__pylint-dev__pylint-7277__astropy",
+      "levels": {
+        "l0": {
+          "primary_reason": "PASS",
+          "status": "pass"
+        },
+        "l1": {
+          "primary_reason": "PASS",
+          "status": "pass"
+        },
+        "l2": {
+          "primary_reason": "L2_AUG_TESTS_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/pylint-dev__pylint-7277.json"
+    },
+    {
+      "bundle_hash": "sha256:9299489b3ab7f158ec35d841cdaac92ef19e40eecf1392ddeaaaf4b6ccabff2c",
+      "bundle_name": "gru__sphinx-doc__sphinx-9698__astropy",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/gru/sphinx-doc__sphinx-9698.json",
+      "entry_id": "gru__sphinx-doc__sphinx-9698__astropy",
+      "levels": {
+        "l0": {
+          "primary_reason": "PASS",
+          "status": "pass"
+        },
+        "l1": {
+          "primary_reason": "PASS",
+          "status": "pass"
+        },
+        "l2": {
+          "primary_reason": "L2_AUG_TESTS_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/sphinx-doc__sphinx-9698.json"
+    },
+    {
+      "bundle_hash": "sha256:954f6d1711ae35a481a2f5272239337925930ab95fdcb5e5e844ace20bfa9f89",
+      "bundle_name": "honeycomb__astropy__astropy-7671__astropy",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/honeycomb/astropy__astropy-7671.json",
+      "entry_id": "honeycomb__astropy__astropy-7671__astropy",
+      "levels": {
+        "l0": {
+          "primary_reason": "PASS",
+          "status": "pass"
+        },
+        "l1": {
+          "primary_reason": "PASS",
+          "status": "pass"
+        },
+        "l2": {
+          "primary_reason": "L2_AUG_TESTS_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/astropy__astropy-7671.json"
+    },
+    {
+      "bundle_hash": "sha256:0ce46cfa1d1606f9337ecea6a52f9d88061ebc488485c549b547226424da53c7",
+      "bundle_name": "honeycomb__django__django-7530__astropy",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/honeycomb/django__django-7530.json",
+      "entry_id": "honeycomb__django__django-7530__astropy",
+      "levels": {
+        "l0": {
+          "primary_reason": "PASS",
+          "status": "pass"
+        },
+        "l1": {
+          "primary_reason": "PASS",
+          "status": "pass"
+        },
+        "l2": {
+          "primary_reason": "L2_AUG_TESTS_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/django__django-7530.json"
+    },
+    {
+      "bundle_hash": "sha256:d1494b129fa8efccc57983b26abd3890d53ea5808906e51077af9febd5b5095f",
+      "bundle_name": "honeycomb__django__django-9296__astropy",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/honeycomb/django__django-9296.json",
+      "entry_id": "honeycomb__django__django-9296__astropy",
+      "levels": {
+        "l0": {
+          "primary_reason": "L0_OFFICIAL_FAIL",
+          "status": "fail"
+        },
+        "l1": {
+          "primary_reason": "L1_HARNESS_ERROR",
+          "status": "fail"
+        },
+        "l2": {
+          "primary_reason": "L2_AUG_TESTS_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/django__django-9296.json"
+    },
+    {
+      "bundle_hash": "sha256:ab96bfc23d43b0df2265590ba0348d6312111a5d1890a4fd8785cb7c13347be7",
+      "bundle_name": "honeycomb__pallets__flask-5014__astropy",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/honeycomb/pallets__flask-5014.json",
+      "entry_id": "honeycomb__pallets__flask-5014__astropy",
+      "levels": {
+        "l0": {
+          "primary_reason": "L0_OFFICIAL_FAIL",
+          "status": "fail"
+        },
+        "l1": {
+          "primary_reason": "L1_HARNESS_ERROR",
+          "status": "fail"
+        },
+        "l2": {
+          "primary_reason": "L2_AUG_TESTS_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/pallets__flask-5014.json"
+    },
+    {
+      "bundle_hash": "sha256:78f224afbda54f8d9437111fff7a396d84a18d3f3c7911de403126c7239147be",
+      "bundle_name": "honeycomb__psf__requests-1766__astropy",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/honeycomb/psf__requests-1766.json",
+      "entry_id": "honeycomb__psf__requests-1766__astropy",
+      "levels": {
+        "l0": {
+          "primary_reason": "L0_OFFICIAL_FAIL",
+          "status": "fail"
+        },
+        "l1": {
+          "primary_reason": "L1_HARNESS_ERROR",
+          "status": "fail"
+        },
+        "l2": {
+          "primary_reason": "L2_AUG_TESTS_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/psf__requests-1766.json"
+    },
+    {
+      "bundle_hash": "sha256:cd7b279ed551cfe004305b339fe090f7b58035633058a798a9229ad435f46d7b",
+      "bundle_name": "honeycomb__psf__requests-2317__astropy",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/honeycomb/psf__requests-2317.json",
+      "entry_id": "honeycomb__psf__requests-2317__astropy",
+      "levels": {
+        "l0": {
+          "primary_reason": "L0_OFFICIAL_FAIL",
+          "status": "fail"
+        },
+        "l1": {
+          "primary_reason": "L1_HARNESS_ERROR",
+          "status": "fail"
+        },
+        "l2": {
+          "primary_reason": "L2_AUG_TESTS_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/psf__requests-2317.json"
+    },
+    {
+      "bundle_hash": "sha256:c5b6ccc8274031d4a5eb761af0c513cc5c844eb5b03b0566b3587ab892ce67d6",
+      "bundle_name": "honeycomb__pydata__xarray-4075__astropy",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/honeycomb/pydata__xarray-4075.json",
+      "entry_id": "honeycomb__pydata__xarray-4075__astropy",
+      "levels": {
+        "l0": {
+          "primary_reason": "L0_OFFICIAL_FAIL",
+          "status": "fail"
+        },
+        "l1": {
+          "primary_reason": "L1_HARNESS_ERROR",
+          "status": "fail"
+        },
+        "l2": {
+          "primary_reason": "L2_AUG_TESTS_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/pydata__xarray-4075.json"
+    },
+    {
+      "bundle_hash": "sha256:5e945aba053b27287bb17ce436e4c6bea04b04d81ab1ea50eaf0f8be07eaed12",
+      "bundle_name": "honeycomb__pydata__xarray-4629__astropy",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/honeycomb/pydata__xarray-4629.json",
+      "entry_id": "honeycomb__pydata__xarray-4629__astropy",
+      "levels": {
+        "l0": {
+          "primary_reason": "L0_OFFICIAL_FAIL",
+          "status": "fail"
+        },
+        "l1": {
+          "primary_reason": "L1_HARNESS_ERROR",
+          "status": "fail"
+        },
+        "l2": {
+          "primary_reason": "L2_AUG_TESTS_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/pydata__xarray-4629.json"
+    },
+    {
+      "bundle_hash": "sha256:260bb744eaa9ca769ba8e80fac4c6ec3ca2924b6cddc84d96aa767ce4f5099b8",
+      "bundle_name": "honeycomb__pylint-dev__pylint-6903__astropy",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/honeycomb/pylint-dev__pylint-6903.json",
+      "entry_id": "honeycomb__pylint-dev__pylint-6903__astropy",
+      "levels": {
+        "l0": {
+          "primary_reason": "L0_OFFICIAL_FAIL",
+          "status": "fail"
+        },
+        "l1": {
+          "primary_reason": "L1_HARNESS_ERROR",
+          "status": "fail"
+        },
+        "l2": {
+          "primary_reason": "L2_AUG_TESTS_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/pylint-dev__pylint-6903.json"
+    },
+    {
+      "bundle_hash": "sha256:87b64082e2a8c70dae732c3907fa3e744d0c44c53a52843a595446aa99a3394e",
+      "bundle_name": "honeycomb__pylint-dev__pylint-7277__astropy",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/honeycomb/pylint-dev__pylint-7277.json",
+      "entry_id": "honeycomb__pylint-dev__pylint-7277__astropy",
+      "levels": {
+        "l0": {
+          "primary_reason": "PASS",
+          "status": "pass"
+        },
+        "l1": {
+          "primary_reason": "PASS",
+          "status": "pass"
+        },
+        "l2": {
+          "primary_reason": "L2_AUG_TESTS_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/pylint-dev__pylint-7277.json"
+    },
+    {
+      "bundle_hash": "sha256:fabe21a00214f5c36f48d1b68086e2facad3015e67d1df011f0599544592b6e2",
+      "bundle_name": "honeycomb__sphinx-doc__sphinx-9698__astropy",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/honeycomb/sphinx-doc__sphinx-9698.json",
+      "entry_id": "honeycomb__sphinx-doc__sphinx-9698__astropy",
+      "levels": {
+        "l0": {
+          "primary_reason": "PASS",
+          "status": "pass"
+        },
+        "l1": {
+          "primary_reason": "PASS",
+          "status": "pass"
+        },
+        "l2": {
+          "primary_reason": "L2_AUG_TESTS_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/sphinx-doc__sphinx-9698.json"
+    },
+    {
+      "bundle_hash": "sha256:b390bf4ebac64a60b0aa24a691097f596962d6aa33464901b95292abee729d84",
+      "bundle_name": "sweagent__astropy__astropy-7671__astropy",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/sweagent/astropy__astropy-7671.json",
+      "entry_id": "sweagent__astropy__astropy-7671__astropy",
+      "levels": {
+        "l0": {
+          "primary_reason": "PASS",
+          "status": "pass"
+        },
+        "l1": {
+          "primary_reason": "PASS",
+          "status": "pass"
+        },
+        "l2": {
+          "primary_reason": "L2_AUG_TESTS_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/astropy__astropy-7671.json"
+    },
+    {
+      "bundle_hash": "sha256:0c3f341b99ca49c09ca656d1e4dea41b28489ac854e8d21e2842c2fe5a1d8798",
+      "bundle_name": "sweagent__django__django-7530__astropy",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/sweagent/django__django-7530.json",
+      "entry_id": "sweagent__django__django-7530__astropy",
+      "levels": {
+        "l0": {
+          "primary_reason": "PASS",
+          "status": "pass"
+        },
+        "l1": {
+          "primary_reason": "PASS",
+          "status": "pass"
+        },
+        "l2": {
+          "primary_reason": "L2_AUG_TESTS_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/django__django-7530.json"
+    },
+    {
+      "bundle_hash": "sha256:bf8a68ac23e29a46e3925b903fb4e59af6ba0d255dbccf611b09235a0c286100",
+      "bundle_name": "sweagent__django__django-9296__astropy",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/sweagent/django__django-9296.json",
+      "entry_id": "sweagent__django__django-9296__astropy",
+      "levels": {
+        "l0": {
+          "primary_reason": "L0_OFFICIAL_FAIL",
+          "status": "fail"
+        },
+        "l1": {
+          "primary_reason": "L1_HARNESS_ERROR",
+          "status": "fail"
+        },
+        "l2": {
+          "primary_reason": "L2_AUG_TESTS_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/django__django-9296.json"
+    },
+    {
+      "bundle_hash": "sha256:551d6c0db8158102a12008a681577a71919d70571c825f08a8d984775dd33a01",
+      "bundle_name": "sweagent__pallets__flask-5014__astropy",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/sweagent/pallets__flask-5014.json",
+      "entry_id": "sweagent__pallets__flask-5014__astropy",
+      "levels": {
+        "l0": {
+          "primary_reason": "L0_OFFICIAL_FAIL",
+          "status": "fail"
+        },
+        "l1": {
+          "primary_reason": "L1_HARNESS_ERROR",
+          "status": "fail"
+        },
+        "l2": {
+          "primary_reason": "L2_AUG_TESTS_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/pallets__flask-5014.json"
+    },
+    {
+      "bundle_hash": "sha256:e8d87a091b5e6e31f105c0afeb694e2745306a6b9a6fdfc3443cfa6a8c409bfb",
+      "bundle_name": "sweagent__psf__requests-1766__astropy",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/sweagent/psf__requests-1766.json",
+      "entry_id": "sweagent__psf__requests-1766__astropy",
+      "levels": {
+        "l0": {
+          "primary_reason": "L0_OFFICIAL_FAIL",
+          "status": "fail"
+        },
+        "l1": {
+          "primary_reason": "L1_HARNESS_ERROR",
+          "status": "fail"
+        },
+        "l2": {
+          "primary_reason": "L2_AUG_TESTS_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/psf__requests-1766.json"
+    },
+    {
+      "bundle_hash": "sha256:f0ff97490b694662e5e0385e458314d38d6329a660e54593f67fe37260b980fd",
+      "bundle_name": "sweagent__psf__requests-2317__astropy",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/sweagent/psf__requests-2317.json",
+      "entry_id": "sweagent__psf__requests-2317__astropy",
+      "levels": {
+        "l0": {
+          "primary_reason": "L0_OFFICIAL_FAIL",
+          "status": "fail"
+        },
+        "l1": {
+          "primary_reason": "L1_HARNESS_ERROR",
+          "status": "fail"
+        },
+        "l2": {
+          "primary_reason": "L2_AUG_TESTS_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/psf__requests-2317.json"
+    },
+    {
+      "bundle_hash": "sha256:c53da66b7a020bc3174e292a0b09fbc09f9936299d355fe979ca491bf7f934c4",
+      "bundle_name": "sweagent__pydata__xarray-4075__astropy",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/sweagent/pydata__xarray-4075.json",
+      "entry_id": "sweagent__pydata__xarray-4075__astropy",
+      "levels": {
+        "l0": {
+          "primary_reason": "L0_OFFICIAL_FAIL",
+          "status": "fail"
+        },
+        "l1": {
+          "primary_reason": "L1_HARNESS_ERROR",
+          "status": "fail"
+        },
+        "l2": {
+          "primary_reason": "L2_AUG_TESTS_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/pydata__xarray-4075.json"
+    },
+    {
+      "bundle_hash": "sha256:ea68492e3fcf12342adaf89d4492fa5c45e8de28c29cb8131102bcffba0c7e25",
+      "bundle_name": "sweagent__pydata__xarray-4629__astropy",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/sweagent/pydata__xarray-4629.json",
+      "entry_id": "sweagent__pydata__xarray-4629__astropy",
+      "levels": {
+        "l0": {
+          "primary_reason": "L0_OFFICIAL_FAIL",
+          "status": "fail"
+        },
+        "l1": {
+          "primary_reason": "L1_HARNESS_ERROR",
+          "status": "fail"
+        },
+        "l2": {
+          "primary_reason": "L2_AUG_TESTS_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/pydata__xarray-4629.json"
+    },
+    {
+      "bundle_hash": "sha256:adcf6b1ebacfbebce9187026bb968a10b01adf920cc3bc4b9b32e8e857f79447",
+      "bundle_name": "sweagent__pylint-dev__pylint-6903__astropy",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/sweagent/pylint-dev__pylint-6903.json",
+      "entry_id": "sweagent__pylint-dev__pylint-6903__astropy",
+      "levels": {
+        "l0": {
+          "primary_reason": "L0_OFFICIAL_FAIL",
+          "status": "fail"
+        },
+        "l1": {
+          "primary_reason": "L1_HARNESS_ERROR",
+          "status": "fail"
+        },
+        "l2": {
+          "primary_reason": "L2_AUG_TESTS_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/pylint-dev__pylint-6903.json"
+    },
+    {
+      "bundle_hash": "sha256:4dc52bca97c9cc555206cccef23e5f913d5d85495a22bb8dc058fb10854e0a2e",
+      "bundle_name": "sweagent__pylint-dev__pylint-7277__astropy",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/sweagent/pylint-dev__pylint-7277.json",
+      "entry_id": "sweagent__pylint-dev__pylint-7277__astropy",
+      "levels": {
+        "l0": {
+          "primary_reason": "PASS",
+          "status": "pass"
+        },
+        "l1": {
+          "primary_reason": "PASS",
+          "status": "pass"
+        },
+        "l2": {
+          "primary_reason": "L2_AUG_TESTS_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/pylint-dev__pylint-7277.json"
+    },
+    {
+      "bundle_hash": "sha256:8bc07d9a5d97a0f2d25dcf0eaa18ef68d4f6d8e5c8c17a1278b3e356e22e7e2f",
+      "bundle_name": "sweagent__sphinx-doc__sphinx-9698__astropy",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/sweagent/sphinx-doc__sphinx-9698.json",
+      "entry_id": "sweagent__sphinx-doc__sphinx-9698__astropy",
+      "levels": {
+        "l0": {
+          "primary_reason": "PASS",
+          "status": "pass"
+        },
+        "l1": {
+          "primary_reason": "PASS",
+          "status": "pass"
+        },
+        "l2": {
+          "primary_reason": "L2_AUG_TESTS_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/sphinx-doc__sphinx-9698.json"
+    },
+    {
+      "bundle_hash": "sha256:4547823c80adb6bbfbfc42de9c024a9d94b891c3e9bffeaffb1b97f9ad55eed5",
+      "bundle_name": "gru__astropy__astropy-7671__regressionfail",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/gru/astropy__astropy-7671.json",
+      "entry_id": "gru__astropy__astropy-7671__regressionfail",
+      "levels": {
+        "l0": {
+          "primary_reason": "PASS",
+          "status": "pass"
+        },
+        "l1": {
+          "primary_reason": "PASS",
+          "status": "pass"
+        },
+        "l2": {
+          "primary_reason": "L2_REGRESSION_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/astropy__astropy-7671.json"
+    },
+    {
+      "bundle_hash": "sha256:5f397f87831f05b62b16c38abae35884228f28f5361afcc316aafc0fe9ac98a7",
+      "bundle_name": "gru__django__django-7530__regressionfail",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/gru/django__django-7530.json",
+      "entry_id": "gru__django__django-7530__regressionfail",
+      "levels": {
+        "l0": {
+          "primary_reason": "PASS",
+          "status": "pass"
+        },
+        "l1": {
+          "primary_reason": "PASS",
+          "status": "pass"
+        },
+        "l2": {
+          "primary_reason": "L2_REGRESSION_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/django__django-7530.json"
+    },
+    {
+      "bundle_hash": "sha256:ade5990c26ec0f3e63961bae4f1fe158316798c64ad32590eabd1e717e17c76a",
+      "bundle_name": "gru__django__django-9296__regressionfail",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/gru/django__django-9296.json",
+      "entry_id": "gru__django__django-9296__regressionfail",
+      "levels": {
+        "l0": {
+          "primary_reason": "L0_OFFICIAL_FAIL",
+          "status": "fail"
+        },
+        "l1": {
+          "primary_reason": "L1_HARNESS_ERROR",
+          "status": "fail"
+        },
+        "l2": {
+          "primary_reason": "L2_REGRESSION_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/django__django-9296.json"
+    },
+    {
+      "bundle_hash": "sha256:878c2b278b30cf6cf6a1404bacbbedf03df6e34b7d242b9fc32bc38ace48d5ca",
+      "bundle_name": "gru__pallets__flask-5014__regressionfail",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/gru/pallets__flask-5014.json",
+      "entry_id": "gru__pallets__flask-5014__regressionfail",
+      "levels": {
+        "l0": {
+          "primary_reason": "L0_OFFICIAL_FAIL",
+          "status": "fail"
+        },
+        "l1": {
+          "primary_reason": "L1_HARNESS_ERROR",
+          "status": "fail"
+        },
+        "l2": {
+          "primary_reason": "L2_REGRESSION_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/pallets__flask-5014.json"
+    },
+    {
+      "bundle_hash": "sha256:6bdefe5b4d2efdd97766984904df05ee6e4172cbdd775d30e2fd56ff92d4e2c0",
+      "bundle_name": "gru__psf__requests-1766__regressionfail",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/gru/psf__requests-1766.json",
+      "entry_id": "gru__psf__requests-1766__regressionfail",
+      "levels": {
+        "l0": {
+          "primary_reason": "L0_OFFICIAL_FAIL",
+          "status": "fail"
+        },
+        "l1": {
+          "primary_reason": "L1_HARNESS_ERROR",
+          "status": "fail"
+        },
+        "l2": {
+          "primary_reason": "L2_REGRESSION_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/psf__requests-1766.json"
+    },
+    {
+      "bundle_hash": "sha256:6a7c805b7719112f992d61ccc68169be654c4e912cc5373147d2d0f0c40e1a0c",
+      "bundle_name": "gru__psf__requests-2317__regressionfail",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/gru/psf__requests-2317.json",
+      "entry_id": "gru__psf__requests-2317__regressionfail",
+      "levels": {
+        "l0": {
+          "primary_reason": "L0_OFFICIAL_FAIL",
+          "status": "fail"
+        },
+        "l1": {
+          "primary_reason": "L1_HARNESS_ERROR",
+          "status": "fail"
+        },
+        "l2": {
+          "primary_reason": "L2_REGRESSION_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/psf__requests-2317.json"
+    },
+    {
+      "bundle_hash": "sha256:a16fa2883b95208c5bd2c6518626707c092eccfe3c96ffc1be6703707f4323d8",
+      "bundle_name": "gru__pydata__xarray-4075__regressionfail",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/gru/pydata__xarray-4075.json",
+      "entry_id": "gru__pydata__xarray-4075__regressionfail",
+      "levels": {
+        "l0": {
+          "primary_reason": "L0_OFFICIAL_FAIL",
+          "status": "fail"
+        },
+        "l1": {
+          "primary_reason": "L1_HARNESS_ERROR",
+          "status": "fail"
+        },
+        "l2": {
+          "primary_reason": "L2_REGRESSION_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/pydata__xarray-4075.json"
+    },
+    {
+      "bundle_hash": "sha256:4409540f24daa2496632a95fc3916251cb5859730b34e34e84f4da946dac7a72",
+      "bundle_name": "gru__pydata__xarray-4629__regressionfail",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/gru/pydata__xarray-4629.json",
+      "entry_id": "gru__pydata__xarray-4629__regressionfail",
+      "levels": {
+        "l0": {
+          "primary_reason": "L0_OFFICIAL_FAIL",
+          "status": "fail"
+        },
+        "l1": {
+          "primary_reason": "L1_HARNESS_ERROR",
+          "status": "fail"
+        },
+        "l2": {
+          "primary_reason": "L2_REGRESSION_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/pydata__xarray-4629.json"
+    },
+    {
+      "bundle_hash": "sha256:966527faf8e1a578d416ed6deca50bbccd8a6a21140987a73943e52ad8d8bc76",
+      "bundle_name": "gru__pylint-dev__pylint-6903__regressionfail",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/gru/pylint-dev__pylint-6903.json",
+      "entry_id": "gru__pylint-dev__pylint-6903__regressionfail",
+      "levels": {
+        "l0": {
+          "primary_reason": "L0_OFFICIAL_FAIL",
+          "status": "fail"
+        },
+        "l1": {
+          "primary_reason": "L1_HARNESS_ERROR",
+          "status": "fail"
+        },
+        "l2": {
+          "primary_reason": "L2_REGRESSION_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/pylint-dev__pylint-6903.json"
+    },
+    {
+      "bundle_hash": "sha256:7f04f0cdc4827bddf850dbdf20f95230f8adda93273a584db39fe3a5dd98ea32",
+      "bundle_name": "gru__pylint-dev__pylint-7277__regressionfail",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/gru/pylint-dev__pylint-7277.json",
+      "entry_id": "gru__pylint-dev__pylint-7277__regressionfail",
+      "levels": {
+        "l0": {
+          "primary_reason": "PASS",
+          "status": "pass"
+        },
+        "l1": {
+          "primary_reason": "PASS",
+          "status": "pass"
+        },
+        "l2": {
+          "primary_reason": "L2_REGRESSION_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/pylint-dev__pylint-7277.json"
+    },
+    {
+      "bundle_hash": "sha256:6b9efba6eeb352f9fe3ac79159c8cadd65ffa4277603e1977c50a0cafe49a37c",
+      "bundle_name": "gru__sphinx-doc__sphinx-9698__regressionfail",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/gru/sphinx-doc__sphinx-9698.json",
+      "entry_id": "gru__sphinx-doc__sphinx-9698__regressionfail",
+      "levels": {
+        "l0": {
+          "primary_reason": "PASS",
+          "status": "pass"
+        },
+        "l1": {
+          "primary_reason": "PASS",
+          "status": "pass"
+        },
+        "l2": {
+          "primary_reason": "L2_REGRESSION_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/sphinx-doc__sphinx-9698.json"
+    },
+    {
+      "bundle_hash": "sha256:0b975458bbb5dd621e09e5678fc2383215492c5a71b7aa64adf6a88df0fd4a32",
+      "bundle_name": "honeycomb__astropy__astropy-7671__regressionfail",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/honeycomb/astropy__astropy-7671.json",
+      "entry_id": "honeycomb__astropy__astropy-7671__regressionfail",
+      "levels": {
+        "l0": {
+          "primary_reason": "PASS",
+          "status": "pass"
+        },
+        "l1": {
+          "primary_reason": "PASS",
+          "status": "pass"
+        },
+        "l2": {
+          "primary_reason": "L2_REGRESSION_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/astropy__astropy-7671.json"
+    },
+    {
+      "bundle_hash": "sha256:6e7173b0ccaecba6b6ff75869a688ea912b6e6920a6dec22adc6d237f0895e7c",
+      "bundle_name": "honeycomb__django__django-7530__regressionfail",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/honeycomb/django__django-7530.json",
+      "entry_id": "honeycomb__django__django-7530__regressionfail",
+      "levels": {
+        "l0": {
+          "primary_reason": "PASS",
+          "status": "pass"
+        },
+        "l1": {
+          "primary_reason": "PASS",
+          "status": "pass"
+        },
+        "l2": {
+          "primary_reason": "L2_REGRESSION_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/django__django-7530.json"
+    },
+    {
+      "bundle_hash": "sha256:cce57380e7ae4880ee37c1b01b857039fa2b03936a499ec505f16450305c6d7b",
+      "bundle_name": "honeycomb__django__django-9296__regressionfail",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/honeycomb/django__django-9296.json",
+      "entry_id": "honeycomb__django__django-9296__regressionfail",
+      "levels": {
+        "l0": {
+          "primary_reason": "L0_OFFICIAL_FAIL",
+          "status": "fail"
+        },
+        "l1": {
+          "primary_reason": "L1_HARNESS_ERROR",
+          "status": "fail"
+        },
+        "l2": {
+          "primary_reason": "L2_REGRESSION_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/django__django-9296.json"
+    },
+    {
+      "bundle_hash": "sha256:6a852ebba1d2419f8afecba42bb9397553c520f5148d64a3ba264315b919101b",
+      "bundle_name": "honeycomb__pallets__flask-5014__regressionfail",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/honeycomb/pallets__flask-5014.json",
+      "entry_id": "honeycomb__pallets__flask-5014__regressionfail",
+      "levels": {
+        "l0": {
+          "primary_reason": "L0_OFFICIAL_FAIL",
+          "status": "fail"
+        },
+        "l1": {
+          "primary_reason": "L1_HARNESS_ERROR",
+          "status": "fail"
+        },
+        "l2": {
+          "primary_reason": "L2_REGRESSION_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/pallets__flask-5014.json"
+    },
+    {
+      "bundle_hash": "sha256:a511a84416c9690e1382ad1853807f2733f94f4c35f6058668a0e252d12b83ac",
+      "bundle_name": "honeycomb__psf__requests-1766__regressionfail",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/honeycomb/psf__requests-1766.json",
+      "entry_id": "honeycomb__psf__requests-1766__regressionfail",
+      "levels": {
+        "l0": {
+          "primary_reason": "L0_OFFICIAL_FAIL",
+          "status": "fail"
+        },
+        "l1": {
+          "primary_reason": "L1_HARNESS_ERROR",
+          "status": "fail"
+        },
+        "l2": {
+          "primary_reason": "L2_REGRESSION_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/psf__requests-1766.json"
+    },
+    {
+      "bundle_hash": "sha256:2cb8bdd6ca0c4e9fb36ea3566b5177a97e91d8a4fe012d1aec6f96c2007def25",
+      "bundle_name": "honeycomb__psf__requests-2317__regressionfail",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/honeycomb/psf__requests-2317.json",
+      "entry_id": "honeycomb__psf__requests-2317__regressionfail",
+      "levels": {
+        "l0": {
+          "primary_reason": "L0_OFFICIAL_FAIL",
+          "status": "fail"
+        },
+        "l1": {
+          "primary_reason": "L1_HARNESS_ERROR",
+          "status": "fail"
+        },
+        "l2": {
+          "primary_reason": "L2_REGRESSION_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/psf__requests-2317.json"
+    },
+    {
+      "bundle_hash": "sha256:148585f3a4f13aaf1c2a67abc7cd628a907c8ce57805dc5b97abc6aa72bafea6",
+      "bundle_name": "honeycomb__pydata__xarray-4075__regressionfail",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/honeycomb/pydata__xarray-4075.json",
+      "entry_id": "honeycomb__pydata__xarray-4075__regressionfail",
+      "levels": {
+        "l0": {
+          "primary_reason": "L0_OFFICIAL_FAIL",
+          "status": "fail"
+        },
+        "l1": {
+          "primary_reason": "L1_HARNESS_ERROR",
+          "status": "fail"
+        },
+        "l2": {
+          "primary_reason": "L2_REGRESSION_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/pydata__xarray-4075.json"
+    },
+    {
+      "bundle_hash": "sha256:7dce87843dc3b0367a25112a9ce4de1ddfa2848543ccb15d5873df8febd81777",
+      "bundle_name": "honeycomb__pydata__xarray-4629__regressionfail",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/honeycomb/pydata__xarray-4629.json",
+      "entry_id": "honeycomb__pydata__xarray-4629__regressionfail",
+      "levels": {
+        "l0": {
+          "primary_reason": "L0_OFFICIAL_FAIL",
+          "status": "fail"
+        },
+        "l1": {
+          "primary_reason": "L1_HARNESS_ERROR",
+          "status": "fail"
+        },
+        "l2": {
+          "primary_reason": "L2_REGRESSION_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/pydata__xarray-4629.json"
+    },
+    {
+      "bundle_hash": "sha256:df13f4a22370f134740f8ff3ec0f49151302dcfdcc03d02d501d828f08081bbb",
+      "bundle_name": "honeycomb__pylint-dev__pylint-6903__regressionfail",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/honeycomb/pylint-dev__pylint-6903.json",
+      "entry_id": "honeycomb__pylint-dev__pylint-6903__regressionfail",
+      "levels": {
+        "l0": {
+          "primary_reason": "L0_OFFICIAL_FAIL",
+          "status": "fail"
+        },
+        "l1": {
+          "primary_reason": "L1_HARNESS_ERROR",
+          "status": "fail"
+        },
+        "l2": {
+          "primary_reason": "L2_REGRESSION_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/pylint-dev__pylint-6903.json"
+    },
+    {
+      "bundle_hash": "sha256:cfad0d293f269eb23a5ac2f917b55f1df60706b382c382737744348660c36521",
+      "bundle_name": "honeycomb__pylint-dev__pylint-7277__regressionfail",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/honeycomb/pylint-dev__pylint-7277.json",
+      "entry_id": "honeycomb__pylint-dev__pylint-7277__regressionfail",
+      "levels": {
+        "l0": {
+          "primary_reason": "PASS",
+          "status": "pass"
+        },
+        "l1": {
+          "primary_reason": "PASS",
+          "status": "pass"
+        },
+        "l2": {
+          "primary_reason": "L2_REGRESSION_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/pylint-dev__pylint-7277.json"
+    },
+    {
+      "bundle_hash": "sha256:a01ea997be4b3e97ec56d53c9596c537ff6a0df684be18066ade649cc0e8d265",
+      "bundle_name": "honeycomb__sphinx-doc__sphinx-9698__regressionfail",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/honeycomb/sphinx-doc__sphinx-9698.json",
+      "entry_id": "honeycomb__sphinx-doc__sphinx-9698__regressionfail",
+      "levels": {
+        "l0": {
+          "primary_reason": "PASS",
+          "status": "pass"
+        },
+        "l1": {
+          "primary_reason": "PASS",
+          "status": "pass"
+        },
+        "l2": {
+          "primary_reason": "L2_REGRESSION_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/sphinx-doc__sphinx-9698.json"
+    },
+    {
+      "bundle_hash": "sha256:e45f90c0f3dc96f6cf552a5e083c39e54af2cfa897b63acd01b04f44ca6aa634",
+      "bundle_name": "sweagent__astropy__astropy-7671__regressionfail",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/sweagent/astropy__astropy-7671.json",
+      "entry_id": "sweagent__astropy__astropy-7671__regressionfail",
+      "levels": {
+        "l0": {
+          "primary_reason": "PASS",
+          "status": "pass"
+        },
+        "l1": {
+          "primary_reason": "PASS",
+          "status": "pass"
+        },
+        "l2": {
+          "primary_reason": "L2_REGRESSION_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/astropy__astropy-7671.json"
+    },
+    {
+      "bundle_hash": "sha256:bcea79a3b8c466e47ce2f2793e261d47c078cd94b57121f0a9f2de56569c6e5b",
+      "bundle_name": "sweagent__django__django-7530__regressionfail",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/sweagent/django__django-7530.json",
+      "entry_id": "sweagent__django__django-7530__regressionfail",
+      "levels": {
+        "l0": {
+          "primary_reason": "PASS",
+          "status": "pass"
+        },
+        "l1": {
+          "primary_reason": "PASS",
+          "status": "pass"
+        },
+        "l2": {
+          "primary_reason": "L2_REGRESSION_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/django__django-7530.json"
+    },
+    {
+      "bundle_hash": "sha256:3bdebd34f411a40428698e2f2f53f320bdb1b9a749158f66eba53e31b65d150f",
+      "bundle_name": "sweagent__django__django-9296__regressionfail",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/sweagent/django__django-9296.json",
+      "entry_id": "sweagent__django__django-9296__regressionfail",
+      "levels": {
+        "l0": {
+          "primary_reason": "L0_OFFICIAL_FAIL",
+          "status": "fail"
+        },
+        "l1": {
+          "primary_reason": "L1_HARNESS_ERROR",
+          "status": "fail"
+        },
+        "l2": {
+          "primary_reason": "L2_REGRESSION_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/django__django-9296.json"
+    },
+    {
+      "bundle_hash": "sha256:c68fb8b4b3b1af45ebd2b9e3f6f934fa46924d2e212469527cd7866212fb5a13",
+      "bundle_name": "sweagent__pallets__flask-5014__regressionfail",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/sweagent/pallets__flask-5014.json",
+      "entry_id": "sweagent__pallets__flask-5014__regressionfail",
+      "levels": {
+        "l0": {
+          "primary_reason": "L0_OFFICIAL_FAIL",
+          "status": "fail"
+        },
+        "l1": {
+          "primary_reason": "L1_HARNESS_ERROR",
+          "status": "fail"
+        },
+        "l2": {
+          "primary_reason": "L2_REGRESSION_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/pallets__flask-5014.json"
+    },
+    {
+      "bundle_hash": "sha256:d21bbc270f227e64ae674365b5213887f7cd60fd015149087bec57b5abedb014",
+      "bundle_name": "sweagent__psf__requests-1766__regressionfail",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/sweagent/psf__requests-1766.json",
+      "entry_id": "sweagent__psf__requests-1766__regressionfail",
+      "levels": {
+        "l0": {
+          "primary_reason": "L0_OFFICIAL_FAIL",
+          "status": "fail"
+        },
+        "l1": {
+          "primary_reason": "L1_HARNESS_ERROR",
+          "status": "fail"
+        },
+        "l2": {
+          "primary_reason": "L2_REGRESSION_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/psf__requests-1766.json"
+    },
+    {
+      "bundle_hash": "sha256:147c23b4b8ae105e90806d83ca0748acf458435cc575836937d845135b611082",
+      "bundle_name": "sweagent__psf__requests-2317__regressionfail",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/sweagent/psf__requests-2317.json",
+      "entry_id": "sweagent__psf__requests-2317__regressionfail",
+      "levels": {
+        "l0": {
+          "primary_reason": "L0_OFFICIAL_FAIL",
+          "status": "fail"
+        },
+        "l1": {
+          "primary_reason": "L1_HARNESS_ERROR",
+          "status": "fail"
+        },
+        "l2": {
+          "primary_reason": "L2_REGRESSION_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/psf__requests-2317.json"
+    },
+    {
+      "bundle_hash": "sha256:064926a3ef70adf09afc010e41775368aef780f437a2cbeb0e302bd09b2449b0",
+      "bundle_name": "sweagent__pydata__xarray-4075__regressionfail",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/sweagent/pydata__xarray-4075.json",
+      "entry_id": "sweagent__pydata__xarray-4075__regressionfail",
+      "levels": {
+        "l0": {
+          "primary_reason": "L0_OFFICIAL_FAIL",
+          "status": "fail"
+        },
+        "l1": {
+          "primary_reason": "L1_HARNESS_ERROR",
+          "status": "fail"
+        },
+        "l2": {
+          "primary_reason": "L2_REGRESSION_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/pydata__xarray-4075.json"
+    },
+    {
+      "bundle_hash": "sha256:7bab4059e2935f91ba9fdfe33ef07c5d743db257fc3954742aface4c05c2107e",
+      "bundle_name": "sweagent__pydata__xarray-4629__regressionfail",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/sweagent/pydata__xarray-4629.json",
+      "entry_id": "sweagent__pydata__xarray-4629__regressionfail",
+      "levels": {
+        "l0": {
+          "primary_reason": "L0_OFFICIAL_FAIL",
+          "status": "fail"
+        },
+        "l1": {
+          "primary_reason": "L1_HARNESS_ERROR",
+          "status": "fail"
+        },
+        "l2": {
+          "primary_reason": "L2_REGRESSION_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/pydata__xarray-4629.json"
+    },
+    {
+      "bundle_hash": "sha256:4ac872576b01d3fa5f07938bb8b343fb0c9f562a71422aec0fa664147991ae8a",
+      "bundle_name": "sweagent__pylint-dev__pylint-6903__regressionfail",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/sweagent/pylint-dev__pylint-6903.json",
+      "entry_id": "sweagent__pylint-dev__pylint-6903__regressionfail",
+      "levels": {
+        "l0": {
+          "primary_reason": "L0_OFFICIAL_FAIL",
+          "status": "fail"
+        },
+        "l1": {
+          "primary_reason": "L1_HARNESS_ERROR",
+          "status": "fail"
+        },
+        "l2": {
+          "primary_reason": "L2_REGRESSION_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/pylint-dev__pylint-6903.json"
+    },
+    {
+      "bundle_hash": "sha256:3c698da60e6d3918d1b37ea3ac151626a2190d6bff5eb532d4900b5bb995554b",
+      "bundle_name": "sweagent__pylint-dev__pylint-7277__regressionfail",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/sweagent/pylint-dev__pylint-7277.json",
+      "entry_id": "sweagent__pylint-dev__pylint-7277__regressionfail",
+      "levels": {
+        "l0": {
+          "primary_reason": "PASS",
+          "status": "pass"
+        },
+        "l1": {
+          "primary_reason": "PASS",
+          "status": "pass"
+        },
+        "l2": {
+          "primary_reason": "L2_REGRESSION_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/pylint-dev__pylint-7277.json"
+    },
+    {
+      "bundle_hash": "sha256:56f97ede4d21d89b38d69ddd1a9b345a5340a79258d2bbff76761ac166b968ae",
+      "bundle_name": "sweagent__sphinx-doc__sphinx-9698__regressionfail",
+      "candidate_path": "runs/released/agent_panel_verified_flagship_v1\\candidates/sweagent/sphinx-doc__sphinx-9698.json",
+      "entry_id": "sweagent__sphinx-doc__sphinx-9698__regressionfail",
+      "levels": {
+        "l0": {
+          "primary_reason": "PASS",
+          "status": "pass"
+        },
+        "l1": {
+          "primary_reason": "PASS",
+          "status": "pass"
+        },
+        "l2": {
+          "primary_reason": "L2_REGRESSION_FAIL",
+          "status": "fail"
+        }
+      },
+      "status": "ok",
+      "task_path": "runs/released/agent_panel_verified_flagship_v1\\../../../benchmarks/verified/manifests/sphinx-doc__sphinx-9698.json"
+    }
+  ],
+  "evaluator_version": "0.1.0",
+  "invalid_entries": 0,
+  "levels": [
+    "L0",
+    "L1",
+    "L2"
+  ],
+  "ok_entries": 66,
+  "schema_version": 1,
+  "total_entries": 66
+}
