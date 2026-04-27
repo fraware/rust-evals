@@ -1,0 +1,10 @@
+E
+======================================================================
+ERROR: test_prefetch_GFK_uuid_pk (unittest.loader._FailedTest)
+----------------------------------------------------------------------
+AttributeError: type object 'GenericRelationTests' has no attribute 'test_prefetch_GFK_uuid_pk'
+
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+FAILED (errors=1)

@@ -1,0 +1,4 @@
+agent_id,live_tasks_total,baseline_live_pass_rate_L1,leave_one_out_min_rate_L1,leave_one_out_max_rate_L1,min_rate_when_excluding_task,max_rate_when_excluding_task
+gru,8,0.125,0.0,0.14285714285714285,networkx__networkx-8013,Pyomo__pyomo-3588
+honeycomb,4,0.25,0.0,0.3333333333333333,networkx__networkx-8013,Pyomo__pyomo-3588
+sweagent,4,0.0,0.0,0.0,apify__crawlee-python-1181,apify__crawlee-python-1181

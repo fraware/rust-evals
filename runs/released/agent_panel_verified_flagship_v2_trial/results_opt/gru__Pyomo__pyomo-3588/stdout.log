@@ -1,0 +1,8 @@
+============================= test session starts ==============================
+platform linux -- Python 3.9.23, pytest-8.3.5, pluggy-1.5.0
+rootdir: /workspace
+configfile: setup.cfg
+plugins: parallel-0.1.1
+collected 2 items
+
+============================ no tests ran in 2.16s =============================

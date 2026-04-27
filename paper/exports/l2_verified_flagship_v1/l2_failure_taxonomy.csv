@@ -1,0 +1,3 @@
+validator_family,primary_reason,count
+augmented_unit_tests,L2_AUG_TESTS_FAIL,33
+targeted_regression,L2_REGRESSION_FAIL,33

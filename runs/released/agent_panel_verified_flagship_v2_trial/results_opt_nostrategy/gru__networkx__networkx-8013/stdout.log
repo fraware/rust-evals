@@ -1,0 +1,10 @@
+============================= test session starts ==============================
+platform linux -- Python 3.11.13, pytest-8.3.5, pluggy-1.5.0
+rootdir: /workspace
+configfile: pyproject.toml
+plugins: xdist-3.6.1, cov-6.1.1
+collected 1 item
+
+networkx/algorithms/traversal/tests/test_bfs.py .                        [100%]
+
+============================== 1 passed in 1.20s ===============================

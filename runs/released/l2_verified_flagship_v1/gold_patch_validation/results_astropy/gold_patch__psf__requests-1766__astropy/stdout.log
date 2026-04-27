@@ -1,0 +1,88 @@
+============================= test session starts ==============================
+platform linux -- Python 3.9.20, pytest-7.4.4, pluggy-1.0.0
+rootdir: /workspace
+collected 5 items
+
+=============================== warnings summary ===============================
+requests/packages/urllib3/connectionpool.py:383
+  /workspace/requests/packages/urllib3/connectionpool.py:383: DeprecationWarning: invalid escape sequence \*
+    """
+
+requests/packages/urllib3/connectionpool.py:658
+  /workspace/requests/packages/urllib3/connectionpool.py:658: DeprecationWarning: invalid escape sequence \*
+    """
+
+requests/packages/urllib3/poolmanager.py:36
+  /workspace/requests/packages/urllib3/poolmanager.py:36: DeprecationWarning: invalid escape sequence \*
+    """
+
+requests/packages/urllib3/_collections.py:7
+  /workspace/requests/packages/urllib3/_collections.py:7: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated since Python 3.3, and in 3.10 it will stop working
+    from collections import MutableMapping
+
+requests/models.py:717
+  /workspace/requests/models.py:717: DeprecationWarning: invalid escape sequence \*
+    """Returns the json-encoded content of a response, if any.
+
+requests/api.py:48
+  /workspace/requests/api.py:48: DeprecationWarning: invalid escape sequence \*
+    """Sends a GET request. Returns :class:`Response` object.
+
+requests/api.py:59
+  /workspace/requests/api.py:59: DeprecationWarning: invalid escape sequence \*
+    """Sends a OPTIONS request. Returns :class:`Response` object.
+
+requests/api.py:70
+  /workspace/requests/api.py:70: DeprecationWarning: invalid escape sequence \*
+    """Sends a HEAD request. Returns :class:`Response` object.
+
+requests/api.py:81
+  /workspace/requests/api.py:81: DeprecationWarning: invalid escape sequence \*
+    """Sends a POST request. Returns :class:`Response` object.
+
+requests/api.py:92
+  /workspace/requests/api.py:92: DeprecationWarning: invalid escape sequence \*
+    """Sends a PUT request. Returns :class:`Response` object.
+
+requests/api.py:103
+  /workspace/requests/api.py:103: DeprecationWarning: invalid escape sequence \*
+    """Sends a PATCH request. Returns :class:`Response` object.
+
+requests/api.py:114
+  /workspace/requests/api.py:114: DeprecationWarning: invalid escape sequence \*
+    """Sends a DELETE request. Returns :class:`Response` object.
+
+requests/sessions.py:372
+  /workspace/requests/sessions.py:372: DeprecationWarning: invalid escape sequence \*
+    """Sends a GET request. Returns :class:`Response` object.
+
+requests/sessions.py:382
+  /workspace/requests/sessions.py:382: DeprecationWarning: invalid escape sequence \*
+    """Sends a OPTIONS request. Returns :class:`Response` object.
+
+requests/sessions.py:392
+  /workspace/requests/sessions.py:392: DeprecationWarning: invalid escape sequence \*
+    """Sends a HEAD request. Returns :class:`Response` object.
+
+requests/sessions.py:402
+  /workspace/requests/sessions.py:402: DeprecationWarning: invalid escape sequence \*
+    """Sends a POST request. Returns :class:`Response` object.
+
+requests/sessions.py:412
+  /workspace/requests/sessions.py:412: DeprecationWarning: invalid escape sequence \*
+    """Sends a PUT request. Returns :class:`Response` object.
+
+requests/sessions.py:422
+  /workspace/requests/sessions.py:422: DeprecationWarning: invalid escape sequence \*
+    """Sends a PATCH request. Returns :class:`Response` object.
+
+requests/sessions.py:432
+  /workspace/requests/sessions.py:432: DeprecationWarning: invalid escape sequence \*
+    """Sends a DELETE request. Returns :class:`Response` object.
+
+requests/sessions.py:12
+  /workspace/requests/sessions.py:12: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated since Python 3.3, and in 3.10 it will stop working
+    from collections import Mapping
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+============================= 20 warnings in 2.60s =============================

@@ -1,0 +1,200 @@
+[
+  {
+    "artifact_bundle": "runs/released/l2_verified_flagship_v1/gold_patch_validation/results_astropy/gold_patch__astropy__astropy-7671__astropy",
+    "gold_patch_status_L0": "pass",
+    "gold_patch_status_L1": "pass",
+    "gold_patch_status_L2": "fail",
+    "primary_reason": "L2_AUG_TESTS_FAIL",
+    "task_id": "astropy__astropy-7671",
+    "validator_family": "augmented_unit_tests"
+  },
+  {
+    "artifact_bundle": "runs/released/l2_verified_flagship_v1/gold_patch_validation/results_regressionfail/gold_patch__astropy__astropy-7671__regressionfail",
+    "gold_patch_status_L0": "pass",
+    "gold_patch_status_L1": "pass",
+    "gold_patch_status_L2": "fail",
+    "primary_reason": "L2_REGRESSION_FAIL",
+    "task_id": "astropy__astropy-7671",
+    "validator_family": "targeted_regression"
+  },
+  {
+    "artifact_bundle": "runs/released/l2_verified_flagship_v1/gold_patch_validation/results_astropy/gold_patch__django__django-7530__astropy",
+    "gold_patch_status_L0": "pass",
+    "gold_patch_status_L1": "pass",
+    "gold_patch_status_L2": "fail",
+    "primary_reason": "L2_AUG_TESTS_FAIL",
+    "task_id": "django__django-7530",
+    "validator_family": "augmented_unit_tests"
+  },
+  {
+    "artifact_bundle": "runs/released/l2_verified_flagship_v1/gold_patch_validation/results_regressionfail/gold_patch__django__django-7530__regressionfail",
+    "gold_patch_status_L0": "pass",
+    "gold_patch_status_L1": "pass",
+    "gold_patch_status_L2": "fail",
+    "primary_reason": "L2_REGRESSION_FAIL",
+    "task_id": "django__django-7530",
+    "validator_family": "targeted_regression"
+  },
+  {
+    "artifact_bundle": "runs/released/l2_verified_flagship_v1/gold_patch_validation/results_astropy/gold_patch__django__django-9296__astropy",
+    "gold_patch_status_L0": "fail",
+    "gold_patch_status_L1": "fail",
+    "gold_patch_status_L2": "fail",
+    "primary_reason": "L2_AUG_TESTS_FAIL",
+    "task_id": "django__django-9296",
+    "validator_family": "augmented_unit_tests"
+  },
+  {
+    "artifact_bundle": "runs/released/l2_verified_flagship_v1/gold_patch_validation/results_regressionfail/gold_patch__django__django-9296__regressionfail",
+    "gold_patch_status_L0": "fail",
+    "gold_patch_status_L1": "fail",
+    "gold_patch_status_L2": "fail",
+    "primary_reason": "L2_REGRESSION_FAIL",
+    "task_id": "django__django-9296",
+    "validator_family": "targeted_regression"
+  },
+  {
+    "artifact_bundle": "runs/released/l2_verified_flagship_v1/gold_patch_validation/results_astropy/gold_patch__pallets__flask-5014__astropy",
+    "gold_patch_status_L0": "fail",
+    "gold_patch_status_L1": "fail",
+    "gold_patch_status_L2": "fail",
+    "primary_reason": "L2_AUG_TESTS_FAIL",
+    "task_id": "pallets__flask-5014",
+    "validator_family": "augmented_unit_tests"
+  },
+  {
+    "artifact_bundle": "runs/released/l2_verified_flagship_v1/gold_patch_validation/results_regressionfail/gold_patch__pallets__flask-5014__regressionfail",
+    "gold_patch_status_L0": "fail",
+    "gold_patch_status_L1": "fail",
+    "gold_patch_status_L2": "fail",
+    "primary_reason": "L2_REGRESSION_FAIL",
+    "task_id": "pallets__flask-5014",
+    "validator_family": "targeted_regression"
+  },
+  {
+    "artifact_bundle": "runs/released/l2_verified_flagship_v1/gold_patch_validation/results_astropy/gold_patch__psf__requests-1766__astropy",
+    "gold_patch_status_L0": "fail",
+    "gold_patch_status_L1": "fail",
+    "gold_patch_status_L2": "fail",
+    "primary_reason": "L2_AUG_TESTS_FAIL",
+    "task_id": "psf__requests-1766",
+    "validator_family": "augmented_unit_tests"
+  },
+  {
+    "artifact_bundle": "runs/released/l2_verified_flagship_v1/gold_patch_validation/results_regressionfail/gold_patch__psf__requests-1766__regressionfail",
+    "gold_patch_status_L0": "fail",
+    "gold_patch_status_L1": "fail",
+    "gold_patch_status_L2": "fail",
+    "primary_reason": "L2_REGRESSION_FAIL",
+    "task_id": "psf__requests-1766",
+    "validator_family": "targeted_regression"
+  },
+  {
+    "artifact_bundle": "runs/released/l2_verified_flagship_v1/gold_patch_validation/results_astropy/gold_patch__psf__requests-2317__astropy",
+    "gold_patch_status_L0": "fail",
+    "gold_patch_status_L1": "fail",
+    "gold_patch_status_L2": "fail",
+    "primary_reason": "L2_AUG_TESTS_FAIL",
+    "task_id": "psf__requests-2317",
+    "validator_family": "augmented_unit_tests"
+  },
+  {
+    "artifact_bundle": "runs/released/l2_verified_flagship_v1/gold_patch_validation/results_regressionfail/gold_patch__psf__requests-2317__regressionfail",
+    "gold_patch_status_L0": "fail",
+    "gold_patch_status_L1": "fail",
+    "gold_patch_status_L2": "fail",
+    "primary_reason": "L2_REGRESSION_FAIL",
+    "task_id": "psf__requests-2317",
+    "validator_family": "targeted_regression"
+  },
+  {
+    "artifact_bundle": "runs/released/l2_verified_flagship_v1/gold_patch_validation/results_astropy/gold_patch__pydata__xarray-4075__astropy",
+    "gold_patch_status_L0": "fail",
+    "gold_patch_status_L1": "fail",
+    "gold_patch_status_L2": "fail",
+    "primary_reason": "L2_AUG_TESTS_FAIL",
+    "task_id": "pydata__xarray-4075",
+    "validator_family": "augmented_unit_tests"
+  },
+  {
+    "artifact_bundle": "runs/released/l2_verified_flagship_v1/gold_patch_validation/results_regressionfail/gold_patch__pydata__xarray-4075__regressionfail",
+    "gold_patch_status_L0": "fail",
+    "gold_patch_status_L1": "fail",
+    "gold_patch_status_L2": "fail",
+    "primary_reason": "L2_REGRESSION_FAIL",
+    "task_id": "pydata__xarray-4075",
+    "validator_family": "targeted_regression"
+  },
+  {
+    "artifact_bundle": "runs/released/l2_verified_flagship_v1/gold_patch_validation/results_astropy/gold_patch__pydata__xarray-4629__astropy",
+    "gold_patch_status_L0": "fail",
+    "gold_patch_status_L1": "fail",
+    "gold_patch_status_L2": "fail",
+    "primary_reason": "L2_AUG_TESTS_FAIL",
+    "task_id": "pydata__xarray-4629",
+    "validator_family": "augmented_unit_tests"
+  },
+  {
+    "artifact_bundle": "runs/released/l2_verified_flagship_v1/gold_patch_validation/results_regressionfail/gold_patch__pydata__xarray-4629__regressionfail",
+    "gold_patch_status_L0": "fail",
+    "gold_patch_status_L1": "fail",
+    "gold_patch_status_L2": "fail",
+    "primary_reason": "L2_REGRESSION_FAIL",
+    "task_id": "pydata__xarray-4629",
+    "validator_family": "targeted_regression"
+  },
+  {
+    "artifact_bundle": "runs/released/l2_verified_flagship_v1/gold_patch_validation/results_astropy/gold_patch__pylint-dev__pylint-6903__astropy",
+    "gold_patch_status_L0": "fail",
+    "gold_patch_status_L1": "fail",
+    "gold_patch_status_L2": "fail",
+    "primary_reason": "L2_AUG_TESTS_FAIL",
+    "task_id": "pylint-dev__pylint-6903",
+    "validator_family": "augmented_unit_tests"
+  },
+  {
+    "artifact_bundle": "runs/released/l2_verified_flagship_v1/gold_patch_validation/results_regressionfail/gold_patch__pylint-dev__pylint-6903__regressionfail",
+    "gold_patch_status_L0": "fail",
+    "gold_patch_status_L1": "fail",
+    "gold_patch_status_L2": "fail",
+    "primary_reason": "L2_REGRESSION_FAIL",
+    "task_id": "pylint-dev__pylint-6903",
+    "validator_family": "targeted_regression"
+  },
+  {
+    "artifact_bundle": "runs/released/l2_verified_flagship_v1/gold_patch_validation/results_astropy/gold_patch__pylint-dev__pylint-7277__astropy",
+    "gold_patch_status_L0": "pass",
+    "gold_patch_status_L1": "pass",
+    "gold_patch_status_L2": "fail",
+    "primary_reason": "L2_AUG_TESTS_FAIL",
+    "task_id": "pylint-dev__pylint-7277",
+    "validator_family": "augmented_unit_tests"
+  },
+  {
+    "artifact_bundle": "runs/released/l2_verified_flagship_v1/gold_patch_validation/results_regressionfail/gold_patch__pylint-dev__pylint-7277__regressionfail",
+    "gold_patch_status_L0": "pass",
+    "gold_patch_status_L1": "pass",
+    "gold_patch_status_L2": "fail",
+    "primary_reason": "L2_REGRESSION_FAIL",
+    "task_id": "pylint-dev__pylint-7277",
+    "validator_family": "targeted_regression"
+  },
+  {
+    "artifact_bundle": "runs/released/l2_verified_flagship_v1/gold_patch_validation/results_astropy/gold_patch__sphinx-doc__sphinx-9698__astropy",
+    "gold_patch_status_L0": "pass",
+    "gold_patch_status_L1": "pass",
+    "gold_patch_status_L2": "fail",
+    "primary_reason": "L2_AUG_TESTS_FAIL",
+    "task_id": "sphinx-doc__sphinx-9698",
+    "validator_family": "augmented_unit_tests"
+  },
+  {
+    "artifact_bundle": "runs/released/l2_verified_flagship_v1/gold_patch_validation/results_regressionfail/gold_patch__sphinx-doc__sphinx-9698__regressionfail",
+    "gold_patch_status_L0": "pass",
+    "gold_patch_status_L1": "pass",
+    "gold_patch_status_L2": "fail",
+    "primary_reason": "L2_REGRESSION_FAIL",
+    "task_id": "sphinx-doc__sphinx-9698",
+    "validator_family": "targeted_regression"
+  }
+]

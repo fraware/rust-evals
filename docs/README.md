@@ -14,6 +14,9 @@ are relative to the repository root.
 | [`operational_runbook.md`](operational_runbook.md) | CLI recipes, batch drives, verification, and CI alignment. |
 | [`evidence_tranche_plan.md`](evidence_tranche_plan.md) | NeurIPS evidence tranche execution plan and gate commands. |
 | [`evidence_empirical_status.md`](evidence_empirical_status.md) | Machine-checked gate outcomes (strict vs `--gate-profile release`). |
+| [`l2_selection_protocol.md`](l2_selection_protocol.md) | Pre-specified L2 flagship row construction, exclusions, and validator-family semantics. |
+| [`l2_failure_case_studies.md`](l2_failure_case_studies.md) | Six-case human adjudication sample for L2 failures (augmented-test vs regression). |
+| [`l2_gold_patch_validation.md`](l2_gold_patch_validation.md) | Gold/developer patch replay outcomes under flagship L2 validators and limitation analysis. |
 | [`submission_checklist.md`](submission_checklist.md) | Venue checklist: engineering, reviewer ergonomics, and evidence gates. |
 
 **Removed (superseded):** `docs/proof_subset_sketches.md` — content merged into
