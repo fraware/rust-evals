@@ -48,6 +48,10 @@ runs/ci/**
 # Shared Cargo target cache for local batch recipes (`just verified-batch-optimized`, etc.)
 runs/released/.eval_ladder_cargo_cache/
 
+# Local-only rerun artifacts from gold-patch validation (keep out of commits)
+runs/released/l2_verified_flagship_v1/gold_patch_results/results_astropy/
+runs/released/l2_verified_flagship_v1/gold_patch_results/results_regressionfail/
+
 # Large benchmark assets pulled from public sources
 datasets/cache/
 benchmarks/**/workdir/
