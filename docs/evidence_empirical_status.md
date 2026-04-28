@@ -1,5 +1,13 @@
 # Empirical evidence gates (live status)
 
+**NeurIPS 2026 claim alignment:** L3 and L4 are real surfaces in the evaluator
+but **not** the two central quantitative pillars of the current paper. The
+**primary** sealed evidence is the **Live v2** static-vs-live panel and the
+**L2 verified flagship** batch. **Synthetic** L4 counterexample or
+broken-obligation **replays** are for **regression / mechanism** testing only
+and are **out of scope** for headline pass/fail statistics. This matches
+`README.md` and `docs/proof_subset_policy.md`.
+
 See also the [documentation index](README.md) for how this file fits next to
 the tranche plan and submission checklist.
 
@@ -132,6 +140,43 @@ Current strict metrics (`ok: true`):
 
 Historical release-profile merge remains at:
 `runs/released/l2_verified_merged_v1/results/`.
+
+### Gold-patch validator legitimacy check (W1)
+
+Canonical exports:
+
+- `paper/exports/l2_verified_flagship_v1/gold_patch_validation.csv`
+- `paper/exports/l2_verified_flagship_v1/gold_patch_validation.json`
+- `paper/exports/l2_verified_flagship_v1/gold_patch_validation_summary.json`
+
+Regeneration command:
+
+```bash
+python ci/scripts/l2_flagship_gold_patch_validation.py --jobs 2
+```
+
+Protocol highlights:
+
+- Uses same evaluator config/mode (`configs/evaluator/default.toml`,
+  `tests_plus_regression`) as flagship L2 runs.
+- Uses pre-declared `strengthening_spec_gold_mechanical.json` for headline gold
+  validity so strict-arm artifacts (`regression_forced_fail`, cross-repo
+  Astropy selectors) do not dominate gold outcomes.
+- Defines headline denominator explicitly as rows where gold passes L0 and L1.
+
+Current summary (`gold_patch_validation_summary.json`):
+
+- `L2_AUG_TESTS_FAIL.eligible_L0_L1_pass.gold_pass_rate = 1.0`
+- `L2_REGRESSION_FAIL.eligible_L0_L1_pass.gold_pass_rate = 1.0`
+
+Diagnostic strict replay remains available:
+
+```bash
+python ci/scripts/l2_flagship_gold_patch_validation.py --strict-flagship-specs --jobs 2
+```
+
+Use strict replay for parity debugging only; do not treat its raw pass rate as
+the headline validator-legitimacy estimate.
 
 ## Rust proof-subset (`check_evidence_quality rust-proof`)
 

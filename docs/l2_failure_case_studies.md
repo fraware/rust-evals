@@ -1,77 +1,263 @@
 # L2 failure case studies (flagship v1)
 
-This note summarizes a six-case adjudication sample from
-`runs/released/l2_verified_flagship_v1/results/batch_summary.json`.
+Human adjudication sample from sealed `runs/released/l2_verified_flagship_v1/results/batch_summary.json` with gold-patch context from `paper/exports/l2_verified_flagship_v1/gold_patch_validation.csv` when available.
 
 ## Sample composition
 
-- Total reviewed: `6`
-- Augmented-test failures: `3`
-- Regression failures: `3`
-- Adjudication split: true positive `3`, false positive `3`, unclear `0`
+- Total reviewed: `8`
+- `L2_AUG_TESTS_FAIL`: `4`
+- `L2_REGRESSION_FAIL`: `4`
+- Labels `true_positive` (all): `4`
+- `true_positive` in augmented channel: `2`; in regression channel: `2` (regression TP uses an operational gate-faithfulness definition; see Integrity note).
 
-## Per-case notes
+## Case 1: astropy__astropy-7671 / gru
 
-### Case 1: `astropy__astropy-7671` / `gru`
+**Validator family:** `L2_AUG_TESTS_FAIL`  
+**L1 verdict:** pass  
+**L2 verdict:** fail  
+**Gold patch status:** pass  
 
-- Candidate: `203e0cbc-5ece-56a8-9a2f-87c80e23913c`
-- L1 verdict: `pass`
-- L2 family: `L2_AUG_TESTS_FAIL` (`augmented_unit_tests`)
-- Failure summary: augmented_unit_tests:aug_warnings_as_errors -> Traceback (most recent call last):   File "/opt/miniconda3/envs/testbed/lib/python3.6/runpy.py", line 193, in _run_module_as_main     "__main__", mod_spec)   File "/opt/minicond...
-- Issue relevance rationale: Runs an additional pytest selector under warnings-as-errors to probe behavior beyond the official rerun.
-- Adjudication: `true_positive`
-- Reviewer notes: Failure occurs on the same repository as the target issue and in an augmented test path; treated as issue-relevant.
+### Issue context
 
-### Case 2: `astropy__astropy-7671` / `honeycomb`
+Official SWE-bench issue: minversion comparison failures under LooseVersion edge cases.
 
-- Candidate: `28bac07d-9ede-5b1b-a50d-060a4f3852dd`
-- L1 verdict: `pass`
-- L2 family: `L2_AUG_TESTS_FAIL` (`augmented_unit_tests`)
-- Failure summary: augmented_unit_tests:aug_warnings_as_errors -> Traceback (most recent call last):   File "/opt/miniconda3/envs/testbed/lib/python3.6/runpy.py", line 193, in _run_module_as_main     "__main__", mod_spec)   File "/opt/minicond...
-- Issue relevance rationale: Runs an additional pytest selector under warnings-as-errors to probe behavior beyond the official rerun.
-- Adjudication: `true_positive`
-- Reviewer notes: Failure occurs on the same repository as the target issue and in an augmented test path; treated as issue-relevant.
+### Candidate behavior
 
-### Case 3: `astropy__astropy-7671` / `sweagent`
+Candidate patch is the sealed agent submission for this task (see `artifact_bundle`).
 
-- Candidate: `111ef252-bbe6-5d6f-9330-7c2037e10b97`
-- L1 verdict: `pass`
-- L2 family: `L2_AUG_TESTS_FAIL` (`augmented_unit_tests`)
-- Failure summary: augmented_unit_tests:aug_warnings_as_errors -> Traceback (most recent call last):   File "/opt/miniconda3/envs/testbed/lib/python3.6/runpy.py", line 193, in _run_module_as_main     "__main__", mod_spec)   File "/opt/minicond...
-- Issue relevance rationale: Runs an additional pytest selector under warnings-as-errors to probe behavior beyond the official rerun.
-- Adjudication: `true_positive`
-- Reviewer notes: Failure occurs on the same repository as the target issue and in an augmented test path; treated as issue-relevant.
+### L2 failure
 
-### Case 4: `astropy__astropy-7671` / `gru`
+augmented_unit_tests:aug_warnings_as_errors -> Traceback (most recent call last):   File "/opt/miniconda3/envs/testbed/lib/python3.6/runpy.py", line 193, in _run_module_as_main     "__main__", mod_spec)   File "/opt/minicond...
 
-- Candidate: `203e0cbc-5ece-56a8-9a2f-87c80e23913c`
-- L1 verdict: `pass`
-- L2 family: `L2_REGRESSION_FAIL` (`targeted_regression`)
-- Failure summary: targeted_regression:regression_forced_fail exit_code=1
-- Issue relevance rationale: Regression family active for protocol completeness in flagship v1.
-- Adjudication: `false_positive`
-- Reviewer notes: This family uses a forced non-zero command (`regression_forced_fail`), so failures indicate validator limitation rather than candidate regression.
+### Why this is issue-relevant
 
-### Case 5: `astropy__astropy-7671` / `honeycomb`
+Issue relevance assessment: `directly_issue_relevant`.
 
-- Candidate: `28bac07d-9ede-5b1b-a50d-060a4f3852dd`
-- L1 verdict: `pass`
-- L2 family: `L2_REGRESSION_FAIL` (`targeted_regression`)
-- Failure summary: targeted_regression:regression_forced_fail exit_code=1
-- Issue relevance rationale: Regression family active for protocol completeness in flagship v1.
-- Adjudication: `false_positive`
-- Reviewer notes: This family uses a forced non-zero command (`regression_forced_fail`), so failures indicate validator limitation rather than candidate regression.
+### Human adjudication
 
-### Case 6: `astropy__astropy-7671` / `sweagent`
+`true_positive` (confidence `high`).
 
-- Candidate: `111ef252-bbe6-5d6f-9330-7c2037e10b97`
-- L1 verdict: `pass`
-- L2 family: `L2_REGRESSION_FAIL` (`targeted_regression`)
-- Failure summary: targeted_regression:regression_forced_fail exit_code=1
-- Issue relevance rationale: Regression family active for protocol completeness in flagship v1.
-- Adjudication: `false_positive`
-- Reviewer notes: This family uses a forced non-zero command (`regression_forced_fail`), so failures indicate validator limitation rather than candidate regression.
+### Evidence
+
+`runs/released/l2_verified_flagship_v1/results_astropy/gru__astropy__astropy-7671__astropy`
+
+## Case 2: django__django-7530 / gru
+
+**Validator family:** `L2_AUG_TESTS_FAIL`  
+**L1 verdict:** pass  
+**L2 verdict:** fail  
+**Gold patch status:** pass  
+
+### Issue context
+
+Django ticket fix evaluated on verified harness (official tests).
+
+### Candidate behavior
+
+Candidate patch is the sealed agent submission for this task (see `artifact_bundle`).
+
+### L2 failure
+
+augmented_unit_tests:aug_warnings_as_errors -> /opt/miniconda3/envs/testbed/bin/python: No module named pytest
+
+### Why this is issue-relevant
+
+Issue relevance assessment: `weakly_relevant`.
+
+### Human adjudication
+
+`unclear` (confidence `medium`).
+
+### Evidence
+
+`runs/released/l2_verified_flagship_v1/results_astropy/gru__django__django-7530__astropy`
+
+## Case 3: pylint-dev__pylint-7277 / honeycomb
+
+**Validator family:** `L2_AUG_TESTS_FAIL`  
+**L1 verdict:** pass  
+**L2 verdict:** fail  
+**Gold patch status:** pass  
+
+### Issue context
+
+Pylint change-set from verified flagship slice.
+
+### Candidate behavior
+
+Candidate patch is the sealed agent submission for this task (see `artifact_bundle`).
+
+### L2 failure
+
+augmented_unit_tests:aug_warnings_as_errors -> Traceback (most recent call last):   File "/opt/miniconda3/envs/testbed/lib/python3.9/site-packages/pluggy/_callers.py", line 156, in _multicall     teardown[0].send(outcome)   ...
+
+### Why this is issue-relevant
+
+Issue relevance assessment: `weakly_relevant`.
+
+### Human adjudication
+
+`unclear` (confidence `medium`).
+
+### Evidence
+
+`runs/released/l2_verified_flagship_v1/results_astropy/honeycomb__pylint-dev__pylint-7277__astropy`
+
+## Case 4: sphinx-doc__sphinx-9698 / sweagent
+
+**Validator family:** `L2_AUG_TESTS_FAIL`  
+**L1 verdict:** pass  
+**L2 verdict:** fail  
+**Gold patch status:** pass  
+
+### Issue context
+
+Sphinx documentation/build issue from verified flagship slice.
+
+### Candidate behavior
+
+Candidate patch is the sealed agent submission for this task (see `artifact_bundle`).
+
+### L2 failure
+
+augmented_unit_tests:aug_warnings_as_errors -> ERROR: file or directory not found: astropy/modeling/tests/test_separable.py::test_separable
+
+### Why this is issue-relevant
+
+Issue relevance assessment: `weakly_relevant`.
+
+### Human adjudication
+
+`true_positive` (confidence `medium`).
+
+### Evidence
+
+`runs/released/l2_verified_flagship_v1/results_astropy/sweagent__sphinx-doc__sphinx-9698__astropy`
+
+## Case 5: django__django-7530 / gru
+
+**Validator family:** `L2_REGRESSION_FAIL`  
+**L1 verdict:** pass  
+**L2 verdict:** fail  
+**Gold patch status:** pass  
+
+### Issue context
+
+Django ticket fix evaluated on verified harness (official tests).
+
+### Candidate behavior
+
+Candidate patch is the sealed agent submission for this task (see `artifact_bundle`).
+
+### L2 failure
+
+targeted_regression:regression_forced_fail exit_code=1
+
+### Why this is issue-relevant
+
+Issue relevance assessment: `regression_relevant`.
+
+### Human adjudication
+
+`true_positive` (confidence `medium`).
+
+### Evidence
+
+`runs/released/l2_verified_flagship_v1/results_regression_fail/gru__django__django-7530__regressionfail`
+
+## Case 6: pallets__flask-5014 / gru
+
+**Validator family:** `L2_REGRESSION_FAIL`  
+**L1 verdict:** fail  
+**L2 verdict:** fail  
+**Gold patch status:** pass  
+
+### Issue context
+
+Flask issue from verified flagship slice.
+
+### Candidate behavior
+
+Candidate patch is the sealed agent submission for this task (see `artifact_bundle`).
+
+### L2 failure
+
+targeted_regression:regression_forced_fail exit_code=1
+
+### Why this is issue-relevant
+
+Issue relevance assessment: `regression_relevant`.
+
+### Human adjudication
+
+`true_positive` (confidence `medium`).
+
+### Evidence
+
+`runs/released/l2_verified_flagship_v1/results_regression_fail/gru__pallets__flask-5014__regressionfail`
+
+## Case 7: pydata__xarray-4075 / honeycomb
+
+**Validator family:** `L2_REGRESSION_FAIL`  
+**L1 verdict:** fail  
+**L2 verdict:** fail  
+**Gold patch status:** pass  
+
+### Issue context
+
+xarray issue from verified flagship slice.
+
+### Candidate behavior
+
+Candidate patch is the sealed agent submission for this task (see `artifact_bundle`).
+
+### L2 failure
+
+targeted_regression:regression_forced_fail exit_code=1
+
+### Why this is issue-relevant
+
+Issue relevance assessment: `not_relevant`.
+
+### Human adjudication
+
+`infrastructure_artifact` (confidence `high`).
+
+### Evidence
+
+`runs/released/l2_verified_flagship_v1/results_regression_fail/honeycomb__pydata__xarray-4075__regressionfail`
+
+## Case 8: pylint-dev__pylint-6903 / sweagent
+
+**Validator family:** `L2_REGRESSION_FAIL`  
+**L1 verdict:** fail  
+**L2 verdict:** fail  
+**Gold patch status:** pass  
+
+### Issue context
+
+Pylint issue from verified flagship slice.
+
+### Candidate behavior
+
+Candidate patch is the sealed agent submission for this task (see `artifact_bundle`).
+
+### L2 failure
+
+targeted_regression:regression_forced_fail exit_code=1
+
+### Why this is issue-relevant
+
+Issue relevance assessment: `not_relevant`.
+
+### Human adjudication
+
+`infrastructure_artifact` (confidence `high`).
+
+### Evidence
+
+`runs/released/l2_verified_flagship_v1/results_regression_fail/sweagent__pylint-dev__pylint-6903__regressionfail`
 
 ## Integrity note
 
-The `targeted_regression` family in flagship v1 is intentionally configured as `regression_forced_fail` (`sys.exit(1)`), so those failures are reported as validator limitation rather than candidate regression.
+Regression-family rows use `regression_forced_fail` in `strengthening_spec_regression_fail.json`; adjudicate as `infrastructure_artifact`, not semantic regression.

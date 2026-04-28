@@ -14,6 +14,18 @@ semantically justified than official benchmark scoring.
 > resolution; a trusted evaluator and a curated proof-carrying subset reveal
 > the size and structure of that overstatement.
 
+**NeurIPS 2026 Evidence and Deployment framing:** the submission’s **primary empirical
+evidence** is the **Live static-vs-live panel** and the **L2 verified flagship
+strengthening slice** (see `just reproduce-paper-tables`). **L3** and **L4** are
+**implemented** ladder levels and important for the artifact story, but they are
+**not** treated as headline numeric results in the current sealed runs: L3
+exposes process assumptions where trace data exist; L4 is a semantic extension
+on the curated Rust proof subset. The **sealed** real proof batch does not
+currently produce clean L3-pass / L4-fail separations; **synthetic
+broken-obligation** replays are **mechanism tests only** and are **excluded**
+from headline quantitative claims. See `docs/evidence_empirical_status.md` and
+`docs/proof_subset_policy.md`.
+
 ## The evaluation ladder
 
 | Level | Name                | Definition                                                             |

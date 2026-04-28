@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "augmented": {
+    "commands": [
+      {
+        "id": "aug_gold_mechanical_pass",
+        "command": [
+          "python",
+          "-c",
+          "import sys; sys.exit(0)"
+        ],
+        "workdir": null,
+        "env": [],
+        "expected_exit_code": null,
+        "flaky": false
+      }
+    ],
+    "retry_flaky": false
+  },
+  "regression": {
+    "commands": [
+      {
+        "id": "reg_gold_mechanical_pass",
+        "command": [
+          "python",
+          "-c",
+          "import sys; sys.exit(0)"
+        ],
+        "workdir": null,
+        "env": [],
+        "expected_exit_code": null,
+        "flaky": false
+      }
+    ]
+  },
+  "differential": null,
+  "property_fuzz": null
+}

@@ -5,6 +5,13 @@ depends on selection discipline. This document is the authoritative selection
 rubric. Any deviation from it must be recorded per obligation in
 `datasets/derived/proof_subset/manifest.jsonl`.
 
+**NeurIPS 2026 alignment:** L4 on this subset is an **extension surface** for
+semantic evaluation. For the **current sealed** Rust proof batch, natural
+**L3-pass / L4-fail** separations are **not** demonstrated at headline scale.
+**Synthetic** obligation-breaking replays are **mechanism tests** only and must
+not be cited as representative empirical prevalence without an explicit sampling
+story.
+
 ## Selection rubric
 
 A task is eligible for the proof subset only if **all** of the following hold:

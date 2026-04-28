@@ -167,8 +167,4 @@ prewarm-panel-strict panel parallel='4':
 # ---------------------------------------------------------------------------
 
 reproduce-paper-tables: eval-ladder-cli-release
-    {{eval-ladder-bin}} analyze paper-export --run-dir runs/released/live_panel_v2/results_opt --out-dir paper/exports/live_panel_v2_postbatch
-    {{eval-ladder-bin}} analyze paper-export --run-dir runs/released/l2_verified_flagship_v1/results --out-dir paper/exports/l2_verified_flagship_v1
-    python ci/scripts/export_live_panel_v2_appendix.py
-    python ci/scripts/export_l2_flagship_reviews.py
-    python ci/scripts/analyze_strict_feasibility.py --out paper/exports/strict_feasibility_report.json
+    python packages/python/scripts/reproduce_paper_tables.py
