@@ -14,17 +14,16 @@ semantically justified than official benchmark scoring.
 > resolution; a trusted evaluator and a curated proof-carrying subset reveal
 > the size and structure of that overstatement.
 
-**NeurIPS 2026 Evidence and Deployment framing:** the submission’s **primary empirical
-evidence** is the **Live static-vs-live panel** and the **L2 verified flagship
+**NeurIPS 2026 evidence and deployment framing:** the submission’s **primary empirical
+evidence** is the **Live static-vs-live panel** and the **L2 primary evaluation cohort
 strengthening slice** (see `just reproduce-paper-tables`). **L3** and **L4** are
 **implemented** ladder levels and important for the artifact story, but they are
-**not** treated as headline numeric results in the current sealed runs: L3
-exposes process assumptions where trace data exist; L4 is a semantic extension
-on the curated Rust proof subset. The **sealed** real proof batch does not
-currently produce clean L3-pass / L4-fail separations; **synthetic
-broken-obligation** replays are **mechanism tests only** and are **excluded**
-from headline quantitative claims. See `docs/evidence_empirical_status.md` and
-`docs/proof_subset_policy.md`.
+**not** treated as headline numeric results in the current frozen reproducibility snapshots:
+L3 exposes process assumptions where trace data exist; L4 is a semantic extension
+on the curated Rust proof subset. The real proof batch does not currently produce
+clean L3-pass / L4-fail separations; **synthetic broken-obligation** replays are
+**mechanism tests only** and are **excluded** from headline quantitative claims.
+See `docs/evidence_empirical_status.md` and `docs/proof_subset_policy.md`.
 
 ## The evaluation ladder
 
@@ -108,7 +107,7 @@ cargo run --bin eval-ladder -- schema validate
 
 # Run the reproducibility demo: generates a synthetic panel, drives
 # the full batch pipeline, emits paper-export tables, and re-verifies
-# every sealed bundle. No upstream data, no network, no containers.
+# every frozen reproducibility bundle. No upstream data, no network, no containers.
 # Completes in about a second on a developer laptop.
 cargo run --bin eval-ladder -- demo run --out runs/demo --tasks 2
 ```
@@ -163,13 +162,24 @@ eval-ladder verify run-dir --run-dir runs/released/agent_panel_v1/results/
 eval-ladder demo run --out runs/demo --tasks 2
 ```
 
+## Public terminology
+
+For consistent public-facing language, see `docs/public_terminology.md`.
+Core mappings used across this repository:
+
+- `flagship` -> `primary evaluation cohort`
+- `sealed` -> `frozen reproducibility snapshot`
+- `strict gate` -> `publication-threshold gate`
+- `release profile` -> `repository-release profile`
+- `gold patch` -> `reference patch`
+
 ## Released run status
 
 The repository ships several release-track run directories under
 `runs/released/`:
 
-- `runs/released/agent_panel_v3_r1/`: NeurIPS **Verified flagship** remediation
-  panel (51 preflight-clean candidates x 3 agents); canonical sealed summary under
+- `runs/released/agent_panel_v3_r1/`: NeurIPS **Verified primary evaluation cohort** remediation
+  panel (51 preflight-clean candidates x 3 agents); canonical frozen summary under
   `results_opt/`; gates and exports documented in `docs/evidence_empirical_status.md`
   and `runs/released/agent_panel_v3_r1/README.md`.
 - `runs/released/agent_panel_verified_flagship_v1/`: headline cleanup slice (33
@@ -177,7 +187,7 @@ The repository ships several release-track run directories under
   README and `just verified-flagship-batch-optimized-prewarmed`.
 - `runs/released/l2_verified_merged_v1/`: deduplicated merge of small L2 slices
   (`ci/scripts/merge_l2_batch_summaries.py`) for release-profile gating only.
-- `runs/released/l2_verified_flagship_v1/`: strict-pass headline L2 expansion
+- `runs/released/l2_verified_flagship_v1/`: publication-threshold-pass headline L2 expansion
   (66 merged entries from two strengthening families) with canonical merged
   summary in `results/` and reproducibility commands in the directory README.
 - `runs/released/agent_panel_v1/`: panel artifacts (candidates, patches,
@@ -193,7 +203,7 @@ The repository ships several release-track run directories under
 - `runs/released/l2_verified_v1/`: five-task L2 strengthening decomposition
   slice (see `runs/released/l2_verified_v1/README.md`).
 - `runs/released/l2_verified_v2/`: two-task Docker-backed run with **L0/L1
-  pass and L2 fail** on golden candidates; sealed `results/`, `verify_report`,
+  pass and L2 fail** on golden candidates; frozen `results/`, `verify_report`,
   and `paper/exports/l2_verified_v2/` (see `runs/released/l2_verified_v2/README.md`).
 - `runs/released/live_panel_v1/`: 39-entry static-vs-live panel (8 Live + 5
   Verified anchors, 3 agents), `L0,L1` batch, `verify run-dir`, and paper
@@ -237,7 +247,7 @@ submission checklist is maintained at
 [`docs/submission_checklist.md`](docs/submission_checklist.md). Two release
 modes are planned:
 
-1. **Code-only audit submission.** Safest; audits only existing public datasets.
+1. **Code-only audit submission.** Audits only existing public datasets.
 2. **Code + new proof-carrying subset.** Triggers dataset hosting and
    Croissant metadata requirements (see
    [`datasets/derived/proof_subset`](datasets/derived/proof_subset)).
@@ -246,3 +256,5 @@ modes are planned:
 
 Licensed under either Apache-2.0 or MIT at your option. See
 [`LICENSE-APACHE`](LICENSE-APACHE) and [`LICENSE-MIT`](LICENSE-MIT).
+Third-party attribution and notice files are documented in
+[`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md) and [`NOTICE`](NOTICE).

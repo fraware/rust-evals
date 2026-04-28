@@ -87,7 +87,7 @@ The schema is captured in `schemas/proof_obligation.schema.json`.
 
 ## Lean sketch fidelity (obligation table)
 
-The flagship obligation **`clap-rs__clap_5873`**
+The primary semantic obligation **`clap-rs__clap_5873`**
 (`EvalLadder/Obligations/ClapRs/Clap5873.lean`) carries a small-step semantic model
 of the cited `did_you_mean` recovery path and is intended to be read alongside
 the merged PR hunk on `Parser::parse_long_arg`.

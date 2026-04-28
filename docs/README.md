@@ -12,12 +12,19 @@ are relative to the repository root.
 | [`benchmark_support.md`](benchmark_support.md) | Verified, Live, and Rust benchmark adapters and ingest. |
 | [`proof_subset_policy.md`](proof_subset_policy.md) | Proof-subset selection rubric, governance, **Lean sketch fidelity** obligation table, and batching notes. |
 | [`operational_runbook.md`](operational_runbook.md) | CLI recipes, batch drives, verification, and CI alignment. |
-| [`evidence_tranche_plan.md`](evidence_tranche_plan.md) | NeurIPS evidence tranche execution plan and gate commands. |
-| [`evidence_empirical_status.md`](evidence_empirical_status.md) | Machine-checked gate outcomes (strict vs `--gate-profile release`). |
-| [`l2_selection_protocol.md`](l2_selection_protocol.md) | Pre-specified L2 flagship row construction, exclusions, and validator-family semantics. |
+| [`public_terminology.md`](public_terminology.md) | Public-facing terminology and naming policy for documentation. |
+| [`getting_started.md`](getting_started.md) | First-run setup, demo execution, and table regeneration path. |
+| [`troubleshooting.md`](troubleshooting.md) | Common setup, runtime, and reproducibility failures with fixes. |
+| [`cli_reference.md`](cli_reference.md) | Command reference for core `eval-ladder` workflows. |
+| [`evidence_tranche_plan.md`](evidence_tranche_plan.md) | Evidence tranche execution plan and gate commands. |
+| [`evidence_empirical_status.md`](evidence_empirical_status.md) | Machine-checked gate outcomes (publication-threshold vs `--gate-profile release`). |
+| [`l2_selection_protocol.md`](l2_selection_protocol.md) | Pre-specified L2 primary-cohort row construction, exclusions, and validator-family semantics. |
 | [`l2_failure_case_studies.md`](l2_failure_case_studies.md) | Six-case human adjudication sample for L2 failures (augmented-test vs regression). |
-| [`l2_gold_patch_validation.md`](l2_gold_patch_validation.md) | Gold/developer patch replay outcomes under flagship L2 validators and limitation analysis. |
-| [`submission_checklist.md`](submission_checklist.md) | Venue checklist: engineering, reviewer ergonomics, and evidence gates. |
+| [`l2_gold_patch_validation.md`](l2_gold_patch_validation.md) | Gold/developer patch replay outcomes under primary-cohort L2 validators and limitation analysis. |
+| [`submission_checklist.md`](submission_checklist.md) | Submission checklist, engineering readiness, and evidence gates. |
 
-**Removed (superseded):** `docs/proof_subset_sketches.md` — content merged into
-[`proof_subset_policy.md`](proof_subset_policy.md) under **Lean sketch fidelity (obligation table)** (2026-04-26).
+## Start here
+
+1. Read [`getting_started.md`](getting_started.md) for local setup and a first successful run.
+2. Use [`operational_runbook.md`](operational_runbook.md) for production-like evaluation batches.
+3. Use [`artifact_spec.md`](artifact_spec.md) and [`evaluator_card_template.md`](evaluator_card_template.md) when interpreting released run outputs.

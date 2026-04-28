@@ -7,6 +7,11 @@ semantic validator. Manifest entries in `../manifest.jsonl` MUST conform to
 See `docs/proof_subset_policy.md` for the selection rubric, eligible task
 categories, and the obligation template.
 
+Public dataset metadata for release:
+
+- Croissant metadata: `datasets/derived/proof_subset/croissant/metadata.json`
+- Datasheet: `datasets/derived/proof_subset/docs/datasheet.md`
+
 The production `manifest.jsonl` currently holds **eight** curated
 obligations over distinct `task_id` values (one row per task; see
 `eval_ladder_lean::ObligationManifest`). The flagship entry is:

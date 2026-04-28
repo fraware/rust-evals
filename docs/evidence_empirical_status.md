@@ -2,8 +2,8 @@
 
 **NeurIPS 2026 claim alignment:** L3 and L4 are real surfaces in the evaluator
 but **not** the two central quantitative pillars of the current paper. The
-**primary** sealed evidence is the **Live v2** static-vs-live panel and the
-**L2 verified flagship** batch. **Synthetic** L4 counterexample or
+**primary** frozen evidence is the **Live v2** static-vs-live panel and the
+**L2 primary evaluation cohort** batch. **Synthetic** L4 counterexample or
 broken-obligation **replays** are for **regression / mechanism** testing only
 and are **out of scope** for headline pass/fail statistics. This matches
 `README.md` and `docs/proof_subset_policy.md`.
@@ -14,28 +14,28 @@ the tranche plan and submission checklist.
 This document records **machine-checked** outcomes for the NeurIPS evidence
 tranche gates. Two CLI regimes exist:
 
-- **Strict (default):** `check_evidence_quality` without `--gate-profile` uses
+- **Publication-threshold (default):** `check_evidence_quality` without `--gate-profile` uses
   headline NeurIPS thresholds from `docs/evidence_tranche_plan.md`.
 - **Release profile:** `--gate-profile release` relaxes thresholds so the
-  **currently sealed** repository bundles can exit zero while remediation
-  batches are replanned. Strict runs remain the scientific bar; release is a
-  Mode 1 repository-closure bar only.
+  **currently frozen** repository bundles can exit zero while remediation
+  batches are replanned. Publication-threshold runs remain the scientific bar; release is a
+  repository-closure bar only.
 
-## Phase 0 baseline (strict defaults, 2026-04-26)
+## Phase 0 baseline (publication-threshold defaults, 2026-04-26)
 
 Commands below use the repository root. All exited **2** except where noted.
 
 | Tranche | Command | Outcome |
 |--------|---------|--------|
-| Verified prefclean | `python ci/scripts/check_evidence_quality.py verified --run-dir runs/released/agent_panel_v3_r1/results_verified_prefclean` | Fail: harness rate, distinct agent vectors |
-| Verified opt | same with `results_opt` | Same metrics as prefclean (51 candidates) |
+| Verified preflight-clean | `python ci/scripts/check_evidence_quality.py verified --run-dir runs/released/agent_panel_v3_r1/results_verified_prefclean` | Fail: harness rate, distinct agent vectors |
+| Verified optimized | same with `results_opt` | Same metrics as preflight-clean (51 candidates) |
 | Live export | `python ci/scripts/check_evidence_quality.py live --paper-export-dir paper/exports/live_panel_v1_postbatch` | Fail: tied live rates, tau `0.0` |
 | L2 thin slice | `python ci/scripts/check_evidence_quality.py l2 --run-dir runs/released/l2_verified_v2/results` | Fail: counts below defaults |
 | Rust seal strict | `python ci/scripts/check_evidence_quality.py rust-proof --run-dir runs/released/rust_proof_subset_v1/results_seal` | Fail: semantic minima (`l3-pass/l4-fail`, all-level pass) |
 
 **Bundle integrity:** `eval-ladder verify run-dir --run-dir runs/released/agent_panel_v3_r1/results_opt` → `51 ok / 0 invalid`.
 
-## Verified flagship (`check_evidence_quality verified`)
+## Verified primary evaluation cohort (`check_evidence_quality verified`)
 
 **Headline cleanup panel (materialised, awaiting fresh `results_opt`):**
 
@@ -44,13 +44,13 @@ Commands below use the repository root. All exited **2** except where noted.
   meant to be evaluated with `configs/evaluator/verified_headline.toml` (deny-only
   L3 edit scope). See that directory’s README and `just verified-flagship-batch-optimized-prewarmed`.
 
-**Canonical run directory (optimized batch, identical summary to prefclean):**
+**Canonical run directory (optimized batch, identical summary to preflight-clean):**
 
 - `runs/released/agent_panel_v3_r1/results_opt/`
 - Archived summary copy: `runs/released/agent_panel_v3_r1/evidence/batch_summary_results_opt_v1.json`
 - Panel input: `runs/released/agent_panel_v3_r1/panel_preflight_clean.jsonl`
 
-**Strict gate (headline science thresholds):**
+**Publication-threshold gate (headline science thresholds):**
 
 ```bash
 python ci/scripts/check_evidence_quality.py verified \
@@ -86,10 +86,10 @@ Current report: `paper/exports/strict_feasibility_report.json`.
 
 - Public-agent L1-pass inventory from all in-repo summaries yields
   `7` tasks with pass evidence for all three public agents
-  (`gru`, `honeycomb`, `sweagent`).
+  (IDs documented in the run summaries).
 - This implies a current upper bound of `21` rows if taking one candidate per
   task-agent pair, below strict Verified `--min-candidates 30`.
-- Conclusion: strict flagship is currently blocked by candidate/task inventory;
+- Conclusion: the publication-threshold primary evaluation cohort target is currently blocked by candidate/task inventory;
   further progress requires adding new L1-stable task families and/or new
   candidate rows, not additional reruns of the same panel mix.
 
@@ -99,9 +99,9 @@ Current report: `paper/exports/strict_feasibility_report.json`.
 - Canonical export: `paper/exports/live_panel_v2_postbatch/`.
 - `runs/released/live_panel_v2/results_opt` integrity: `verify run-dir` reports
   `31 ok / 0 invalid`.
-- **Strict:** passes on v2 (non-tied live rates and non-zero Kendall tau).
+- **Publication-threshold:** passes on v2 (non-tied live rates and non-zero Kendall tau).
 - **Release:** also passes (strictly negative deltas preserved).
-- Historical strict-failing export from v1 remains at:
+- Historical publication-threshold-failing export from v1 remains at:
   `paper/exports/live_panel_v1_postbatch/`.
 
 ```bash
@@ -119,19 +119,19 @@ python ci/scripts/check_evidence_quality.py live \
 
 ## L2 expansion (`check_evidence_quality l2`)
 
-**Canonical strict-pass run directory:**
+**Canonical publication-threshold-pass run directory:**
 
 - `runs/released/l2_verified_flagship_v1/results/` (merged from
   `results_astropy` + `results_regression_fail`).
 
-**Strict gate (default thresholds):**
+**Publication-threshold gate (default thresholds):**
 
 ```bash
 python ci/scripts/check_evidence_quality.py l2 \
   --run-dir runs/released/l2_verified_flagship_v1/results
 ```
 
-Current strict metrics (`ok: true`):
+Current publication-threshold metrics (`ok: true`):
 
 - `total_entries=66`
 - `l1_passed_from=24`
@@ -158,9 +158,9 @@ python ci/scripts/l2_flagship_gold_patch_validation.py --jobs 2
 Protocol highlights:
 
 - Uses same evaluator config/mode (`configs/evaluator/default.toml`,
-  `tests_plus_regression`) as flagship L2 runs.
-- Uses pre-declared `strengthening_spec_gold_mechanical.json` for headline gold
-  validity so strict-arm artifacts (`regression_forced_fail`, cross-repo
+  `tests_plus_regression`) as primary-cohort L2 runs.
+- Uses pre-declared `strengthening_spec_gold_mechanical.json` for headline reference-patch
+  validity so publication-threshold-arm artifacts (`regression_forced_fail`, cross-repo
   Astropy selectors) do not dominate gold outcomes.
 - Defines headline denominator explicitly as rows where gold passes L0 and L1.
 
@@ -169,13 +169,13 @@ Current summary (`gold_patch_validation_summary.json`):
 - `L2_AUG_TESTS_FAIL.eligible_L0_L1_pass.gold_pass_rate = 1.0`
 - `L2_REGRESSION_FAIL.eligible_L0_L1_pass.gold_pass_rate = 1.0`
 
-Diagnostic strict replay remains available:
+Diagnostic publication-threshold replay remains available:
 
 ```bash
 python ci/scripts/l2_flagship_gold_patch_validation.py --strict-flagship-specs --jobs 2
 ```
 
-Use strict replay for parity debugging only; do not treat its raw pass rate as
+Use this replay for parity debugging only; do not treat its raw pass rate as
 the headline validator-legitimacy estimate.
 
 ## Rust proof-subset (`check_evidence_quality rust-proof`)
@@ -189,7 +189,7 @@ the headline validator-legitimacy estimate.
   with `just rust-proof-batch-seal-paper-semantics` writing to a **separate**
   `--out` directory (do not overwrite `results_seal`).
 
-**Strict semantic target (future batch):**
+**Publication-threshold semantic target (future batch):**
 
 ```bash
 python ci/scripts/check_evidence_quality.py rust-proof \
@@ -201,10 +201,10 @@ python ci/scripts/check_evidence_quality.py rust-proof \
 
 **Offline real-manifest status (no reruns):**
 
-- `paper/exports/strict_feasibility_report.json` confirms the sealed
+- `paper/exports/strict_feasibility_report.json` confirms the frozen
   real-manifest run has `l3_pass_l4_fail=0`, `all_level_pass=0`,
   and `L4_OBLIGATION_MET` on all 8 entries.
-- Therefore strict Rust semantic minima are not currently met on natural
+- Therefore publication-threshold Rust semantic minima are not currently met on natural
   evidence. The synthetic paper-semantics replay remains a mechanism test only,
   not a substitute for headline empirical claims.
 

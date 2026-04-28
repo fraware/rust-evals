@@ -305,7 +305,7 @@ Every artifact the ladder emits is hash-verifiable offline. The
 shipped `eval-ladder verify` command wraps
 `eval_ladder_evidence::verify_bundle` and
 `eval_ladder_traces::TraceReader::read_and_verify` in a single
-reviewer-facing binary with three modes - `bundle`, `trace`,
+operator-facing binary with three modes - `bundle`, `trace`,
 `run-dir` - and emits a canonical `verify_report.json` with stable
 `VERIFY_*` error codes. A single tampered byte in any sealed
 bundle flips exactly one row to `invalid` without polluting the

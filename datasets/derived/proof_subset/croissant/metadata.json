@@ -1,0 +1,17 @@
+{
+  "@context": {
+    "@vocab": "https://mlcommons.org/croissant/"
+  },
+  "@type": "Dataset",
+  "name": "eval-ladder proof subset",
+  "description": "Curated Rust proof-obligation subset used by eval-ladder for L4 semantic evaluation experiments.",
+  "license": "Dual-licensed repository context; dataset entries reference upstream public sources.",
+  "distribution": [
+    {
+      "@type": "FileObject",
+      "name": "manifest",
+      "contentUrl": "datasets/derived/proof_subset/manifest.jsonl",
+      "encodingFormat": "application/jsonl"
+    }
+  ]
+}

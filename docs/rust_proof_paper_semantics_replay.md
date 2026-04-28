@@ -1,6 +1,6 @@
 # Rust proof subset: paper-semantics L4 counterexample replay
 
-The sealed ladder under `runs/released/rust_proof_subset_v1/results_seal/` uses
+The frozen ladder under `runs/released/rust_proof_subset_v1/results_seal/` uses
 the production obligation manifest
 `datasets/derived/proof_subset/manifest.jsonl`, where every row is wired to a
 real `EvalLadder/Obligations/**` module.

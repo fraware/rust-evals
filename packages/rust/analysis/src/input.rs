@@ -157,7 +157,7 @@ fn cumulative_projection(input: &AnalysisInput) -> AnalysisInput {
 
             // Derived headline semantics only affect the pass bit.
             out.rows[idx].status = EvaluationStatus::Fail;
-            out.rows[idx].primary_reason = CUMULATIVE_PREREQUISITE_NOT_MET.to_owned();
+            CUMULATIVE_PREREQUISITE_NOT_MET.clone_into(&mut out.rows[idx].primary_reason);
         }
     }
 

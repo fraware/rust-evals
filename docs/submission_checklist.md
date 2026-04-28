@@ -27,10 +27,10 @@ Choose one mode per submission.
 - [ ] Executable repository at the tagged release commit. Tag pending.
 - [x] Documented CLI with worked examples in `docs/operational_runbook.md`.
 - [x] Evidence bundles for a released panel under `runs/released/`.
-      `runs/released/rust_pilot_v1/results/` is sealed and
+      `runs/released/rust_pilot_v1/results/` is frozen and
       `verify run-dir` clean (`1 ok / 0 invalid`).
 - [x] Paper-ready CSV/JSON exports under `paper/exports/`.
-      `paper/exports/rust_pilot_v1/` is generated from the sealed pilot
+      `paper/exports/rust_pilot_v1/` is generated from the frozen pilot
       run-dir via `analyze paper-export`.
 - [x] `docs/scientific_scope.md` up to date with the claim and scope.
 - [x] Reproducibility fixtures runnable without downloading full benchmarks.
@@ -101,7 +101,7 @@ Choose one mode per submission.
       ``GH_TOKEN``. Local prep (no CI claim): ``paper/exports/release/v0.1.2/artifact_manifest.json``
       from ``write_release_artifact_manifest.py`` without ``--require-all-files``.
 
-## Reviewer ergonomics
+## External reproducibility ergonomics
 
 - [x] README quick-start works on a fresh machine.
 - [x] Runbook walks through a complete batch evaluation (Milestone H
@@ -143,7 +143,7 @@ Choose one mode per submission.
       `ci/scripts/diagnose_batch_summary.py --fail-on-warnings`.
 - [x] Execution playbook for remaining tranche:
       `docs/evidence_tranche_plan.md`.
-- [x] Live empirical gate status, sealed batch notes, and remediation commands:
+- [x] Live empirical gate status, frozen batch notes, and remediation commands:
       `docs/evidence_empirical_status.md` and `runs/released/agent_panel_v3_r1/README.md`.
 - [x] Evidence gate script correctness: `check_evidence_quality verified` counts
       every agent on all-fail panels; `live` mode handles null `live_pass_rate` /
@@ -153,20 +153,20 @@ Choose one mode per submission.
       canonical paths documented in ``docs/evidence_empirical_status.md``
       (``--gate-profile release`` on ``results_opt``, ``paper/exports/live_panel_v1_postbatch``,
       ``runs/released/l2_verified_merged_v1/results``, ``rust_proof_subset_v1/results_seal``).
-- [ ] Verified **strict** flagship gate (default CLI: low harness error,
-      distinct agent vectors). Still failing on the sealed batches; offline
+- [ ] Verified **publication-threshold** primary-cohort gate (default CLI: low harness error,
+      distinct agent vectors). Still failing on the frozen batches; offline
       bound in ``paper/exports/strict_feasibility_report.json`` shows current
-      public-agent L1-pass inventory supports only ``21`` one-candidate rows
+      public agent-source L1-pass inventory supports only ``21`` one-candidate rows
       across shared stable tasks (below strict ``min_candidates=30``).
-- [x] Live **strict** comparative gate (non-tied live ranking and non-zero tau)
+- [x] Live **publication-threshold** comparative gate (non-tied live ranking and non-zero tau)
       passes on ``paper/exports/live_panel_v2_postbatch`` from
       ``runs/released/live_panel_v2/results_opt``.
-- [x] L2 **strict** expansion gate passes on
+- [x] L2 **publication-threshold** expansion gate passes on
       ``runs/released/l2_verified_flagship_v1/results``
       (``l1_passed_from=24``, ``l2_failures=24``, two reason families:
       ``L2_AUG_TESTS_FAIL`` + ``L2_REGRESSION_FAIL``).
-- [ ] Rust proof-subset **strict** semantic gate
+- [ ] Rust proof-subset **publication-threshold** semantic gate
       (``--min-l3-pass-l4-fail 2 --min-all-level-pass 1`` on a full ladder out).
-      Real-manifest sealed output currently has ``l3_pass_l4_fail=0`` and
+      Real-manifest frozen output currently has ``l3_pass_l4_fail=0`` and
       ``all_level_pass=0`` (see ``paper/exports/strict_feasibility_report.json``).
       Release profile matches tier-1 structural semantics on ``results_seal``.

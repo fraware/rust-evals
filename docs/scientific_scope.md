@@ -100,7 +100,7 @@ contract.
 
 ## Current empirical status in-tree
 
-The repository now includes one sealed, verified Rust-native pilot run at
+The repository now includes one frozen, verified Rust-native pilot run at
 `runs/released/rust_pilot_v1/results/` with matching paper exports under
 `paper/exports/rust_pilot_v1/`.
 

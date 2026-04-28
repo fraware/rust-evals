@@ -1,6 +1,6 @@
-# L2 failure case studies (flagship v1)
+# L2 failure case studies (primary evaluation cohort v1)
 
-Human adjudication sample from sealed `runs/released/l2_verified_flagship_v1/results/batch_summary.json` with gold-patch context from `paper/exports/l2_verified_flagship_v1/gold_patch_validation.csv` when available.
+Human adjudication sample from frozen run results at `runs/released/l2_verified_flagship_v1/results/batch_summary.json` with reference-patch context from `paper/exports/l2_verified_flagship_v1/gold_patch_validation.csv` when available.
 
 ## Sample composition
 
@@ -10,7 +10,7 @@ Human adjudication sample from sealed `runs/released/l2_verified_flagship_v1/res
 - Labels `true_positive` (all): `4`
 - `true_positive` in augmented channel: `2`; in regression channel: `2` (regression TP uses an operational gate-faithfulness definition; see Integrity note).
 
-## Case 1: astropy__astropy-7671 / gru
+## Case 1: astropy__astropy-7671 / agent source 1
 
 **Validator family:** `L2_AUG_TESTS_FAIL`  
 **L1 verdict:** pass  
@@ -23,7 +23,7 @@ Official SWE-bench issue: minversion comparison failures under LooseVersion edge
 
 ### Candidate behavior
 
-Candidate patch is the sealed agent submission for this task (see `artifact_bundle`).
+Candidate patch is the frozen agent submission for this task (see `artifact_bundle`).
 
 ### L2 failure
 
@@ -41,7 +41,7 @@ Issue relevance assessment: `directly_issue_relevant`.
 
 `runs/released/l2_verified_flagship_v1/results_astropy/gru__astropy__astropy-7671__astropy`
 
-## Case 2: django__django-7530 / gru
+## Case 2: django__django-7530 / agent source 1
 
 **Validator family:** `L2_AUG_TESTS_FAIL`  
 **L1 verdict:** pass  
@@ -54,7 +54,7 @@ Django ticket fix evaluated on verified harness (official tests).
 
 ### Candidate behavior
 
-Candidate patch is the sealed agent submission for this task (see `artifact_bundle`).
+Candidate patch is the frozen agent submission for this task (see `artifact_bundle`).
 
 ### L2 failure
 
@@ -72,7 +72,7 @@ Issue relevance assessment: `weakly_relevant`.
 
 `runs/released/l2_verified_flagship_v1/results_astropy/gru__django__django-7530__astropy`
 
-## Case 3: pylint-dev__pylint-7277 / honeycomb
+## Case 3: pylint-dev__pylint-7277 / agent source 2
 
 **Validator family:** `L2_AUG_TESTS_FAIL`  
 **L1 verdict:** pass  
@@ -81,11 +81,11 @@ Issue relevance assessment: `weakly_relevant`.
 
 ### Issue context
 
-Pylint change-set from verified flagship slice.
+Pylint change-set from the verified primary-cohort slice.
 
 ### Candidate behavior
 
-Candidate patch is the sealed agent submission for this task (see `artifact_bundle`).
+Candidate patch is the frozen agent submission for this task (see `artifact_bundle`).
 
 ### L2 failure
 
@@ -103,7 +103,7 @@ Issue relevance assessment: `weakly_relevant`.
 
 `runs/released/l2_verified_flagship_v1/results_astropy/honeycomb__pylint-dev__pylint-7277__astropy`
 
-## Case 4: sphinx-doc__sphinx-9698 / sweagent
+## Case 4: sphinx-doc__sphinx-9698 / agent source 3
 
 **Validator family:** `L2_AUG_TESTS_FAIL`  
 **L1 verdict:** pass  
@@ -112,11 +112,11 @@ Issue relevance assessment: `weakly_relevant`.
 
 ### Issue context
 
-Sphinx documentation/build issue from verified flagship slice.
+Sphinx documentation/build issue from the verified primary-cohort slice.
 
 ### Candidate behavior
 
-Candidate patch is the sealed agent submission for this task (see `artifact_bundle`).
+Candidate patch is the frozen agent submission for this task (see `artifact_bundle`).
 
 ### L2 failure
 
@@ -134,7 +134,7 @@ Issue relevance assessment: `weakly_relevant`.
 
 `runs/released/l2_verified_flagship_v1/results_astropy/sweagent__sphinx-doc__sphinx-9698__astropy`
 
-## Case 5: django__django-7530 / gru
+## Case 5: django__django-7530 / agent source 1
 
 **Validator family:** `L2_REGRESSION_FAIL`  
 **L1 verdict:** pass  
@@ -147,7 +147,7 @@ Django ticket fix evaluated on verified harness (official tests).
 
 ### Candidate behavior
 
-Candidate patch is the sealed agent submission for this task (see `artifact_bundle`).
+Candidate patch is the frozen agent submission for this task (see `artifact_bundle`).
 
 ### L2 failure
 
@@ -165,7 +165,7 @@ Issue relevance assessment: `regression_relevant`.
 
 `runs/released/l2_verified_flagship_v1/results_regression_fail/gru__django__django-7530__regressionfail`
 
-## Case 6: pallets__flask-5014 / gru
+## Case 6: pallets__flask-5014 / agent source 1
 
 **Validator family:** `L2_REGRESSION_FAIL`  
 **L1 verdict:** fail  
@@ -174,11 +174,11 @@ Issue relevance assessment: `regression_relevant`.
 
 ### Issue context
 
-Flask issue from verified flagship slice.
+Flask issue from the verified primary-cohort slice.
 
 ### Candidate behavior
 
-Candidate patch is the sealed agent submission for this task (see `artifact_bundle`).
+Candidate patch is the frozen agent submission for this task (see `artifact_bundle`).
 
 ### L2 failure
 
@@ -196,7 +196,7 @@ Issue relevance assessment: `regression_relevant`.
 
 `runs/released/l2_verified_flagship_v1/results_regression_fail/gru__pallets__flask-5014__regressionfail`
 
-## Case 7: pydata__xarray-4075 / honeycomb
+## Case 7: pydata__xarray-4075 / agent source 2
 
 **Validator family:** `L2_REGRESSION_FAIL`  
 **L1 verdict:** fail  
@@ -205,11 +205,11 @@ Issue relevance assessment: `regression_relevant`.
 
 ### Issue context
 
-xarray issue from verified flagship slice.
+xarray issue from the verified primary-cohort slice.
 
 ### Candidate behavior
 
-Candidate patch is the sealed agent submission for this task (see `artifact_bundle`).
+Candidate patch is the frozen agent submission for this task (see `artifact_bundle`).
 
 ### L2 failure
 
@@ -227,7 +227,7 @@ Issue relevance assessment: `not_relevant`.
 
 `runs/released/l2_verified_flagship_v1/results_regression_fail/honeycomb__pydata__xarray-4075__regressionfail`
 
-## Case 8: pylint-dev__pylint-6903 / sweagent
+## Case 8: pylint-dev__pylint-6903 / agent source 3
 
 **Validator family:** `L2_REGRESSION_FAIL`  
 **L1 verdict:** fail  
@@ -236,11 +236,11 @@ Issue relevance assessment: `not_relevant`.
 
 ### Issue context
 
-Pylint issue from verified flagship slice.
+Pylint issue from the verified primary-cohort slice.
 
 ### Candidate behavior
 
-Candidate patch is the sealed agent submission for this task (see `artifact_bundle`).
+Candidate patch is the frozen agent submission for this task (see `artifact_bundle`).
 
 ### L2 failure
 

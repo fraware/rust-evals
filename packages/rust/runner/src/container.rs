@@ -40,7 +40,7 @@ const PRESERVED_ENV_VARS: &[&str] = &["PATH"];
 ///
 /// * `SystemRoot`, `PATHEXT`, `ComSpec`, `windir`, `ProgramFiles`,
 ///   `ProgramFiles(x86)`, `ProgramData` -- baseline Windows process
-///   requirements; CreateProcess and the DLL loader consult several of
+///   requirements; `CreateProcess` and the DLL loader consult several of
 ///   these and will fail mysteriously if they are absent.
 /// * `TEMP`, `TMP` -- rustc, cl.exe, link.exe, and every cargo build
 ///   script expect a writable scratch directory. Without these rustc

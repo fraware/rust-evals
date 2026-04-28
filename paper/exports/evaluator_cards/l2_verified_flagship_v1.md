@@ -13,22 +13,22 @@ Merged results under `runs/released/l2_verified_flagship_v1/results/` (33 base
 
 ## Native benchmark assumptions
 
-Same as Verified flagship L0/L1 replay before strengthening.
+Same as Verified primary evaluation cohort L0/L1 replay before strengthening.
 
 ## Replay environment
 
 Harness workspaces from `runs/released/agent_panel_verified_flagship_v1/` with
-strengthening specs referenced from the flagship README.
+strengthening specs referenced from the primary evaluation cohort README.
 
 ## Strengthened validators
 
 `tests_plus_regression` mode with checked-in specs  
 (`strengthening_spec*.json`). Augmented pytest paths may include warnings-as-errors.
-Regression arm includes **forced-fail** negative control (`regression_forced_fail`).
+Regression arm includes a **negative-control mechanism** (`regression_forced_fail`).
 
 ## Policy assumptions
 
-Inherited from flagship verified configuration unless README states otherwise.
+Inherited from primary evaluation cohort verified configuration unless README states otherwise.
 
 ## Semantic obligations
 

@@ -89,7 +89,7 @@ pub struct BatchArgs {
     /// Optional short timeout used by adaptive mode.
     #[arg(long)]
     pub short_timeout_secs: Option<u64>,
-    /// Adapt per-entry timeout using prior batch_summary reasons in `--out`.
+    /// Adapt per-entry timeout using prior `batch_summary` reasons in `--out`.
     #[arg(long, default_value_t = false)]
     pub adaptive_timeouts: bool,
     /// Reuse existing successful bundles in `--out` when possible.
@@ -104,10 +104,10 @@ pub struct BatchArgs {
     /// L1 strategy (`strict` or `smart_rust_reuse`).
     #[arg(long, default_value = "smart_rust_reuse")]
     pub l1_strategy: String,
-    /// Optional root for shared rust target cache (CARGO_TARGET_DIR).
+    /// Optional root for shared rust target cache (`CARGO_TARGET_DIR`).
     #[arg(long)]
     pub rust_target_cache_root: Option<PathBuf>,
-    /// Reuse duplicate workloads (same repo/base_commit/patch) by copying first bundle.
+    /// Reuse duplicate workloads (same `repo/base_commit/patch`) by copying first bundle.
     #[arg(long, default_value_t = true)]
     pub dedupe_workloads: bool,
 
@@ -345,7 +345,7 @@ fn track_levels(track: &str) -> Result<Vec<EvaluationLevel>, BatchError> {
 }
 
 #[inline]
-fn level_ladder_sort_index(level: &EvaluationLevel) -> u8 {
+fn level_ladder_sort_index(level: EvaluationLevel) -> u8 {
     match level {
         EvaluationLevel::L0Official => 0,
         EvaluationLevel::L1TrustedRerun => 1,
@@ -491,7 +491,7 @@ fn validate_level_flag_combination(args: &BatchArgs) -> Result<Vec<EvaluationLev
     if args.obligations.is_some() && !levels.contains(&L4Semantic) {
         levels.push(L4Semantic);
     }
-    levels.sort_by_key(level_ladder_sort_index);
+    levels.sort_by_key(|level| level_ladder_sort_index(*level));
     levels.dedup();
 
     let wants_l2 = levels.contains(&EvaluationLevel::L2Strengthened);
@@ -650,6 +650,7 @@ fn run_entry_isolated(
     run_entry(entry, out_dir, levels, &ext_refs, &args_override)
 }
 
+#[allow(clippy::too_many_arguments)]
 fn run_pipeline(
     task: &BenchmarkTask,
     candidate: &CandidateResolution,
@@ -965,6 +966,7 @@ fn copy_dir_recursive(src: &Path, dst: &Path) -> Result<()> {
 }
 
 /// Top-level entrypoint: `eval-ladder evaluate batch`.
+#[allow(clippy::cognitive_complexity)]
 pub fn run_batch(args: BatchArgs) -> Result<()> {
     fs::create_dir_all(&args.out)
         .with_context(|| format!("creating batch out dir {}", args.out.display()))?;
@@ -1010,7 +1012,7 @@ pub fn run_batch(args: BatchArgs) -> Result<()> {
 
     let default_short_timeout = args
         .short_timeout_secs
-        .unwrap_or((args.timeout_secs / 6).max(60));
+        .unwrap_or_else(|| (args.timeout_secs / 6).max(60));
     let mut rows: Vec<BatchEntryRow> = Vec::with_capacity(panel.len());
     let mut seen_workloads: HashMap<String, String> = HashMap::new();
     let jobs = args.jobs.max(1);
@@ -1054,7 +1056,7 @@ pub fn run_batch(args: BatchArgs) -> Result<()> {
                                 .or_else(|| rows.iter().find(|r| &r.bundle_name == source_bundle))
                             {
                                 let mut cloned = src_row.clone();
-                                cloned.bundle_name = bundle_name.clone();
+                                cloned.bundle_name.clone_from(&bundle_name);
                                 cloned.entry_id = entry
                                     .entry_id
                                     .clone()

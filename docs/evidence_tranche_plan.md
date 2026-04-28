@@ -3,7 +3,7 @@
 This plan turns the remaining NeurIPS engineering work into objective,
 automated acceptance gates.
 
-## Priority 1 - Verified flagship panel (non-degenerate)
+## Priority 1 - Verified primary evaluation cohort panel (non-degenerate)
 
 Target outcome:
 
@@ -101,7 +101,7 @@ cargo run -p eval-ladder-cli -- evaluate batch \
   --deterministic-clock
 ```
 
-**Remediation track (2026-04-25):** a larger materialized panel and sealed
+**Remediation track (2026-04-25):** a larger materialized panel and frozen
 batch live under ``runs/released/agent_panel_v3_r1/`` (see that directory's
 ``README.md``). To reduce degenerate per-agent pass vectors, filter the panel
 to rows where the task is upstream-resolved for that agent:
@@ -186,7 +186,7 @@ Run quality gate:
 Target gate once a full ladder batch with the right verdict mix exists:
 
 ```bash
-# Replace RUN_DIR with the directory that contains your sealed L0,L1,L3,L4 batch_summary.json.
+# Replace RUN_DIR with the directory that contains your frozen L0,L1,L3,L4 batch_summary.json.
 python ci/scripts/check_evidence_quality.py rust-proof \
   --run-dir RUN_DIR \
   --expected-entries 8 \

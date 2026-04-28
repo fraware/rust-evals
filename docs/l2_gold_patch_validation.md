@@ -1,6 +1,6 @@
-# L2 gold patch validation (flagship v1)
+# L2 reference patch validation (primary evaluation cohort v1)
 
-This protocol defines how upstream developer/gold patches are replayed for L2
+This protocol defines how upstream developer/reference patches are replayed for L2
 validator legitimacy checks without conflating known protocol artifacts with
 patch quality.
 
@@ -11,15 +11,15 @@ patch quality.
   `runs/released/l2_verified_flagship_v1/results/batch_summary.json`.
 - **Evaluator stack held fixed:** `configs/evaluator/default.toml` and
   `--strengthening-mode tests_plus_regression`.
-- **Objective:** test whether gold patches can pass an L2 run under a coherent,
+- **Objective:** test whether reference patches can pass an L2 run under a coherent,
   reproducible strengthening profile; this is a validator legitimacy check, not
-  a replacement for candidate strict-arm outcomes.
+  a replacement for candidate publication-threshold-arm outcomes.
 
 ## Artifacts
 
 - Exports: `paper/exports/l2_verified_flagship_v1/gold_patch_validation.{csv,json}`
 - Summary: `paper/exports/l2_verified_flagship_v1/gold_patch_validation_summary.json`
-- Sealed reruns: `runs/released/l2_verified_flagship_v1/gold_patch_results/`
+- Frozen reproducibility reruns: `runs/released/l2_verified_flagship_v1/gold_patch_results/`
   - `results_astropy/` — batch mapped to **augmented_unit_tests** in exports
   - `results_regressionfail/` — batch mapped to **targeted_regression** in exports
 
@@ -37,9 +37,9 @@ python ci/scripts/l2_flagship_gold_patch_validation.py --strict-flagship-specs -
 
 ## Why two strengthening profiles?
 
-### Strict agent-matched profile (diagnostic)
+### Publication-threshold agent-matched profile (diagnostic)
 
-Sealed agent L2 runs use two distinct strengthening specs:
+Frozen agent L2 runs use two distinct strengthening specs:
 
 - **Aug arm:** `runs/released/l2_verified_astropy_v1/strengthening_spec.json`
   (Astropy-specific pytest selector).
@@ -55,7 +55,7 @@ not a fair validator-validity headline because failure can be induced by design
 Default gold replay uses the pre-declared
 `runs/released/l2_verified_flagship_v1/strengthening_spec_gold_mechanical.json`
 for both replay arms. This keeps the evaluator harness and levels unchanged
-while removing strict-arm artifacts that are orthogonal to gold patch quality.
+while removing publication-threshold-arm artifacts that are orthogonal to reference patch quality.
 
 ## Headline profile (default): `gold_mechanical`
 
@@ -75,7 +75,7 @@ emits:
 
 ### Eligibility and acceptance definition
 
-For reviewer-facing acceptance, define:
+For release acceptance, define:
 
 - `eligible := { rows with gold_patch_status_L0 == pass and gold_patch_status_L1 == pass }`
 - `gold_pass_rate_eligible := eligible rows with gold_patch_status_L2 == pass / |eligible|`
@@ -85,7 +85,7 @@ The tranche acceptance condition is:
 - `gold_pass_rate_eligible >= 0.90`, or
 - explicit documented validator limitation with non-silent handling.
 
-Current sealed export summary reports:
+Current frozen export summary reports:
 
 - `eligible_L0_L1_pass.n_eligible = 4` per family,
 - `eligible_L0_L1_pass.gold_pass_rate = 1.0` per family,
@@ -93,7 +93,7 @@ Current sealed export summary reports:
 
 Rows failing L0/L1 remain in exports with notes and are not silently removed.
 
-## Strict diagnostic profile: `--strict-flagship-specs`
+## Diagnostic profile: `--strict-flagship-specs`
 
 Diagnostic command:
 
@@ -101,7 +101,7 @@ Diagnostic command:
 python ci/scripts/l2_flagship_gold_patch_validation.py --strict-flagship-specs --jobs 2
 ```
 
-This reuses the exact strict-arm strengthening specs used in candidate runs.
+This reuses the exact publication-threshold-arm strengthening specs used in candidate runs.
 Interpret low gold L2 pass rates under this mode as expected protocol behavior
 (especially for `regression_forced_fail`), not as direct evidence that gold
 patches are semantically bad.
@@ -111,6 +111,6 @@ patches are semantically bad.
 - Gold headline validation and strict candidate results answer different
   questions and are both preserved.
 - No rows are silently dropped; exclusions are denominator-defined and explicit.
-- The strict diagnostic mode remains available and reproducible for reviewers.
-- Candidate headline findings (`L1-pass -> L2-fail` in flagship strict arms)
+- The diagnostic mode remains available and reproducible.
+- Candidate headline findings (`L1-pass -> L2-fail` in primary-cohort arms)
   are unchanged by the gold-mechanical profile.

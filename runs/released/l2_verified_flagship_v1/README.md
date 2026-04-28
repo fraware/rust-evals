@@ -1,6 +1,6 @@
 # l2_verified_flagship_v1
 
-Canonical strict-pass L2 expansion batch built from the Verified flagship panel
+Canonical publication-threshold-pass L2 expansion batch built from the Verified primary evaluation cohort panel
 with two strengthening families and deduped merge semantics.
 
 ## Inputs and families
@@ -27,7 +27,7 @@ so merge dedupe keeps both families:
   --strengthening-mode tests_plus_regression \
   --out runs/released/l2_verified_flagship_v1/results_astropy \
   --timeout-secs 5400 --short-timeout-secs 900 --adaptive-timeouts \
-  --resume --jobs 2 --seed-tag l2-flagship-astropy --deterministic-clock
+  --resume --jobs 2 --seed-tag l2-primary evaluation cohort-astropy --deterministic-clock
 
 ./target/release/eval-ladder evaluate batch \
   --levels L0,L1,L2 \
@@ -37,7 +37,7 @@ so merge dedupe keeps both families:
   --strengthening-mode tests_plus_regression \
   --out runs/released/l2_verified_flagship_v1/results_regression_fail \
   --timeout-secs 5400 --short-timeout-secs 900 --adaptive-timeouts \
-  --resume --jobs 2 --seed-tag l2-flagship-regressionfail --deterministic-clock
+  --resume --jobs 2 --seed-tag l2-primary evaluation cohort-regressionfail --deterministic-clock
 ```
 
 Both family runs are sealed as `33 ok / 0 invalid`.

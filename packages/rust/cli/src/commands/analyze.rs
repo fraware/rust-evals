@@ -91,8 +91,8 @@ pub enum CliAnalysisMode {
 impl From<CliAnalysisMode> for AnalysisMode {
     fn from(value: CliAnalysisMode) -> Self {
         match value {
-            CliAnalysisMode::Raw => AnalysisMode::Raw,
-            CliAnalysisMode::Cumulative => AnalysisMode::Cumulative,
+            CliAnalysisMode::Raw => Self::Raw,
+            CliAnalysisMode::Cumulative => Self::Cumulative,
         }
     }
 }
