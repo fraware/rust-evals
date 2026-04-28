@@ -1,0 +1,1 @@
+{"command":["python","-m","pytest","astropy/utils/tests/test_introspection.py::test_minversion"],"engine":"other","image_ref":"swebench/sweb.eval.x86_64.astropy_1776_astropy-7671:latest","l1_strategy":"smart_rust_reuse","patch_apply_outcome_l0":"applied","patch_apply_outcome_l1":"applied","resource_limits":{"wall_timeout":{"nanos":0,"secs":1800}}}
