@@ -29,7 +29,7 @@ python ci/scripts/triage_l1_harness_errors.py \
   --run-dir runs/released/agent_panel_v3/results_verified_v4
 ```
 
-Verified quality gate (NeurIPS tranche):
+Verified quality gate (publication tranche):
 
 ```bash
 python ci/scripts/check_evidence_quality.py verified \

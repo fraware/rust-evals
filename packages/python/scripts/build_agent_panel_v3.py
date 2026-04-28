@@ -2,7 +2,7 @@
 
 This script extends v2 by selecting Verified tasks that have submissions from
 multiple agent families and at least one known upstream resolution. The goal is
-to avoid "all-zero" panels and improve comparative signal for NeurIPS evidence.
+to avoid "all-zero" panels and improve comparative publication evidence signal.
 """
 
 from __future__ import annotations

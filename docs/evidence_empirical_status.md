@@ -1,6 +1,6 @@
 # Empirical evidence gates (live status)
 
-**NeurIPS 2026 claim alignment:** L3 and L4 are real surfaces in the evaluator
+**Claim alignment:** L3 and L4 are real surfaces in the evaluator
 but **not** the two central quantitative pillars of the current paper. The
 **primary** frozen evidence is the **Live v2** static-vs-live panel and the
 **L2 primary evaluation cohort** batch. **Synthetic** L4 counterexample or
@@ -11,11 +11,11 @@ and are **out of scope** for headline pass/fail statistics. This matches
 See also the [documentation index](README.md) for how this file fits next to
 the tranche plan and submission checklist.
 
-This document records **machine-checked** outcomes for the NeurIPS evidence
+This document records **machine-checked** outcomes for the publication evidence
 tranche gates. Two CLI regimes exist:
 
 - **Publication-threshold (default):** `check_evidence_quality` without `--gate-profile` uses
-  headline NeurIPS thresholds from `docs/evidence_tranche_plan.md`.
+  headline publication thresholds from `docs/evidence_tranche_plan.md`.
 - **Release profile:** `--gate-profile release` relaxes thresholds so the
   **currently frozen** repository bundles can exit zero while remediation
   batches are replanned. Publication-threshold runs remain the scientific bar; release is a

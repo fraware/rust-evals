@@ -14,7 +14,7 @@ semantically justified than official benchmark scoring.
 > resolution; a trusted evaluator and a curated proof-carrying subset reveal
 > the size and structure of that overstatement.
 
-**NeurIPS 2026 evidence and deployment framing:** the submission’s **primary empirical
+** Evidence and deployment framing:** the submission’s **primary empirical
 evidence** is the **Live static-vs-live panel** and the **L2 primary evaluation cohort
 strengthening slice** (see `just reproduce-paper-tables`). **L3** and **L4** are
 **implemented** ladder levels and important for the artifact story, but they are
@@ -178,7 +178,7 @@ Core mappings used across this repository:
 The repository ships several release-track run directories under
 `runs/released/`:
 
-- `runs/released/agent_panel_v3_r1/`: NeurIPS **Verified primary evaluation cohort** remediation
+- `runs/released/agent_panel_v3_r1/`: **Verified primary evaluation cohort** remediation
   panel (51 preflight-clean candidates x 3 agents); canonical frozen summary under
   `results_opt/`; gates and exports documented in `docs/evidence_empirical_status.md`
   and `runs/released/agent_panel_v3_r1/README.md`.
@@ -242,7 +242,7 @@ Full references and the mapping from each finding to an evaluator level live in
 
 ## Submission posture
 
-This repository targets the NeurIPS 2026 Evaluation & Datasets track. The
+This repository is venue-agnostic and reusable across conference submissions. The
 submission checklist is maintained at
 [`docs/submission_checklist.md`](docs/submission_checklist.md). Two release
 modes are planned:

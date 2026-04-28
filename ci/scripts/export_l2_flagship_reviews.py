@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Export L2 flagship failure taxonomy and human adjudication sample (NeurIPS)."""
+"""Export L2 flagship failure taxonomy and human adjudication sample (publication-ready)."""
 
 from __future__ import annotations
 

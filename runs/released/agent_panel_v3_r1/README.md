@@ -21,7 +21,7 @@ Deterministic multi-agent Verified panel built with
 
 ## Quality gates (Verified)
 
-**Strict (headline NeurIPS thresholds):**
+**Strict (headline publication thresholds):**
 
 ```bash
 python ci/scripts/check_evidence_quality.py verified \

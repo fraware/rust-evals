@@ -17,7 +17,7 @@ the evaluator is replaced by a trusted, strengthened, policy-aware, and
 > issue resolution; a trusted evaluator and a curated proof-carrying subset
 > reveal the size and structure of that overstatement.
 
-## Scope in the NeurIPS 2026 Evaluation & Datasets track
+## Scope for evaluator and dataset publication venues
 
 The Evaluation & Datasets track explicitly welcomes:
 

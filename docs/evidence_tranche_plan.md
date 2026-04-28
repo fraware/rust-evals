@@ -1,6 +1,6 @@
 # Evidence Tranche Execution Plan
 
-This plan turns the remaining NeurIPS engineering work into objective,
+This plan turns the remaining publication engineering work into objective,
 automated acceptance gates.
 
 ## Priority 1 - Verified primary evaluation cohort panel (non-degenerate)
@@ -13,7 +13,7 @@ Target outcome:
 - L1 harness errors below 10% (target below 5%),
 - L3 failures not dominated by one avoidable packaging artifact.
 
-Run quality gate (strict defaults — headline NeurIPS bar):
+Run quality gate (strict defaults — headline publication bar):
 
 ```bash
 python ci/scripts/check_evidence_quality.py verified \

@@ -457,7 +457,7 @@ eval-ladder analyze paper-export --run-dir <run_dir> --out-dir <out_dir>
 eval-ladder analyze paper-export --run-dir <run_dir> --out-dir <out_dir> --analysis-mode raw
 ```
 
-Publication gate commands for the NeurIPS evidence tranches (strict vs
+Publication gate commands for the evidence tranches (strict vs
 `--gate-profile release`) are centralized in
 `docs/evidence_empirical_status.md`.
 

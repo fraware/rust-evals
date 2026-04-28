@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Feasibility and Rust proof frontier TeX for the NeurIPS paper bundle."""
+"""Feasibility and Rust proof frontier TeX for the paper bundle."""
 
 from __future__ import annotations
 

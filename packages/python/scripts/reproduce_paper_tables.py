@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Canonical NeurIPS paper export pipeline: regenerate CSV/JSON/TEX under paper/."""
+"""Canonical paper export pipeline: regenerate CSV/JSON/TEX under paper/."""
 
 from __future__ import annotations
 

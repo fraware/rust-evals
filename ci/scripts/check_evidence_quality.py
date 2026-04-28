@@ -2,7 +2,7 @@
 """Quality gates for release evidence tranches.
 
 This script enforces objective acceptance thresholds for the empirical
-tranche described in the NeurIPS execution plan (Verified, Live, L2,
+tranche described in the publication execution plan (Verified, Live, L2,
 Rust proof-subset). It returns non-zero when any configured gate fails.
 """
 
@@ -367,14 +367,14 @@ def _apply_release_profile(args: argparse.Namespace) -> None:
 
 def _build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(
-        description="Quality gates for NeurIPS evidence tranches."
+        description="Quality gates for publication evidence tranches."
     )
     p.add_argument(
         "--gate-profile",
         choices=("strict", "release"),
         default="strict",
         help=(
-            "strict: NeurIPS headline defaults. release: thresholds aligned with "
+            "strict: publication headline defaults. release: thresholds aligned with "
             "currently sealed bundles (see docs/evidence_empirical_status.md)."
         ),
     )
