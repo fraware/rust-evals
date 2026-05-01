@@ -26,7 +26,10 @@ The review sample is **diagnostic** and **single-reviewer**; it is **not** used 
 - Valid stress-control reversal: `2` regression-control cases (validator behaved according to its declared Evaluator Card; `regression_forced_fail` as designed)
 - Unclear or infrastructure artifact: `4` cases
 
-Do **not** describe forced-fail regression rows as confirmations of natural product regression on the ticket. Use **protocol_control_reversal** / **stress_control_reversal** when referring to score reversals on that arm, or **valid stress-control reversal** when the outcome matches the predeclared control specification.
+Do **not** describe forced-fail regression rows as confirmations of natural product regression on
+the ticket. Use **protocol_control_reversal** / **stress_control_reversal** when referring to
+score reversals on that arm, or **valid stress-control reversal** when the outcome matches the
+predeclared control specification.
 
 ## Case 1: astropy__astropy-7671 / gru
 
@@ -45,7 +48,14 @@ Candidate patch is the sealed agent submission for this task (see `artifact_bund
 
 ### L2 failure
 
-augmented_unit_tests:aug_warnings_as_errors -> Traceback (most recent call last):   File "/opt/miniconda3/envs/testbed/lib/python3.6/runpy.py", line 193, in _run_module_as_main     "__main__", mod_spec)   File "/opt/minicond...
+Abbreviated excerpt (full traceback in sealed bundle `stderr.log`):
+
+```text
+augmented_unit_tests:aug_warnings_as_errors ->
+Traceback (most recent call last):
+  File ".../runpy.py", line 193, in _run_module_as_main
+  ...
+```
 
 ### Why this is issue-relevant
 
@@ -76,7 +86,10 @@ Candidate patch is the sealed agent submission for this task (see `artifact_bund
 
 ### L2 failure
 
-augmented_unit_tests:aug_warnings_as_errors -> /opt/miniconda3/envs/testbed/bin/python: No module named pytest
+```text
+augmented_unit_tests:aug_warnings_as_errors ->
+/opt/miniconda3/envs/testbed/bin/python: No module named pytest
+```
 
 ### Why this is issue-relevant
 
@@ -107,7 +120,14 @@ Candidate patch is the sealed agent submission for this task (see `artifact_bund
 
 ### L2 failure
 
-augmented_unit_tests:aug_warnings_as_errors -> Traceback (most recent call last):   File "/opt/miniconda3/envs/testbed/lib/python3.9/site-packages/pluggy/_callers.py", line 156, in _multicall     teardown[0].send(outcome)   ...
+Abbreviated excerpt (full traceback in sealed bundle `stderr.log`):
+
+```text
+augmented_unit_tests:aug_warnings_as_errors ->
+Traceback (most recent call last):
+  File ".../pluggy/_callers.py", line 156, in _multicall
+  ...
+```
 
 ### Why this is issue-relevant
 
@@ -138,7 +158,11 @@ Candidate patch is the sealed agent submission for this task (see `artifact_bund
 
 ### L2 failure
 
-augmented_unit_tests:aug_warnings_as_errors -> ERROR: file or directory not found: astropy/modeling/tests/test_separable.py::test_separable
+```text
+augmented_unit_tests:aug_warnings_as_errors ->
+ERROR: file or directory not found:
+astropy/modeling/tests/test_separable.py::test_separable
+```
 
 ### Why this is issue-relevant
 
@@ -278,4 +302,7 @@ Issue relevance assessment: `not_relevant`.
 
 ## Protocol note (regression arm)
 
-Regression-family rows use `regression_forced_fail` in `strengthening_spec_regression_fail.json`. Interpret them through `docs/CLAIM_LOCK_NEURIPS2026.md` and the regression Evaluator Card (protocol-control / stress-control evidence).
+Regression-family rows use `regression_forced_fail` in
+`strengthening_spec_regression_fail.json`. Interpret them through
+`docs/CLAIM_LOCK_NEURIPS2026.md` and the regression Evaluator Card (protocol-control /
+stress-control evidence).

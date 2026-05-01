@@ -43,7 +43,11 @@ eval-ladder analyze paper-export --run-dir <run_dir> --out-dir <export_dir>
 
 ```bash
 eval-ladder demo run --out runs/demo --tasks 2
+eval-ladder verify run-dir --run-dir runs/demo/bundles
 ```
+
+Bundles are written under `<out>/bundles` (here `runs/demo/bundles`). Verify that directory
+after a demo run.
 
 ## Release checks
 

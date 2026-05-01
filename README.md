@@ -141,6 +141,13 @@ eval-ladder analyze paper-export \
 eval-ladder verify run-dir --run-dir runs/released/live_panel_v2/results_opt
 ```
 
+### Older tutorial panels
+
+Smaller frozen panels (for example `runs/released/agent_panel_v1/`) remain in-tree for
+regression tests and long-form examples in `docs/operational_runbook.md`. For **Verified
+flagship**, **batch optimization**, and **Rust proof** recipes, follow Milestone H there rather
+than assuming `agent_panel_v1` paths.
+
 ## Repository map
 
 ```text

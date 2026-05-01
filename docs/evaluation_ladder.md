@@ -258,6 +258,11 @@ Two shipping surfaces:
 Driving the entire ladder across a panel of candidates is
 `eval-ladder evaluate batch`:
 
+The paths below use **`agent_panel_v1`** as a compact **CLI illustration** (small frozen
+panel). NeurIPS headline surfaces and frozen paths are listed in `README.md` and
+`docs/submission_checklist.md` (Live v2, L2 flagship, Rust proof seal, and cohort-specific
+Verified directories).
+
 ```bash
 eval-ladder evaluate batch \
   --input runs/released/agent_panel_v1/panel.jsonl \
