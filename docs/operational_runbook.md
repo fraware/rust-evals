@@ -543,8 +543,9 @@ For one-off invocations you can still use
 
 - **`just verified-batch-optimized-prewarmed <panel.jsonl> <out_dir> [jobs] [cache] [prewarm_parallel]`** — pull images for that panel, then Verified `L0,L1,L3` batch (recommended default for wall clock).
 - `just verified-batch-optimized <panel.jsonl> <out_dir> [jobs] [cache]` — same batch without a preceding pull (use if images are already local).
-- **`just live-batch-optimized-prewarmed <out_dir> [jobs] [prewarm_parallel]`** — prewarm `runs/released/live_panel_v1/panel.jsonl`, then Live batch.
-- `just live-batch-optimized <out_dir> [jobs]`
+- **`just live-batch-v2-optimized-prewarmed <out_dir> [jobs] [prewarm_parallel]`** — prewarm `runs/released/live_panel_v2/panel.jsonl`, then Live batch (NeurIPS comparative panel).
+- `just live-batch-v2-optimized <out_dir> [jobs]`
+- Legacy **v1** recipes (`just live-batch-optimized-prewarmed`, paths under `runs/released/live_panel_v1/`) remain for older comparisons only.
 - **`just rust-proof-batch-fast-prewarmed <out_dir> [prewarm_parallel]`** / **`just rust-proof-batch-seal-prewarmed <out_dir> [jobs] [cache] [prewarm_parallel]`** — Rust proof subset panel, then fast or seal batch.
 - `just rust-proof-batch-fast <out_dir>` — fast L3/L4 iteration
 - `just rust-proof-batch-seal <out_dir> [jobs] [cache]` — full ladder for sealing
@@ -577,10 +578,10 @@ That recipe already runs prewarm first; do not also run `python ci/scripts/prewa
 just verified-batch-optimized runs\released\agent_panel_v3_r1\panel_preflight_clean.jsonl runs\released\agent_panel_v3_r1\results_opt
 ```
 
-**Live panel:**
+**Live panel (v2):**
 
 ```powershell
-just live-batch-optimized-prewarmed runs\released\live_panel_v1\results_opt
+just live-batch-v2-optimized-prewarmed runs\released\live_panel_v2\results_opt
 ```
 
 **Rust proof subset — fast iteration then seal:**
@@ -593,7 +594,7 @@ just rust-proof-batch-seal-prewarmed runs\released\rust_proof_subset_v1\results_
 **Prewarm only (custom `evaluate batch` afterward):**
 
 ```powershell
-python ci/scripts/prewarm_panel_images.py --panel runs\released\live_panel_v1\panel.jsonl --parallel 4
+python ci/scripts/prewarm_panel_images.py --panel runs\released\live_panel_v2\panel.jsonl --parallel 4
 ```
 
 **Bash / WSL / Linux** (same flags; use forward slashes):
@@ -602,7 +603,7 @@ python ci/scripts/prewarm_panel_images.py --panel runs\released\live_panel_v1\pa
 cd /path/to/rust-evals
 just eval-ladder-cli-release
 just verified-batch-optimized-prewarmed runs/released/agent_panel_v3_r1/panel_preflight_clean.jsonl runs/released/agent_panel_v3_r1/results_opt
-just live-batch-optimized-prewarmed runs/released/live_panel_v1/results_opt
+just live-batch-v2-optimized-prewarmed runs/released/live_panel_v2/results_opt
 just rust-proof-batch-fast-prewarmed runs/released/rust_proof_subset_v1/results_fast
 just rust-proof-batch-seal-prewarmed runs/released/rust_proof_subset_v1/results_seal
 ```

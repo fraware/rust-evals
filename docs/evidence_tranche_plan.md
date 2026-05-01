@@ -134,12 +134,16 @@ Target outcome:
 - negative static-vs-live delta remains,
 - rank-stability contains at least one informative non-zero tau row.
 
-Run quality gate (strict):
+Run quality gate (strict) on the **canonical comparative export**:
 
 ```bash
 python ci/scripts/check_evidence_quality.py live \
-  --paper-export-dir paper/exports/live_panel_v1_postbatch
+  --paper-export-dir paper/exports/live_panel_v2_postbatch
 ```
+
+The historical **v1** export (`paper/exports/live_panel_v1_postbatch`) fails strict
+gates (tied rates / tau); keep it only for regression comparisons—see
+``docs/evidence_empirical_status.md``.
 
 The strict live gate expects at least one level where agents are not tied on
 ``live_pass_rate``, plus a non-zero Kendall tau row in ``rank_stability.json``.
@@ -151,13 +155,25 @@ strictly negative) per ``docs/evidence_empirical_status.md``.
 
 ## Priority 3 - L2 expansion slice
 
-Target outcome:
+**NeurIPS headline cohort:** merged summaries under
+``runs/released/l2_verified_flagship_v1/results`` (from ``results_astropy`` +
+``results_regression_fail``). Publication-threshold gate:
+
+```bash
+python ci/scripts/check_evidence_quality.py l2 \
+  --run-dir runs/released/l2_verified_flagship_v1/results
+```
+
+Repository closure uses the same paths with ``--gate-profile release`` (see
+``docs/evidence_empirical_status.md``).
+
+Target outcome (defaults still documented on the CLI):
 
 - at least 10 candidates passing from L1 into L2,
 - at least 3 L2 failures,
 - at least 2 distinct L2 failure families.
 
-Run quality gate:
+Thin exploratory slice (may fail headline thresholds until expanded):
 
 ```bash
 python ci/scripts/check_evidence_quality.py l2 \
@@ -167,11 +183,9 @@ python ci/scripts/check_evidence_quality.py l2 \
   --min-l2-reason-families 2
 ```
 
-Use a run directory whose batch actually contains enough L1 passes and L2
-attempts; small exploratory slices will not meet the defaults above until you
-expand the L2 panel. For a **deduplicated merge** of multiple small summaries
-(``batch_summary.json`` only), see ``ci/scripts/merge_l2_batch_summaries.py`` and
-``runs/released/l2_verified_merged_v1/`` (release-profile gate only).
+For a **deduplicated merge** of multiple small summaries (``batch_summary.json``
+only), see ``ci/scripts/merge_l2_batch_summaries.py``. Older merged experiment:
+``runs/released/l2_verified_merged_v1/`` (superseded by **flagship** for NeurIPS).
 
 ## Priority 4 - Rust proof-subset empirical usefulness
 
@@ -211,6 +225,10 @@ directories, rerun with a clean ``--out`` (or remove the listed bundle dirs) so
 the summary can reach 8/8 ok.
 
 ## Priority 5 - Release closure
+
+Full gate list and observed statuses for the NeurIPS freeze live in
+``paper/exports/release/final_validation_matrix.md``. Release pointer:
+``paper/exports/release/NEURIPS2026_ED_RELEASE.md``.
 
 Required commands on the tagged release commit:
 
@@ -253,6 +271,10 @@ Lean or proof-subset paths.
   ``ok: false`` on representative failure shapes (harness rate, degenerate
   agent vectors, live ties / tau / delta, thin L2, rust invalid rows and
   semantic minima).
+- Tier-2 ``ruff check packages/python`` may fail until helper scripts under
+  ``packages/python/scripts/`` are lint-clean (see
+  ``paper/exports/release/final_validation_matrix.md``); ``ruff check ci/scripts``
+  is expected to pass.
 - **Local** runs use the same command from the repository root (no Rust build).
   Add or reorder checks in ``ci/scripts/run_evidence_tier1_checks.py`` only;
   the workflow invokes that script so CI and local stay aligned.

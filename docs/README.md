@@ -23,6 +23,8 @@ are relative to the repository root.
 | [`l2_failure_case_studies.md`](l2_failure_case_studies.md) | Eight-case human adjudication sample for L2 failures (augmented-test vs regression stress-control). |
 | [`l2_gold_patch_validation.md`](l2_gold_patch_validation.md) | Gold/developer patch replay outcomes under primary-cohort L2 validators and limitation analysis. |
 | [`submission_checklist.md`](submission_checklist.md) | Submission checklist, engineering readiness, and evidence gates. |
+| [`../paper/exports/release/final_validation_matrix.md`](../paper/exports/release/final_validation_matrix.md) | NeurIPS closure gate log (commands + Status). |
+| [`../paper/exports/release/NEURIPS2026_ED_RELEASE.md`](../paper/exports/release/NEURIPS2026_ED_RELEASE.md) | NeurIPS freeze tag pointer and anonymity note. |
 
 ## Start here
 

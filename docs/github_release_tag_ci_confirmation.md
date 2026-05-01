@@ -1,8 +1,8 @@
 # Confirming tier-3 CI on tagged releases
 
 The submission checklist requires human-visible confirmation that
-`.github/workflows/release-tag.yml` completed successfully for tags such as
-`v0.1.0` and `v0.1.1`.
+`.github/workflows/release-tag.yml` completed successfully for each pushed
+release tag (historically `v0.1.0`, `v0.1.1`; NeurIPS E&D freeze `v0.1.4-neurips2026-ed`).
 
 ## Prerequisites
 
@@ -47,12 +47,15 @@ validation, and `write_release_artifact_manifest.py --require-all-files`.
 
 For `fraware/rust-evals`, the GitHub REST API is readable without a token for
 workflow metadata. As of the last check, `release-tag.yml` completed
-successfully for both shipped tags:
+successfully for the shipped tags below. After pushing `v0.1.4-neurips2026-ed`,
+list runs (`gh run list --workflow=release-tag.yml`), open the run for that tag,
+and paste the run URL into the table.
 
 | Tag | Run | Conclusion |
 |-----|-----|------------|
 | `v0.1.0` | [24924543926](https://github.com/fraware/rust-evals/actions/runs/24924543926) | `success` |
 | `v0.1.1` | [24924758322](https://github.com/fraware/rust-evals/actions/runs/24924758322) | `success` |
+| `v0.1.4-neurips2026-ed` | *(add Actions URL after push)* | *(pending)* |
 
 List endpoint (same data `gh run list` would show):
 

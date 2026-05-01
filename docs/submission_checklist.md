@@ -100,12 +100,15 @@ Choose one mode per submission.
 - [x] Every JSON schema validates against its own draft 2020-12
       specification. Pinned by `just validate-schemas` /
       `eval-ladder schema validate`.
-- [x] Tier 3 CI has passed on the tagged release commit for ``v0.1.0`` and
-      ``v0.1.1`` (workflow ``release-tag.yml``; conclusions ``success`` on the
-      Actions runs linked from ``docs/github_release_tag_ci_confirmation.md``,
-      including the public REST list URL). For future tags, re-check with
-      ``gh run list --workflow=release-tag.yml`` after ``gh auth login`` or
-      ``GH_TOKEN``. Local prep (no CI claim): ``paper/exports/release/v0.1.2/artifact_manifest.json``
+- [x] Tier 3 CI has passed on tagged commits for ``v0.1.0`` and ``v0.1.1``
+      (workflow ``release-tag.yml``; conclusions ``success`` on the Actions runs
+      linked from ``docs/github_release_tag_ci_confirmation.md``, including the
+      public REST list URL).
+- [ ] NeurIPS 2026 E&D freeze tag ``v0.1.4-neurips2026-ed``: after
+      ``git push origin v0.1.4-neurips2026-ed``, confirm ``release-tag.yml`` is
+      green on that ref (same workflow and confirmation steps as above). Add the
+      run URL to ``docs/github_release_tag_ci_confirmation.md``.
+      Local manifest prep (no CI claim): ``paper/exports/release/v0.1.2/artifact_manifest.json``
       from ``write_release_artifact_manifest.py`` without ``--require-all-files``.
 
 ## External reproducibility ergonomics
@@ -154,7 +157,9 @@ Choose one mode per submission.
 - [x] Execution playbook for remaining tranche:
       `docs/evidence_tranche_plan.md`.
 - [x] Live empirical gate status, frozen batch notes, and remediation commands:
-      `docs/evidence_empirical_status.md` and `runs/released/agent_panel_v3_r1/README.md`.
+      `docs/evidence_empirical_status.md`; Verified cohort notes
+      `runs/released/agent_panel_v3_r1/README.md`; Live v2 panel
+      `runs/released/live_panel_v2/README.md`.
 - [x] Evidence gate script correctness: `check_evidence_quality verified` counts
       every agent on all-fail panels; `live` mode handles null `live_pass_rate` /
       `delta` without crashing and scores ties only on rows with live data.

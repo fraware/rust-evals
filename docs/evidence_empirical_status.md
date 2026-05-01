@@ -15,6 +15,11 @@ and are **out of scope** for headline pass/fail statistics. This matches
 See also the [documentation index](README.md) for how this file fits next to
 the tranche plan and submission checklist.
 
+**NeurIPS 2026 engineering closure:** Per-gate commands and statuses are logged in
+[`paper/exports/release/final_validation_matrix.md`](../paper/exports/release/final_validation_matrix.md).
+Tag and workflow confirmation notes are in
+[`paper/exports/release/NEURIPS2026_ED_RELEASE.md`](../paper/exports/release/NEURIPS2026_ED_RELEASE.md).
+
 This document records **machine-checked** outcomes for the publication evidence
 tranche gates. Two CLI regimes exist:
 
@@ -25,15 +30,17 @@ tranche gates. Two CLI regimes exist:
   batches are replanned. Publication-threshold runs remain the scientific bar; release is a
   repository-closure bar only.
 
-## Phase 0 baseline (publication-threshold defaults, 2026-04-26)
+## Historical snapshot (publication-threshold defaults, 2026-04-26)
 
 Commands below use the repository root. All exited **2** except where noted.
+This table captures an early audit pass; **NeurIPS headline exports** use **Live v2**
+and **L2 flagship** paths documented in the sections below—not the failing Live v1 row here.
 
 | Tranche | Command | Outcome |
 |--------|---------|--------|
 | Verified preflight-clean | `python ci/scripts/check_evidence_quality.py verified --run-dir runs/released/agent_panel_v3_r1/results_verified_prefclean` | Fail: harness rate, distinct agent vectors |
 | Verified optimized | same with `results_opt` | Same metrics as preflight-clean (51 candidates) |
-| Live export | `python ci/scripts/check_evidence_quality.py live --paper-export-dir paper/exports/live_panel_v1_postbatch` | Fail: tied live rates, tau `0.0` |
+| Live export (v1 symmetric batch) | `python ci/scripts/check_evidence_quality.py live --paper-export-dir paper/exports/live_panel_v1_postbatch` | Fail: tied live rates, tau `0.0` (headline comparative evidence moved to **Live v2**) |
 | L2 thin slice | `python ci/scripts/check_evidence_quality.py l2 --run-dir runs/released/l2_verified_v2/results` | Fail: counts below defaults |
 | Rust seal strict | `python ci/scripts/check_evidence_quality.py rust-proof --run-dir runs/released/rust_proof_subset_v1/results_seal` | Fail: semantic minima (`l3-pass/l4-fail`, all-level pass) |
 
@@ -112,21 +119,32 @@ evaluator-runtime failure claim.
 
 ## Live comparative (`check_evidence_quality live`)
 
-- **v2 panel (asymmetric live patches):** `runs/released/live_panel_v2/`.
+**NeurIPS freeze (asymmetric live patches):**
+
+- Panel: `runs/released/live_panel_v2/` (see `runs/released/live_panel_v2/README.md`).
 - Canonical export: `paper/exports/live_panel_v2_postbatch/`.
-- `runs/released/live_panel_v2/results_opt` integrity: `verify run-dir` reports
+- `runs/released/live_panel_v2/results_opt` integrity: `eval-ladder verify run-dir` →
   `31 ok / 0 invalid`.
-- **Publication-threshold:** passes on v2 (non-tied live rates and non-zero Kendall tau).
-- **Release:** also passes (strictly negative deltas preserved).
-- Historical publication-threshold-failing export from v1 remains at:
-  `paper/exports/live_panel_v1_postbatch/`.
+
+**Publication-threshold** (strict defaults) and **release-profile** closure both pass on v2.
+
+Primary closure command (repository bar):
 
 ```bash
 python ci/scripts/check_evidence_quality.py --gate-profile release live \
-  --paper-export-dir paper/exports/live_panel_v1_postbatch
+  --paper-export-dir paper/exports/live_panel_v2_postbatch
 ```
 
-Optional explicit flag (same live logic as release for this sub-gate):
+Strict headline command (same export):
+
+```bash
+python ci/scripts/check_evidence_quality.py live \
+  --paper-export-dir paper/exports/live_panel_v2_postbatch
+```
+
+**Historical v1 export** (`paper/exports/live_panel_v1_postbatch/`): symmetric patches
+yielded tied live rates and tau `0.0` under strict defaults—use only for regression
+comparisons, not headline comparative claims.
 
 ```bash
 python ci/scripts/check_evidence_quality.py live \
@@ -155,8 +173,8 @@ Current publication-threshold metrics (`ok: true`):
 - `l2_failures=24`
 - `l2_reason_counts={L2_AUG_TESTS_FAIL: 12, L2_REGRESSION_FAIL: 12}`
 
-Historical release-profile merge remains at:
-`runs/released/l2_verified_merged_v1/results/`.
+Older exploratory merge directory (optional): `runs/released/l2_verified_merged_v1/results/`.
+NeurIPS evidence uses **`l2_verified_flagship_v1`** above, not this merge.
 
 ### Gold-patch validator legitimacy check (W1)
 
@@ -249,11 +267,14 @@ On the development machine used for closure work:
 
 ## Release manifest (local prep)
 
+Example:
+
 ```bash
 python ci/scripts/write_release_artifact_manifest.py \
   --out paper/exports/release/v0.1.2/artifact_manifest.json
 ```
 
-Pushing a new `v*.*.*` tag still requires a green
-`.github/workflows/release-tag.yml` run on GitHub; see
+NeurIPS 2026 E&D engineering freeze is tagged **`v0.1.4-neurips2026-ed`**
+(see `paper/exports/release/NEURIPS2026_ED_RELEASE.md`). Pushing any new `v*.*.*`
+tag still requires a green `.github/workflows/release-tag.yml` run on GitHub; see
 `docs/github_release_tag_ci_confirmation.md`.
