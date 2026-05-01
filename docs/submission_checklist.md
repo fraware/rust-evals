@@ -89,10 +89,8 @@ Choose one mode per submission.
 - [x] `cargo test` passes for all crates.
 - [x] `mypy` clean on the typed paths in root ``pyproject.toml``
       (``packages/python/benchmark_compat/src`` and ``ci/scripts``).
-- [ ] `ruff check packages/python` clean (tier-2 scope). As of the NeurIPS closure pass,
-      this fails with issues concentrated under ``packages/python/scripts/``; see
-      ``paper/exports/release/final_validation_matrix.md``. ``ruff check ci/scripts``
-      is clean.
+- [x] `ruff check packages/python` clean (tier-2 scope; includes ``packages/python/scripts/``).
+      See ``paper/exports/release/final_validation_matrix.md`` for the last recorded run.
 - [x] `cargo deny check` and `cargo audit` show no high-severity issues.
       Configured via `deny.toml` and `just deny` / `just audit`; re-run clean
       on 2026-04-25 (deny: warnings only for unused license allow-list entries

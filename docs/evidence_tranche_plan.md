@@ -271,10 +271,9 @@ Lean or proof-subset paths.
   ``ok: false`` on representative failure shapes (harness rate, degenerate
   agent vectors, live ties / tau / delta, thin L2, rust invalid rows and
   semantic minima).
-- Tier-2 ``ruff check packages/python`` may fail until helper scripts under
-  ``packages/python/scripts/`` are lint-clean (see
-  ``paper/exports/release/final_validation_matrix.md``); ``ruff check ci/scripts``
-  is expected to pass.
+- Tier-2 ``ruff check packages/python`` and ``ruff check ci/scripts`` are
+  expected to pass on a clean checkout (see
+  ``paper/exports/release/final_validation_matrix.md`` for the last recorded run).
 - **Local** runs use the same command from the repository root (no Rust build).
   Add or reorder checks in ``ci/scripts/run_evidence_tier1_checks.py`` only;
   the workflow invokes that script so CI and local stay aligned.

@@ -48,7 +48,7 @@ def export_frontier(
         f"{inv.get('unique_tasks_with_any_public_agent_pass', '')} \\\\\n"
         f"Min candidates threshold & {thresh.get('min_candidates', '')} \\\\\n"
         f"Supports min candidates without new tasks & "
-        f"\\texttt{{{str(assessment.get('supports_min_candidates_without_new_tasks', ''))}}} \\\\\n"
+        f"\\texttt{{{assessment.get('supports_min_candidates_without_new_tasks', '')!s}}} \\\\\n"
         "\\hline\n"
         "\\end{tabular}\n",
         encoding="utf-8",
@@ -80,7 +80,8 @@ def export_frontier(
         "\\hline\n"
         "Live panel v2 & Sealed \\texttt{live\\_panel\\_v2/results\\_opt} batch \\\\\n"
         "L2 verified flagship v1 & Merged astropy + regression arms; 66 rows \\\\\n"
-        "Verified feasibility & Offline inventory from \\texttt{strict\\_feasibility\\_report.json} \\\\\n"
+        "Verified feasibility & Offline inventory from "
+        "\\texttt{strict\\_feasibility\\_report.json} \\\\\n"
         f"Rust proof subset manifest & \\texttt{{manifest.jsonl}} lines = {n_lines} \\\\\n"
         "\\hline\n"
         "\\end{tabular}\n",

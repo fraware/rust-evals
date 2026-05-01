@@ -35,7 +35,6 @@ import json
 import sys
 import uuid
 from pathlib import Path
-from typing import Iterable
 
 import httpx  # type: ignore[import-not-found]
 
@@ -150,7 +149,11 @@ def _resolved_lists() -> dict[str, dict[str, set[str]]]:
 def build_panel() -> int:
     CANDIDATES_DIR.mkdir(parents=True, exist_ok=True)
     PATCHES_DIR.mkdir(parents=True, exist_ok=True)
-    submitted_at = _dt.datetime(2024, 9, 1, 0, 0, 0, tzinfo=_dt.timezone.utc).isoformat().replace("+00:00", "Z")
+    submitted_at = (
+        _dt.datetime(2024, 9, 1, 0, 0, 0, tzinfo=_dt.timezone.utc)
+        .isoformat()
+        .replace("+00:00", "Z")
+    )
 
     resolved = _resolved_lists()
 
@@ -251,7 +254,11 @@ def build_panel() -> int:
         "notes": [
             "patch_sha256 is the raw SHA-256 of the per-(agent,task) patch.diff bytes.",
             "candidate_id is UUIDv5(namespace=3f3e0b4e-...;name='agent|task|patch_sha256').",
-            "The panel currently assumes workspaces/verified_shared/ is provided at run time; it is NOT materialised here because L0/L1 for SWE-bench Verified requires Docker and per-task environment bootstrap.",
+            (
+                "The panel currently assumes workspaces/verified_shared/ is provided at run "
+                "time; it is NOT materialised here because L0/L1 for SWE-bench Verified "
+                "requires Docker and per-task environment bootstrap."
+            ),
         ],
     }
     (PANEL_ROOT / "provenance.json").write_text(

@@ -95,8 +95,8 @@ def _robust_rmtree(path: Path) -> None:
 
 def _load_jsonl_by_task(path: Path) -> dict[str, dict]:
     out: dict[str, dict] = {}
-    for line in path.read_text(encoding="utf-8").splitlines():
-        line = line.strip()
+    for raw_line in path.read_text(encoding="utf-8").splitlines():
+        line = raw_line.strip()
         if not line:
             continue
         obj = json.loads(line)
@@ -154,7 +154,11 @@ def _materialize_workspace(task_id: str, repo_name: str, base_commit: str) -> st
     tmp = Path(Path.cwd().joinpath(f".tmp-live-panel-{task_id.replace('/', '_')}"))
     _robust_rmtree(tmp)
     subprocess.run(["git", "init", str(tmp)], check=True, cwd=REPO_ROOT)
-    subprocess.run(["git", "remote", "add", "origin", f"https://github.com/{repo_name}.git"], check=True, cwd=tmp)
+    subprocess.run(
+        ["git", "remote", "add", "origin", f"https://github.com/{repo_name}.git"],
+        check=True,
+        cwd=tmp,
+    )
     subprocess.run(["git", "fetch", "--depth", "1", "origin", base_commit], check=True, cwd=tmp)
     subprocess.run(["git", "checkout", "--detach", "FETCH_HEAD"], check=True, cwd=tmp)
 
@@ -188,7 +192,13 @@ def main() -> int:
     panel_lines: list[str] = []
     provenance_entries: list[dict] = []
 
-    def add_entry(task_id: str, benchmark_id: str, manifest_dir: Path, cache_row: dict, is_live: bool) -> None:
+    def add_entry(
+        task_id: str,
+        benchmark_id: str,
+        manifest_dir: Path,
+        cache_row: dict,
+        is_live: bool,
+    ) -> None:
         manifest_path = manifest_dir / f"{task_id}.json"
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
         workspace_template = _materialize_workspace(

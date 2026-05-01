@@ -59,7 +59,7 @@ def _git_commit(repo_root: Path) -> str:
 
 
 def _run_py(repo_root: Path, rel_script: Path, argv: list[str]) -> None:
-    cmd = [sys.executable, str(repo_root / rel_script)] + argv
+    cmd = [sys.executable, str(repo_root / rel_script), *argv]
     subprocess.run(cmd, cwd=repo_root, check=True)
 
 
@@ -85,7 +85,7 @@ def _run_eval_ladder(repo_root: Path, bin_path: Path, run_dir: Path, out_dir: Pa
     )
 
 
-def main() -> int:
+def main() -> int:  # noqa: PLR0915
     repo_root = Path(__file__).resolve().parents[3]
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument(
@@ -126,15 +126,14 @@ def main() -> int:
             print(f"error: missing {label}: {path}", file=sys.stderr)
             return 1
 
-    if not gold_csv.is_file():
-        if not gold_results.is_dir():
-            print(
-                "error: need paper gold export or sealed gold_patch_results directory.\n"
-                f"  missing: {gold_csv}\n"
-                f"  missing: {gold_results}",
-                file=sys.stderr,
-            )
-            return 1
+    if not gold_csv.is_file() and not gold_results.is_dir():
+        print(
+            "error: need paper gold export or sealed gold_patch_results directory.\n"
+            f"  missing: {gold_csv}\n"
+            f"  missing: {gold_results}",
+            file=sys.stderr,
+        )
+        return 1
 
     live_out = repo_root / "paper/exports/live_panel_v2_postbatch"
     l2_out = repo_root / "paper/exports/l2_verified_flagship_v1"
@@ -264,7 +263,12 @@ def main() -> int:
         encoding="utf-8",
     )
 
-    print(json.dumps({"reproduction_manifest": str(manifest_path.relative_to(repo_root))}, indent=2))
+    print(
+        json.dumps(
+            {"reproduction_manifest": str(manifest_path.relative_to(repo_root))},
+            indent=2,
+        )
+    )
     return 0
 
 

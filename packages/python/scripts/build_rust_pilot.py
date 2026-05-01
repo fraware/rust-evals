@@ -33,6 +33,7 @@ the fix.
 from __future__ import annotations
 
 import argparse
+import contextlib
 import datetime as _dt
 import hashlib
 import json
@@ -43,16 +44,15 @@ import subprocess
 import sys
 import uuid
 from pathlib import Path
-from typing import Iterable
+
+import httpx  # type: ignore[import-not-found]
 
 
 def _force_writable(path: Path) -> None:
     for root, dirs, files in os.walk(path):
         for name in dirs + files:
-            try:
+            with contextlib.suppress(OSError):
                 os.chmod(Path(root) / name, stat.S_IWRITE | stat.S_IREAD)
-            except OSError:
-                pass
 
 
 def _robust_rmtree(path: Path) -> None:
@@ -70,7 +70,6 @@ def _robust_rmtree(path: Path) -> None:
 
     shutil.rmtree(path, onexc=_onexc)
 
-import httpx  # type: ignore[import-not-found]
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 PILOT_ROOT = REPO_ROOT / "runs" / "released" / "rust_pilot_v1"
@@ -263,9 +262,18 @@ def build_pilot() -> int:
         "entries": provenance_entries,
         "notes": [
             "Candidate patches are the merged upstream PR diffs fetched via GitHub.",
-            "The candidate is therefore the 'golden agent' baseline: fix + tests match the reference merge.",
-            "Workspaces are pristine source trees exported at base_commit (no .git, no build artifacts).",
-            "Test runs are performed with the native cargo toolchain via LocalProcessEngine; no Docker is required for rust-native tasks.",
+            (
+                "The candidate is therefore the 'golden agent' baseline: fix + tests match "
+                "the reference merge."
+            ),
+            (
+                "Workspaces are pristine source trees exported at base_commit "
+                "(no .git, no build artifacts)."
+            ),
+            (
+                "Test runs use the native cargo toolchain via LocalProcessEngine; "
+                "no Docker is required for rust-native tasks."
+            ),
         ],
     }
     (PILOT_ROOT / "provenance.json").write_text(

@@ -28,8 +28,9 @@ import argparse
 import datetime as _dt
 import json
 import sys
+from collections.abc import Iterable
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any
 
 import pyarrow.parquet as pq  # type: ignore[import-not-found]
 from huggingface_hub import hf_hub_download  # type: ignore[import-not-found]
@@ -63,8 +64,7 @@ def _write_jsonl(records: Iterable[dict], out_path: Path) -> int:
 def _parquet_to_records(path: Path) -> Iterable[dict]:
     table = pq.read_table(str(path))
     for batch in table.to_batches():
-        for row in batch.to_pylist():
-            yield row
+        yield from batch.to_pylist()
 
 
 def fetch_verified() -> Path:
@@ -102,7 +102,7 @@ def fetch_live() -> Path:
     records must carry an image reference" invariant without runner-time
     guesswork.
     """
-    from datasets import load_dataset  # type: ignore[import-not-found]
+    from datasets import load_dataset  # type: ignore[import-not-found]  # noqa: PLC0415
 
     ds = load_dataset("SWE-bench-Live/SWE-bench-Live", split="verified")
 
@@ -115,7 +115,12 @@ def fetch_live() -> Path:
                 if created.tzinfo is None:
                     created = created.replace(tzinfo=_dt.timezone.utc)
                 rec["created_at"] = created.isoformat().replace("+00:00", "Z")
-            elif isinstance(created, str) and created and not created.endswith("Z") and "+" not in created:
+            elif (
+                isinstance(created, str)
+                and created
+                and not created.endswith("Z")
+                and "+" not in created
+            ):
                 rec["created_at"] = f"{created}Z"
             yield rec
 
@@ -136,8 +141,8 @@ def fetch_rust() -> Path:
     )
     records: list[dict] = []
     with src.open("r", encoding="utf-8") as fh:
-        for line in fh:
-            line = line.strip()
+        for raw_line in fh:
+            line = raw_line.strip()
             if not line:
                 continue
             records.append(json.loads(line))

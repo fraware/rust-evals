@@ -9,7 +9,7 @@ Fill **Status** during release closure (for example `ok`, `fail`, `skipped`, dat
 | Clippy | `cargo clippy --workspace --all-targets -- -D warnings` | yes | ok — 2026-05-01 |
 | Rust tests | `cargo test --workspace --all-targets` | yes | ok — 2026-05-01 |
 | Python lint (`ci/scripts`) | `ruff check ci/scripts` | yes | ok — 2026-05-01 |
-| Python lint (`packages/python`) | `ruff check packages/python` | yes | fail — 2026-05-01 (28 issues, mostly `packages/python/scripts/`; CI tier-2 runs this scope) |
+| Python lint (`packages/python`) | `ruff check packages/python` | yes | ok — 2026-05-02 (lint backfill under `packages/python/scripts/`) |
 | Python typecheck | `mypy` (root `pyproject.toml` `files`: `benchmark_compat/src`, `ci/scripts`) | yes | ok — 2026-05-01 |
 | Schema validation | `cargo run --bin eval-ladder -- schema validate` | yes | ok — 2026-05-01 |
 | Demo | `cargo run --bin eval-ladder -- demo run --out runs/demo --tasks 2` (fresh `runs/demo/bundles`) | yes | ok — 2026-05-01 (`2 ok / 0 invalid`) |

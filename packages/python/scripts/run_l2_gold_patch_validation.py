@@ -29,7 +29,7 @@ def main() -> int:
     if not ci_script.is_file():
         raise SystemExit(f"missing {ci_script}")
     forwarded = sys.argv[1:]
-    cmd = [sys.executable, str(ci_script)] + forwarded
+    cmd = [sys.executable, str(ci_script), *forwarded]
     return subprocess.call(cmd, cwd=repo_root)
 
 
