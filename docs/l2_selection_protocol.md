@@ -9,9 +9,9 @@
 
 This document is the **auditable protocol** for the 66-row L2 primary-cohort slice
 `runs/released/l2_verified_flagship_v1/`. The slice is **validator-focused and
-diagnostic**: it is not a random draw from a well-defined superpopulation, and
-it should not support population-level generalizations beyond the stated
-construction. A per-row machine-generated index is
+diagnostic**: it is not a random draw from a well-defined superpopulation, and it
+should not support population-level generalizations beyond the stated construction.
+A per-row machine-generated index is
 `paper/exports/l2_verified_flagship_v1/l2_selection_manifest.{csv,json}`.
 
 ## 1. Source and scope

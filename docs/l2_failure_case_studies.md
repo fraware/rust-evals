@@ -1,6 +1,9 @@
 # L2 failure case studies (L2 flagship primary cohort v1)
 
-Human adjudication sample from frozen run results at `runs/released/l2_verified_flagship_v1/results/batch_summary.json` with reference-patch context from `paper/exports/l2_verified_flagship_v1/gold_patch_validation.csv` when available.
+Human adjudication sample from frozen run results at
+`runs/released/l2_verified_flagship_v1/results/batch_summary.json`, with reference-patch
+context from `paper/exports/l2_verified_flagship_v1/gold_patch_validation.csv` when
+available.
 
 The **regression stress-control arm** is a **negative-control / protocol** arm. Its reversals demonstrate **evaluator-induced score changes**, not natural product regressions. Rows that fail via `regression_forced_fail` are **protocol-control evidence**, not evidence that the upstream issue regressed in production.
 

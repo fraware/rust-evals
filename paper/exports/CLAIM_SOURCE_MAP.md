@@ -63,13 +63,13 @@ python ci/scripts/check_evidence_quality.py l2 \
   --run-dir runs/released/l2_verified_flagship_v1/results
 ```
 
-**Paper-export manifest (`manifest.json`).** The merged flagship `results/` tree
-carries `batch_summary.json` but no per-bundle leaves, so Rust
-`eval-ladder analyze paper-export` sets `input_row_count` to `0`. After analysis,
-always run `packages/python/scripts/export_l2_flagship_tables.py` (invoked from
-`packages/python/scripts/reproduce_paper_tables.py`) so `manifest.json` lists
-the ten standard export siblings with correct SHA-256 hashes and an
-`input_row_count` matching `len(batch_summary.entries)` (66 for the frozen cohort).
+**Paper-export manifest (`manifest.json`).** The merged flagship `results/` tree carries
+`batch_summary.json` but no per-bundle leaves, so Rust `eval-ladder analyze paper-export`
+sets `input_row_count` to `0`. After analysis, always run
+`packages/python/scripts/export_l2_flagship_tables.py` (invoked from
+`packages/python/scripts/reproduce_paper_tables.py`) so `manifest.json` lists the ten
+standard export siblings with correct SHA-256 hashes and an `input_row_count` matching
+`len(batch_summary.entries)` (66 for the frozen cohort).
 
 Per-bundle integrity for the flagship cohort is checked on each **arm**
 directory (the merged `results/` tree holds the joined `batch_summary.json`):

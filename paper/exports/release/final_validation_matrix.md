@@ -22,7 +22,7 @@ Last closure refresh: **2026-05-03** (engineering manuscript-ready pass).
 | L2 gate | `python ci/scripts/check_evidence_quality.py --gate-profile release l2 --run-dir runs/released/l2_verified_flagship_v1/results` | yes | ok — 2026-05-03 |
 | Rust proof release gate | `python ci/scripts/check_evidence_quality.py --gate-profile release rust-proof --run-dir runs/released/rust_proof_subset_v1/results_seal` | yes | ok — 2026-05-03 |
 | Verified feasibility report | `python ci/scripts/analyze_strict_feasibility.py` | yes | ok — 2026-05-03 |
-| Gold validation | `python ci/scripts/l2_flagship_gold_patch_validation.py --skip-evaluate` (full batch: same script with `--jobs 2`; see `paper/exports/release/gold_validation_export_only_log.md`) | yes | ok — 2026-05-03 (frozen exports verified; partial row counts refused by script) |
+| Gold validation | See **Gold validation commands** (below) | yes | ok — 2026-05-03 (frozen exports verified; partial row counts refused by script) |
 | Verify released run-dir (Live v2) | `target/release/eval-ladder verify run-dir --run-dir runs/released/live_panel_v2/results_opt` | yes | ok — 2026-05-03 (`31 ok / 0 invalid`) |
 | Verify released run-dir (L2 astropy arm) | `target/release/eval-ladder verify run-dir --run-dir runs/released/l2_verified_flagship_v1/results_astropy` | yes | ok — 2026-05-03 (`33 ok / 0 invalid`) |
 | Verify released run-dir (L2 regression arm) | `target/release/eval-ladder verify run-dir --run-dir runs/released/l2_verified_flagship_v1/results_regression_fail` | yes | ok — 2026-05-03 (`33 ok / 0 invalid`) |
@@ -31,6 +31,22 @@ Last closure refresh: **2026-05-03** (engineering manuscript-ready pass).
 **Gold validation note:** Bundle outputs under `gold_patch_results/results_*` are gitignored.
 Committed `paper/exports/l2_verified_flagship_v1/gold_patch_validation*` files are the Table 3
 source; `--skip-evaluate` regenerates them only when both sealed arms produce complete row counts.
+
+### Gold validation commands
+
+Full documentation: `paper/exports/release/gold_validation_export_only_log.md`.
+
+- **Export-only / skip evaluate** (requires complete local bundle trees under both arms):
+
+  ```bash
+  python ci/scripts/l2_flagship_gold_patch_validation.py --skip-evaluate
+  ```
+
+- **Full batch regeneration** (release `eval-ladder` binary, OCI runtime, both arms):
+
+  ```bash
+  python ci/scripts/l2_flagship_gold_patch_validation.py --jobs 2
+  ```
 
 ## Verified feasibility summary (inventory frontier)
 

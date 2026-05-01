@@ -1,7 +1,7 @@
 # Submission checklist
 
-Target venue: configurable; this checklist is kept venue-agnostic for reuse. Supporting technical
-docs are indexed in [`README.md`](README.md).
+Target venue: configurable; this checklist is kept venue-agnostic for reuse.
+Supporting technical docs are indexed in [`README.md`](README.md).
 
 Key dates:
 

@@ -42,6 +42,9 @@ cargo run --bin eval-ladder -- demo run --out runs/demo --tasks 2
 
 **Claim discipline:** `docs/CLAIM_LOCK_NEURIPS2026.md`, `paper/exports/CLAIM_SOURCE_MAP.md`, and `ci/scripts/check_paper_claim_sources.py`.
 
+**Engineering closure:** `paper/exports/release/final_validation_matrix.md` (gate log) and
+`paper/exports/release/MANUSCRIPT_READY_SIGNOFF.md` (manuscript-ready sign-off).
+
 ### What this artifact does not claim
 
 - It does not generate coding-agent patches.
@@ -164,6 +167,7 @@ Start here:
 ## Documentation guide
 
 - Docs index: [`docs/README.md`](docs/README.md)
+- Claim source map: [`paper/exports/CLAIM_SOURCE_MAP.md`](paper/exports/CLAIM_SOURCE_MAP.md)
 - Getting started: [`docs/getting_started.md`](docs/getting_started.md)
 - Operational runbook: [`docs/operational_runbook.md`](docs/operational_runbook.md)
 - Artifact model: [`docs/artifact_spec.md`](docs/artifact_spec.md)

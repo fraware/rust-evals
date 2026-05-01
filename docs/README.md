@@ -19,12 +19,14 @@ are relative to the repository root.
 | [`cli_reference.md`](cli_reference.md) | Command reference for core `eval-ladder` workflows. |
 | [`evidence_tranche_plan.md`](evidence_tranche_plan.md) | Evidence tranche execution plan and gate commands. |
 | [`evidence_empirical_status.md`](evidence_empirical_status.md) | Machine-checked gate outcomes (publication-threshold vs `--gate-profile release`). |
-| [`l2_selection_protocol.md`](l2_selection_protocol.md) | Pre-specified L2 primary-cohort row construction, exclusions, and validator-family semantics. |
-| [`l2_failure_case_studies.md`](l2_failure_case_studies.md) | Eight-case human adjudication sample for L2 failures (augmented-test vs regression stress-control). |
-| [`l2_gold_patch_validation.md`](l2_gold_patch_validation.md) | Gold/developer patch replay outcomes under primary-cohort L2 validators and limitation analysis. |
+| [`l2_selection_protocol.md`](l2_selection_protocol.md) | L2 primary-cohort construction, exclusions, validator arms. |
+| [`l2_failure_case_studies.md`](l2_failure_case_studies.md) | Eight-case L2 adjudication (augmented-test vs regression stress-control). |
+| [`l2_gold_patch_validation.md`](l2_gold_patch_validation.md) | Gold-patch replay for L2 legitimacy; profiles and limitations. |
 | [`submission_checklist.md`](submission_checklist.md) | Submission checklist, engineering readiness, and evidence gates. |
 | [`../paper/exports/release/final_validation_matrix.md`](../paper/exports/release/final_validation_matrix.md) | NeurIPS closure gate log (commands + Status). |
 | [`../paper/exports/release/NEURIPS2026_ED_RELEASE.md`](../paper/exports/release/NEURIPS2026_ED_RELEASE.md) | NeurIPS freeze tag pointer and anonymity note. |
+| [`../paper/exports/release/MANUSCRIPT_READY_SIGNOFF.md`](../paper/exports/release/MANUSCRIPT_READY_SIGNOFF.md) | Manuscript-ready engineering sign-off (GO / checklist). |
+| [`../paper/exports/release/gold_validation_export_only_log.md`](../paper/exports/release/gold_validation_export_only_log.md) | Gold validation closure log (frozen exports vs bundle dirs). |
 
 ## Start here
 
