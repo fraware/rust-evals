@@ -18,7 +18,7 @@ Fill **Status** during release closure (for example `ok`, `fail`, `skipped`, dat
 | Verified feasibility report | `python ci/scripts/analyze_strict_feasibility.py` | yes |  |
 | Gold validation | `python ci/scripts/l2_flagship_gold_patch_validation.py --jobs 2` | yes |  |
 | Claim-source check | `python ci/scripts/check_paper_claim_sources.py` (JSON + YAML mirror) | yes |  |
-| Secret scan | Maintainer grep / custom script (see `artifacts/final_repro_log.md`) | yes |  |
+| Secret scan | `python ci/scripts/secret_scan_release.py` | yes |  |
 
 ## Verified feasibility summary (inventory frontier)
 

@@ -1324,3 +1324,41 @@ def test_analyze_strict_feasibility_py_compile(repo_root: Path) -> None:
         check=False,
     )
     assert proc.returncode == 0, proc.stderr
+
+
+def _load_export_l2_flagship_tables(repo_root: Path) -> Any:
+    path = repo_root / "packages/python/scripts/export_l2_flagship_tables.py"
+    spec = importlib.util.spec_from_file_location("_export_l2_flagship_tables_test", path)
+    if spec is None or spec.loader is None:
+        raise AssertionError("failed to load export_l2_flagship_tables module spec")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def test_write_l2_paper_export_manifest_row_count(tmp_path: Path, repo_root: Path) -> None:
+    mod = _load_export_l2_flagship_tables(repo_root)
+    out_dir = tmp_path / "l2_export"
+    out_dir.mkdir()
+    for rel in mod._L2_PAPER_EXPORT_MANIFEST_PATHS:
+        dest = out_dir / rel
+        if rel.endswith(".json"):
+            dest.write_bytes(b"{}")
+        else:
+            dest.write_bytes(b"#stub\n")
+    mod._write_l2_paper_export_manifest(
+        out_dir,
+        input_row_count=42,
+        evaluator_version="9.9.9-test",
+    )
+    loaded = json.loads((out_dir / "manifest.json").read_text(encoding="utf-8"))
+    assert loaded["schema_version"] == 3
+    assert loaded["analysis_mode"] == "cumulative"
+    assert loaded["input_row_count"] == 42
+    assert loaded["evaluator_version"] == "9.9.9-test"
+    assert len(loaded["files"]) == len(mod._L2_PAPER_EXPORT_MANIFEST_PATHS)
+
+
+def test_secret_scan_release_passes_on_repo(repo_root: Path) -> None:
+    proc = _run_script(repo_root, "ci/scripts/secret_scan_release.py", [])
+    assert proc.returncode == 0, proc.stderr + proc.stdout

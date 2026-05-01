@@ -5,10 +5,25 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 import json
 import math
 from pathlib import Path
 from typing import Any
+
+# Basenames emitted by `eval-ladder analyze paper-export` (manifest tracks these only).
+_L2_PAPER_EXPORT_MANIFEST_PATHS: tuple[str, ...] = (
+    "conditional_false_success.csv",
+    "conditional_false_success.json",
+    "rank_stability.csv",
+    "rank_stability.json",
+    "score_descent.csv",
+    "score_descent.json",
+    "static_vs_live.csv",
+    "static_vs_live.json",
+    "taxonomy.csv",
+    "taxonomy.json",
+)
 
 
 def _load_json(path: Path) -> dict[str, Any]:
@@ -16,6 +31,60 @@ def _load_json(path: Path) -> dict[str, Any]:
     if not isinstance(data, dict):
         raise TypeError(f"{path} must be a JSON object")
     return data
+
+
+def _write_l2_paper_export_manifest(
+    out_dir: Path,
+    *,
+    input_row_count: int,
+    evaluator_version: str,
+    analysis_mode: str = "cumulative",
+) -> None:
+    """Rewrite ``manifest.json`` with correct row count and file hashes.
+
+    Merged flagship ``results/`` has no bundle leaves, so Rust ``analyze
+    paper-export`` yields ``input_row_count: 0``. After this script repairs
+    tables, refresh the manifest so sealed-evidence semantics stay aligned with
+    ``batch_summary.json`` (canonical JSON key order matches Rust
+    ``eval_ladder_core::canonical_json``).
+    """
+    files: list[dict[str, Any]] = []
+    missing: list[str] = []
+    for rel in _L2_PAPER_EXPORT_MANIFEST_PATHS:
+        path = out_dir / rel
+        if not path.is_file():
+            missing.append(rel)
+            continue
+        raw = path.read_bytes()
+        digest = hashlib.sha256(raw).hexdigest()
+        files.append(
+            {
+                "bytes": len(raw),
+                "path": rel,
+                "sha256": f"sha256:{digest}",
+            }
+        )
+    if missing:
+        raise FileNotFoundError(
+            "missing standard paper-export siblings required for manifest.json: "
+            + ", ".join(missing)
+            + " (run `eval-ladder analyze paper-export` for this cohort first)"
+        )
+    files.sort(key=lambda e: e["path"])
+    manifest: dict[str, Any] = {
+        "analysis_mode": analysis_mode,
+        "evaluator_version": evaluator_version,
+        "files": files,
+        "input_row_count": int(input_row_count),
+        "schema_version": 3,
+    }
+    payload = json.dumps(manifest, sort_keys=True, separators=(",", ":"))
+    (out_dir / "manifest.json").write_bytes(payload.encode("utf-8"))
+
+
+def _evaluator_version_from_summary(summary: dict[str, Any]) -> str:
+    ev = summary.get("evaluator_version", "0.1.0")
+    return ev if isinstance(ev, str) else str(ev)
 
 
 def _status(levels: dict[str, Any], key: str) -> str:
@@ -359,6 +428,13 @@ def export_l2_tables(
             w.writerow(row)
 
     _write_tex(tex_dir, summary, gold_stats, taxonomy_rows, arm_rows)
+
+    dict_entries = [e for e in entries if isinstance(e, dict)]
+    _write_l2_paper_export_manifest(
+        out_dir,
+        input_row_count=len(dict_entries),
+        evaluator_version=_evaluator_version_from_summary(summary),
+    )
 
     return {
         "conditional_false_success_csv": str(

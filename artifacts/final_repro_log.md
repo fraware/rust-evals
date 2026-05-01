@@ -159,7 +159,13 @@ lake build
 
 ## Secret scan (maintainer)
 
-Example patterns (extend as needed for anonymized archives):
+Preferred automated sweep (release-facing paths only):
+
+```bash
+python ci/scripts/secret_scan_release.py
+```
+
+Example patterns for manual extension (especially anonymized archives):
 
 ```bash
 grep -R "OPENAI_API_KEY" . || true

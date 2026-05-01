@@ -45,6 +45,14 @@ def main() -> int:
             ],
         ),
         (
+            "release secret scan",
+            [
+                str(root / "ci/scripts/secret_scan_release.py"),
+                "--repo-root",
+                str(root),
+            ],
+        ),
+        (
             "structural rust-proof gate",
             [
                 str(root / "ci/scripts/check_evidence_quality.py"),

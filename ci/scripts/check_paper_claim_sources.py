@@ -151,10 +151,17 @@ def main() -> int:
     failures.extend(_yaml_sync_failures(root, cfg))
     failures.extend(_doc_guards(root))
 
+    frontier_claims = {"verified_inventory_bound", "rust_l4_frontier"}
     for name, spec in claims.items():
         if not isinstance(spec, dict):
             failures.append(f"claim {name}: spec must be object")
             continue
+        tier = spec.get("claim_tier", "")
+        if name in frontier_claims and tier != "frontier":
+            failures.append(
+                f"claim {name}: claim_tier must be 'frontier' "
+                f"(found {tier!r}); headline tables must not reuse this source"
+            )
         failures.extend(
             _claim_failures(name, spec, root, forbidden, headline_live, headline_l2)
         )
