@@ -9,6 +9,47 @@
   It is built to make benchmark claims auditable, reproducible, and explicitly evaluator-conditioned.
 </p>
 
+## Reviewer quick path
+
+This artifact supports the NeurIPS 2026 E&D submission:
+**Eval-Ladder: Evaluator-Conditioned Measurement for Repository-Level Coding-Agent Benchmarks.**
+
+The artifact evaluates **fixed candidate patches**. It does **not** generate patches.
+
+**Headline empirical surfaces**
+
+1. **Live v2** static-vs-live diagnostic:
+   - `runs/released/live_panel_v2/results_opt/`
+   - `paper/exports/live_panel_v2_postbatch/`
+2. **L2 flagship** diagnostic:
+   - `runs/released/l2_verified_flagship_v1/results/`
+   - `paper/exports/l2_verified_flagship_v1/`
+
+**Evidence-frontier surfaces**
+
+1. **Verified** strict comparison (inventory bound):
+   - `paper/exports/strict_feasibility_report.json`
+2. **Rust proof subset**:
+   - `runs/released/rust_proof_subset_v1/results_seal/`
+
+**Minimal reproduction**
+
+```bash
+cargo build --workspace
+cargo run --bin eval-ladder -- schema validate
+cargo run --bin eval-ladder -- demo run --out runs/demo --tasks 2
+```
+
+**Claim discipline:** `docs/CLAIM_LOCK_NEURIPS2026.md`, `paper/exports/CLAIM_SOURCE_MAP.md`, and `ci/scripts/check_paper_claim_sources.py`.
+
+### What this artifact does not claim
+
+- It does not generate coding-agent patches.
+- It does not replace SWE-bench.
+- It does not estimate population-level bug rates from the L2 diagnostic slice.
+- It does not prove full semantic correctness of candidate patches.
+- It does not use synthetic L4 counterexamples as headline empirical evidence.
+
 ## Why this project exists
 
 Benchmark pass rates can change when evaluator assumptions change. `eval-ladder`

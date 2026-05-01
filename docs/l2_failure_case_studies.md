@@ -1,14 +1,42 @@
-# L2 failure case studies (primary evaluation cohort v1)
+# L2 failure case studies (L2 flagship primary cohort v1)
 
-Human adjudication sample from frozen run results at `runs/released/l2_verified_flagship_v1/results/batch_summary.json` with reference-patch context from `paper/exports/l2_verified_flagship_v1/gold_patch_validation.csv` when available.
+Human adjudication sample from frozen run results at
+`runs/released/l2_verified_flagship_v1/results/batch_summary.json` with
+reference-patch context from
+`paper/exports/l2_verified_flagship_v1/gold_patch_validation.csv` when
+available.
+
+The **regression stress-control arm** is a **negative-control / protocol arm**.
+Its reversals demonstrate **evaluator-induced score changes**, not natural
+product regressions. Rows that fail via `regression_forced_fail` are
+**protocol-control evidence**, not evidence that the upstream issue regressed in
+production.
+
+## Human review summary (diagnostic sample)
+
+The review sample is **diagnostic** and **single-reviewer**; it is **not** used to
+estimate population-level true-positive rates.
+
+| Review label | Augmented tests | Regression stress-control | Total |
+|--------------|-----------------|----------------------------|-------|
+| Issue-relevant candidate weakness | 2 | 0 | 2 |
+| Valid stress-control reversal | 0 | 2 | 2 |
+| Unclear or infrastructure artifact | 2 | 2 | 4 |
 
 ## Sample composition
 
 - Total reviewed: `8`
-- `L2_AUG_TESTS_FAIL`: `4`
-- `L2_REGRESSION_FAIL`: `4`
-- Labels `true_positive` (all): `4`
-- `true_positive` in augmented channel: `2`; in regression channel: `2` (regression TP uses an operational gate-faithfulness definition; see Integrity note).
+- Augmented-test failures (`L2_AUG_TESTS_FAIL`): `4`
+- Regression stress-control failures (`L2_REGRESSION_FAIL`): `4`
+- Issue-relevant candidate weakness: `2` augmented cases
+- Valid stress-control reversal: `2` regression-control cases (validator behaved
+  according to its declared Evaluator Card; `regression_forced_fail` as designed)
+- Unclear or infrastructure artifact: `4` cases
+
+Do **not** describe forced-fail regression rows as semantic “true positives.”
+Use **protocol_control_reversal** / **stress_control_reversal** when referring to
+score reversals on that arm, or **valid stress-control reversal** when the
+outcome matches the predeclared control specification.
 
 ## Case 1: astropy__astropy-7671 / agent source 1
 
@@ -35,7 +63,7 @@ Issue relevance assessment: `directly_issue_relevant`.
 
 ### Human adjudication
 
-`true_positive` (confidence `high`).
+`issue_relevant_candidate_weakness` (confidence `high`).
 
 ### Evidence
 
@@ -66,7 +94,7 @@ Issue relevance assessment: `weakly_relevant`.
 
 ### Human adjudication
 
-`unclear` (confidence `medium`).
+`unclear_or_infrastructure_artifact` (confidence `medium`).
 
 ### Evidence
 
@@ -97,7 +125,7 @@ Issue relevance assessment: `weakly_relevant`.
 
 ### Human adjudication
 
-`unclear` (confidence `medium`).
+`unclear_or_infrastructure_artifact` (confidence `medium`).
 
 ### Evidence
 
@@ -128,7 +156,7 @@ Issue relevance assessment: `weakly_relevant`.
 
 ### Human adjudication
 
-`true_positive` (confidence `medium`).
+`issue_relevant_candidate_weakness` (confidence `medium`).
 
 ### Evidence
 
@@ -155,11 +183,12 @@ targeted_regression:regression_forced_fail exit_code=1
 
 ### Why this is issue-relevant
 
-Issue relevance assessment: `regression_relevant`.
+Issue relevance assessment: `regression_relevant` (protocol labeling; not a
+claim of natural product regression).
 
 ### Human adjudication
 
-`true_positive` (confidence `medium`).
+`valid_stress_control_reversal` (confidence `medium`).
 
 ### Evidence
 
@@ -186,11 +215,11 @@ targeted_regression:regression_forced_fail exit_code=1
 
 ### Why this is issue-relevant
 
-Issue relevance assessment: `regression_relevant`.
+Issue relevance assessment: `regression_relevant` (protocol labeling).
 
 ### Human adjudication
 
-`true_positive` (confidence `medium`).
+`valid_stress_control_reversal` (confidence `medium`).
 
 ### Evidence
 
@@ -258,6 +287,10 @@ Issue relevance assessment: `not_relevant`.
 
 `runs/released/l2_verified_flagship_v1/results_regression_fail/sweagent__pylint-dev__pylint-6903__regressionfail`
 
-## Integrity note
+## Integrity note (regression arm)
 
-Regression-family rows use `regression_forced_fail` in `strengthening_spec_regression_fail.json`; adjudicate as `infrastructure_artifact`, not semantic regression.
+Regression-family rows use `regression_forced_fail` in
+`strengthening_spec_regression_fail.json`. Interpret **L2_REGRESSION_FAIL** on
+this arm as **controlled protocol / stress-control evidence**, not standalone
+proof of natural product regression on the ticket. When the failure is not
+task-relevant, adjudicate as **`infrastructure_artifact`**.

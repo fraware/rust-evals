@@ -1,5 +1,12 @@
 # L2 selection protocol (primary evaluation cohort v1)
 
+> **Important interpretation note:** The 66-row L2 primary cohort is
+> **validator-focused** and **diagnostic**. It is **not** a random sample and
+> must **not** be used to estimate the population rate of semantic failure in
+> SWE-bench-style tasks. The regression arm includes `regression_forced_fail`;
+> those rows are **protocol-control evidence**, not natural product-regression
+> evidence.
+
 This document is the **auditable protocol** for the 66-row L2 primary-cohort slice
 `runs/released/l2_verified_flagship_v1/`. The slice is **validator-focused and
 diagnostic**: it is not a random draw from a well-defined superpopulation, and

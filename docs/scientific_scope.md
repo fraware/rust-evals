@@ -2,20 +2,32 @@
 
 This document records the scientific posture of `eval-ladder`. It is the
 reference for reviewers and should be cited by the paper. See also
-[`README.md`](README.md) for the full documentation map.
+[`README.md`](../README.md) for the full documentation map, the NeurIPS claim
+lock in [`CLAIM_LOCK_NEURIPS2026.md`](CLAIM_LOCK_NEURIPS2026.md), and
+[`evidence_empirical_status.md`](evidence_empirical_status.md) for machine-checked
+gates.
 
 ## Research question
 
 Given a fixed panel of externally generated candidate patches for a benchmark
-task suite, how much of the officially reported resolution rate survives when
-the evaluator is replaced by a trusted, strengthened, policy-aware, and
-(for a curated subset) proof-carrying evaluator?
+task suite, how do **official and trusted** benchmark conclusions change when
+the evaluator is replaced or strengthened along a predeclared ladder (L0–L4),
+and how can those changes be reported as **evaluator-conditioned measurements**
+with sealed, auditable evidence?
 
 ## Core paper claim
 
-> Official coding-agent benchmark scores overstate semantically justified
-> issue resolution; a trusted evaluator and a curated proof-carrying subset
-> reveal the size and structure of that overstatement.
+Coding-agent benchmark scores are **evaluator-conditioned measurements**.
+Eval-Ladder makes evaluator transformations **executable and auditable** by
+scoring fixed candidate patches across official scoring, trusted rerun,
+strengthened validation, policy-conformant execution, and semantic-obligation
+surfaces. In the current submission, **Live v2** and **L2 flagship** are the
+**central diagnostic** surfaces; **Verified feasibility** and **Rust
+proof-subset** results are **evidence-frontier** results (see claim lock).
+
+Official or rerun benchmark conclusions **can change** under evaluator
+transformations; the framework records **where** and **how** they change rather
+than collapsing them into a single population rate claim.
 
 ## Scope for evaluator and dataset publication venues
 
@@ -26,27 +38,24 @@ The Evaluation & Datasets track explicitly welcomes:
 - Refined evaluation protocols.
 - Executable tools that improve how evaluative claims are constructed.
 
-`eval-ladder` produces all four: an audit (the ladder descent), a comparison
-(official vs trusted vs strengthened vs policy-aware vs semantic), a refined
-protocol (L0-L4), and an executable tool (the `eval-ladder` CLI and the
-signed evidence bundles).
+`eval-ladder` produces all four: a structured comparison across evaluator
+surfaces, a refined protocol (L0–L4), and an executable tool (the `eval-ladder`
+CLI and signed evidence bundles).
 
-### Dataset posture
+### Dataset posture (submission: Mode 1)
 
-The repository audits **only existing public datasets** at bootstrap:
-SWE-Bench Verified, SWE-bench-Live, and the Rust-SWE-bench release. Under
-the track's rules this removes the hosting and Croissant requirements that
-apply to new dataset releases.
+For the NeurIPS 2026 E&D submission this repository adopts **Mode 1: code-only
+audit submission** (see `docs/submission_checklist.md`):
 
-The curated proof-carrying subset is a derived evaluation slice over those
-public datasets. Two release modes are planned, tracked in
-`docs/submission_checklist.md`:
+- Audit **only existing public datasets** at bootstrap (SWE-Bench Verified,
+  SWE-bench-Live, Rust-SWE-bench release).
+- **No new dataset artifact** for redistribution; **no Croissant** requirement
+  on this path.
+- The curated proof subset ships as **task identifiers plus obligations** over
+  upstream public tasks, not as redistributed benchmark payloads.
 
-1. **Code-only audit submission.** The proof subset ships as a manifest of
-   task identifiers plus obligations; no raw benchmark data is redistributed.
-2. **Code + new proof subset as a dataset.** The same manifest is published
-   as a Croissant-compliant dataset. This path is strictly stronger for the
-   paper and strictly heavier operationally.
+Mode 2 (hosting a new proof subset as a Croissant dataset with datasheet and
+selection-bias audit) remains a future, heavier path.
 
 ## Related work this repository is built to absorb and extend
 
@@ -76,12 +85,11 @@ directions.
    edits, undeclared network access, non-deterministic behaviour, or
    incomplete traces. L3 surfaces that process-level invalidity explicitly
    and attributes a separable score drop to it.
-2. **Semantic obligation (L4).** For a curated subset of tasks we encode
-   the intended semantic property as a machine-checkable Lean obligation.
-   A patch that passes all tests but does not establish the intended
-   property fails L4. The residual gap between L2/L3 and L4 is the clearest
-   available estimate of how much "semantically justified" success the
-   benchmarks would lose under a stricter criterion.
+2. **Semantic obligation (L4).** For a curated subset of tasks we attach
+   machine-checkable obligations (Lean). This is an **implemented extension
+   surface** for obligation-aware scoring; it is **not**, in the current
+   submission, a claim of full semantic verification or of a natural semantic
+   failure rate for SWE-bench-scale populations.
 
 ## Required outputs for the paper
 
@@ -91,33 +99,28 @@ The analysis crate must deterministically produce:
 - Conditional false-success rate `P(fail at L_{k+1} | pass at L_k)`.
 - Rank correlation between leaderboards derived at each level.
 - Benchmark-wise, agent-wise, and task-category drops.
-- Static-vs-live gap.
-- Proof-subset residual gap.
+- Static-vs-live gap (Live diagnostic).
 - Error taxonomy aggregated by stable code.
 
 See `docs/evaluation_ladder.md` and `packages/rust/analysis` for the full
-contract.
+contract. Proof-subset **natural** semantic minima are **evidence-gated**; see
+`docs/evidence_empirical_status.md`.
 
 ## Current empirical status in-tree
 
-The repository now includes one frozen, verified Rust-native pilot run at
-`runs/released/rust_pilot_v1/results/` with matching paper exports under
-`paper/exports/rust_pilot_v1/`.
+Frozen panels, exports, and gate outcomes are summarized in
+`docs/evidence_empirical_status.md` and bounded offline by
+`paper/exports/strict_feasibility_report.json` (from
+`ci/scripts/analyze_strict_feasibility.py`).
 
-- This is evidence that the full artifact chain (batch -> paper-export ->
-  verify) executes end-to-end on real upstream data.
-- It is not yet a panel-level scientific result because the sample size is
-  one task and L0/L1 timed out; final claims remain tied to the full panel
-  releases.
-
-For current strict-gate readiness without rerunning long batches, see
-`paper/exports/strict_feasibility_report.json` (produced by
-`ci/scripts/analyze_strict_feasibility.py`). That report is the canonical
-offline bound used to decide whether headline strict claims are currently
-supported by in-repo evidence inventory.
+The repository includes end-to-end pilot and flagship bundles; **headline
+empirical claims** in the NeurIPS package are locked to Tier A/B in
+`docs/CLAIM_LOCK_NEURIPS2026.md`.
 
 ## Non-goals
 
 - Producing our own coding agents. We evaluate externally produced patches.
 - Automated Rust-to-Lean translation. Lean obligations are curated.
 - A new benchmark dataset at bootstrap. We audit existing public datasets.
+- Population-scale leaderboards or natural semantic-failure-rate estimates from
+  diagnostic slices alone.

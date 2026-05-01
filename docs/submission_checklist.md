@@ -120,6 +120,9 @@ Choose one mode per submission.
 
 - [x] Machine-checkable gate script for empirical tranche quality:
       `ci/scripts/check_evidence_quality.py`.
+- [x] Paper claim wiring vs frozen exports (NeurIPS claim lock):
+      `paper/paper_claim_sources.json` and `ci/scripts/check_paper_claim_sources.py`
+      (invoked from `ci/scripts/run_evidence_tier1_checks.py`).
 - [x] L1 harness-error clustering for triage:
       `ci/scripts/triage_l1_harness_errors.py` (see evidence tranche plan).
 - [x] Preflight of ``official_test_entrypoint`` selectors vs materialized

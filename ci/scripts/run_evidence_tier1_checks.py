@@ -39,6 +39,12 @@ def main() -> int:
     steps: list[tuple[str, list[str]]] = [
         ("compileall ci/scripts", ["-m", "compileall", "-q", "ci/scripts"]),
         (
+            "paper claim sources",
+            [
+                str(root / "ci/scripts/check_paper_claim_sources.py"),
+            ],
+        ),
+        (
             "structural rust-proof gate",
             [
                 str(root / "ci/scripts/check_evidence_quality.py"),

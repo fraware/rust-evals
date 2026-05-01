@@ -1,9 +1,13 @@
 # Empirical evidence gates (live status)
 
+**NeurIPS 2026 claim lock:** Authoritative allowed/prohibited claims for the
+submission package are listed in `docs/CLAIM_LOCK_NEURIPS2026.md`, with a
+per-surface source map in `paper/exports/CLAIM_SOURCE_MAP.md`.
+
 **Claim alignment:** L3 and L4 are real surfaces in the evaluator
 but **not** the two central quantitative pillars of the current paper. The
 **primary** frozen evidence is the **Live v2** static-vs-live panel and the
-**L2 primary evaluation cohort** batch. **Synthetic** L4 counterexample or
+**L2 flagship** batch. **Synthetic** L4 counterexample or
 broken-obligation **replays** are for **regression / mechanism** testing only
 and are **out of scope** for headline pass/fail statistics. This matches
 `README.md` and `docs/proof_subset_policy.md`.
@@ -83,6 +87,13 @@ python ci/scripts/analyze_strict_feasibility.py
 ```
 
 Current report: `paper/exports/strict_feasibility_report.json`.
+
+| Quantity | Value |
+|----------|-------|
+| Shared L1-pass tasks across three agents | 7 |
+| One-candidate task-agent upper bound | 21 |
+| Strict threshold | 30 |
+| Status | inventory-bound frontier |
 
 - Public-agent L1-pass inventory from all in-repo summaries yields
   `7` tasks with pass evidence for all three public agents

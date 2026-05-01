@@ -1,0 +1,45 @@
+surface_id: live_v2_static_vs_live
+purpose: >-
+  Diagnostic static-anchor vs live provenance comparison on a small overlapping
+  task panel for three public agent sources.
+scientific_question: >-
+  How much do static-anchor pass rates overstate observed live outcomes under
+  fixed candidates and the same evaluator stack?
+applicability_domain: >-
+  Sealed bundles under runs/released/live_panel_v2/results_opt; agents gru,
+  honeycomb, sweagent; tasks drawn from overlapping verified-anchor and live
+  manifests documented in the Live panel README.
+benchmark_sources: >-
+  SWE-Bench Verified (static anchor) and SWE-bench-Live manifests under
+  benchmarks/verified/manifests and benchmarks/live/manifests.
+candidate_sources: >-
+  Frozen public candidate patches referenced by the Live v2 panel input; one
+  candidate row per (agent, task) in the released panel.
+selection_rule: >-
+  Predeclared Live v2 panel construction (see runs/released/live_panel_v2/README.md).
+exclusion_rule: >-
+  Invalid or unevaluated bundles are reported in summaries; exclusions follow the
+  frozen panel manifest, not post-hoc outcome filtering.
+denominator_rule: >-
+  Pass rates use evaluated rows per agent stratum as emitted in batch_summary /
+  paper exports (static vs live denominators reported separately).
+invalid_row_rule: >-
+  Invalid bundles and harness errors are surfaced with stable primary_reason
+  strings; integrity is checked via eval-ladder verify run-dir.
+levels_used: L0, L1
+validator_families: Official adapter scoring (L0); deterministic trusted rerun (L1).
+known_false_positive_risks: >-
+  Harvester drift, image or registry drift, and harness flakiness can fail good patches.
+known_false_negative_risks: >-
+  Passes do not establish issue-level semantic correctness beyond the benchmark's
+  native tests at L1.
+gold_patch_validation: Not applicable at headline Live-vs-static comparison (L2+ gold protocols are separate).
+human_review: Optional qualitative notes; headline statistics are machine-exported.
+reproduction_command: >-
+  just reproduce-paper-tables
+  (requires release eval-ladder); then python ci/scripts/check_evidence_quality.py live
+  --paper-export-dir paper/exports/live_panel_v2_postbatch
+source_paths: >-
+  runs/released/live_panel_v2/results_opt/;
+  paper/exports/live_panel_v2_postbatch/
+claim_status: central

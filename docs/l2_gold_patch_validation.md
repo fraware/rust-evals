@@ -106,6 +106,13 @@ Interpret low gold L2 pass rates under this mode as expected protocol behavior
 (especially for `regression_forced_fail`), not as direct evidence that gold
 patches are semantically bad.
 
+## Paper wording (validator legitimacy only)
+
+Gold-patch validation shows that the headline L2 harness can accept reference
+patches under the predeclared **gold-mechanical** profile. This validates the
+harness at the **eligible denominator** (gold passes L0 and L1), but does **not**
+imply that every candidate L2 failure is a semantic defect.
+
 ## Non-overclaim guardrails
 
 - Gold headline validation and strict candidate results answer different

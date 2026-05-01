@@ -1,0 +1,35 @@
+surface_id: verified_feasibility_frontier
+purpose: >-
+  Offline inventory bound for strict three-agent Verified-style comparison from
+  existing in-repo batch summaries without new candidate ingestion.
+scientific_question: >-
+  Given frozen public-agent pass observations, can a predeclared strict candidate
+  count threshold be met without adding tasks or candidates?
+applicability_domain: >-
+  Inputs documented in paper/exports/strict_feasibility_report.json produced by
+  ci/scripts/analyze_strict_feasibility.py from current summaries.
+benchmark_sources: >-
+  SWE-Bench Verified and related verified-style panels referenced by the analyzer.
+candidate_sources: >-
+  Public agent candidate inventories summarized in-tree (no new downloads assumed).
+selection_rule: >-
+  Analyzer-defined pairing rules and shared-task detection as implemented in
+  analyze_strict_feasibility.py.
+exclusion_rule: >-
+  Synthetic replays or non-public inventories are out of scope for this bound.
+denominator_rule: >-
+  Reported fields include max_rows_if_single_candidate_per_task and agent/task
+  pair counts in strict_feasibility_report.json.
+invalid_row_rule: N/A for JSON report; upstream invalid rows remain in source summaries.
+levels_used: >-
+  Feasibility references L1-pass evidence across agents; not a full L0–L4 ladder export.
+validator_families: Inventory logic only (no new container runs in this artifact).
+known_false_positive_risks: >-
+  Stale summaries could mis-count if not regenerated after panel changes.
+known_false_negative_risks: >-
+  Bound is optimistic if additional compatible candidates exist outside summarized panels.
+gold_patch_validation: Not applicable to the feasibility JSON artifact.
+human_review: Not required; output is machine-generated JSON.
+reproduction_command: python ci/scripts/analyze_strict_feasibility.py
+source_paths: paper/exports/strict_feasibility_report.json
+claim_status: frontier

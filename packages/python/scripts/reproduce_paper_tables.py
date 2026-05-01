@@ -104,8 +104,10 @@ def main() -> int:
 
     live_run = repo_root / "runs/released/live_panel_v2/results_opt"
     l2_run = repo_root / "runs/released/l2_verified_flagship_v1/results"
+    rust_seal_run = repo_root / "runs/released/rust_proof_subset_v1/results_seal"
     live_summary = live_run / "batch_summary.json"
     l2_summary = l2_run / "batch_summary.json"
+    rust_seal_summary = rust_seal_run / "batch_summary.json"
     gold_results = (
         repo_root / "runs/released/l2_verified_flagship_v1/gold_patch_results"
     )
@@ -117,6 +119,7 @@ def main() -> int:
     for path, label in [
         (live_summary, "live batch_summary"),
         (l2_summary, "L2 batch_summary"),
+        (rust_seal_summary, "rust proof seal batch_summary"),
         (proof_manifest, "proof manifest"),
     ]:
         if not path.is_file():
@@ -135,13 +138,19 @@ def main() -> int:
 
     live_out = repo_root / "paper/exports/live_panel_v2_postbatch"
     l2_out = repo_root / "paper/exports/l2_verified_flagship_v1"
+    rust_out = repo_root / "paper/exports/rust_proof_subset_v1_seal_release"
     tex_dir = repo_root / "paper/tables"
 
     _run_eval_ladder(repo_root, bin_path.resolve(), live_run, live_out)
     _run_eval_ladder(repo_root, bin_path.resolve(), l2_run, l2_out)
+    _run_eval_ladder(repo_root, bin_path.resolve(), rust_seal_run, rust_out)
 
     _ensure_manifest_schema(live_out / "manifest.json", "live paper-export manifest")
     _ensure_manifest_schema(l2_out / "manifest.json", "L2 paper-export manifest")
+    _ensure_manifest_schema(
+        rust_out / "manifest.json",
+        "rust proof seal paper-export manifest",
+    )
 
     _run_py(
         repo_root,
@@ -200,12 +209,13 @@ def main() -> int:
     input_paths = [
         live_summary,
         l2_summary,
+        rust_seal_summary,
         gold_csv,
         feas_out,
         proof_manifest,
     ]
     output_paths: list[Path] = []
-    for base in [live_out, l2_out, tex_dir]:
+    for base in [live_out, l2_out, rust_out, tex_dir]:
         if base.is_dir():
             output_paths.extend(sorted(base.rglob("*")))
     output_paths = [x for x in output_paths if x.is_file()]
