@@ -1,7 +1,7 @@
 # L2 reference patch validation (primary evaluation cohort v1)
 
-This protocol defines how upstream developer/reference patches are replayed for L2
-validator legitimacy checks without conflating known protocol artifacts with
+This protocol defines how upstream developer/reference patches are replayed for
+L2 validator legitimacy checks without conflating known protocol artifacts with
 patch quality.
 
 ## Scope and objective
