@@ -66,11 +66,11 @@ in `docs/evaluation_ladder.md`.
 | Work                  | Scale                                                    | Findings motivating a ladder level |
 |-----------------------|----------------------------------------------------------|------------------------------------|
 | SWE-bench             | 2,294 tasks, 12 Python repositories.                     | Defines L0 (official scoring).     |
-| SWE-Bench+            | Re-evaluates public leaderboards.                        | One system drops 12.47% -> 3.97%; motivates L1 (trusted rerun) and L2 (strengthened tests). |
-| PatchDiff             | Patch-level behavioural comparison.                      | 7.8% of passing patches diverge from developer tests; ~6.2-point inflation; motivates L2's differential module. |
-| UTBoost               | Test adequacy audit.                                     | Insufficient/erroneous tests affect 40.9% of Lite and 24.4% of Verified entries; motivates L2 augmented tests. |
-| SWE-bench-Live        | 1,319 live tasks, 93 repositories, per-task Docker images. | Static-vs-live gap; motivates Live adapter and static-vs-live analysis output. |
-| Rust-SWE-bench        | 500 tasks, 34 Rust repositories.                         | Repository-wide Rust semantics; motivates Rust adapter and Lean L4 slice. |
+| SWE-Bench+            | Re-evaluates public leaderboards.                        | One system drops 12.47% → 3.97%;<br>motivates L1 (trusted rerun) and L2 (strengthened tests). |
+| PatchDiff             | Patch-level behavioural comparison.                      | 7.8% of passing patches diverge from developer tests;<br>~6.2-point inflation; motivates L2's differential module. |
+| UTBoost               | Test adequacy audit.                                     | Insufficient/erroneous tests affect 40.9% of Lite and<br>24.4% of Verified entries; motivates L2 augmented tests. |
+| SWE-bench-Live        | 1,319 live tasks, 93 repositories, per-task Docker images. | Static-vs-live gap; motivates Live adapter and<br>static-vs-live analysis output. |
+| Rust-SWE-bench        | 500 tasks, 34 Rust repositories.                         | Repository-wide Rust semantics;<br>motivates Rust adapter and Lean L4 slice. |
 
 References are maintained in `paper/references.bib` once the paper tree is
 seeded.

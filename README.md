@@ -112,27 +112,33 @@ eval-ladder ingest rust --manifest configs/evaluator/rust.toml
 
 ### Evaluate a batch
 
+Example using the **frozen Live v2** panel (headline NeurIPS comparative surface):
+
 ```bash
 eval-ladder evaluate batch \
-  --input runs/released/agent_panel_v1/panel.jsonl \
-  --levels L0,L1,L2,L3 \
+  --input runs/released/live_panel_v2/panel.jsonl \
+  --config configs/evaluator/default.toml \
+  --levels L0,L1 \
   --resume \
   --jobs 2 \
-  --out runs/released/agent_panel_v1/results/
+  --out runs/released/live_panel_v2/results_opt/
 ```
+
+Verified-style and Rust panels use different `--input` paths (for example
+`runs/released/agent_panel_v3_r1/`); see `docs/operational_runbook.md`.
 
 ### Analyze and export
 
 ```bash
 eval-ladder analyze paper-export \
-  --run-dir runs/released/agent_panel_v1/results/ \
-  --out-dir paper/exports/agent_panel_v1/
+  --run-dir runs/released/live_panel_v2/results_opt \
+  --out-dir paper/exports/live_panel_v2_postbatch
 ```
 
 ### Verify artifact integrity
 
 ```bash
-eval-ladder verify run-dir --run-dir runs/released/agent_panel_v1/results/
+eval-ladder verify run-dir --run-dir runs/released/live_panel_v2/results_opt
 ```
 
 ## Repository map

@@ -14,7 +14,7 @@ This guide is the fastest path from clone to a verified local result.
 cargo build --workspace
 cargo run --bin eval-ladder -- schema validate
 cargo run --bin eval-ladder -- demo run --out runs/demo --tasks 2
-cargo run --bin eval-ladder -- verify run-dir --run-dir runs/demo/results
+cargo run --bin eval-ladder -- verify run-dir --run-dir runs/demo/bundles
 ```
 
 Expected outcome:

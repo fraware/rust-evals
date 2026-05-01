@@ -1,9 +1,17 @@
 # Manuscript-ready signoff
 
 Date: 2026-05-03  
-Tag: `v0.1.4-neurips2026-ed` (engineering freeze; CI recorded in `docs/github_release_tag_ci_confirmation.md`)
+Tag: `v0.1.4-neurips2026-ed` (engineering freeze; CI recorded in
+`docs/github_release_tag_ci_confirmation.md`)
 
-Identifying commit: run `git log -1 --pretty=format:%H -- paper/exports/release/MANUSCRIPT_READY_SIGNOFF.md` from a checkout that contains this file (the hash is the commit object that adds or updates this sign-off).
+**Related closure artifacts:** `paper/exports/release/final_validation_matrix.md`,
+`paper/exports/release/gold_validation_export_only_log.md`,
+`paper/exports/release/NEURIPS2026_ED_RELEASE.md`.
+
+**Identifying commit:** run  
+`git log -1 --pretty=format:%H -- paper/exports/release/MANUSCRIPT_READY_SIGNOFF.md`  
+from a checkout that contains this file (the hash is the commit object that adds or
+updates this sign-off).
 
 ## Central empirical surfaces
 
