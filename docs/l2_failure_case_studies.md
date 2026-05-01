@@ -1,24 +1,15 @@
 # L2 failure case studies (L2 flagship primary cohort v1)
 
-Human adjudication sample from frozen run results at
-`runs/released/l2_verified_flagship_v1/results/batch_summary.json` with
-reference-patch context from
-`paper/exports/l2_verified_flagship_v1/gold_patch_validation.csv` when
-available.
+Human adjudication sample from frozen run results at `runs/released/l2_verified_flagship_v1/results/batch_summary.json` with reference-patch context from `paper/exports/l2_verified_flagship_v1/gold_patch_validation.csv` when available.
 
-The **regression stress-control arm** is a **negative-control / protocol arm**.
-Its reversals demonstrate **evaluator-induced score changes**, not natural
-product regressions. Rows that fail via `regression_forced_fail` are
-**protocol-control evidence**, not evidence that the upstream issue regressed in
-production.
+The **regression stress-control arm** is a **negative-control / protocol** arm. Its reversals demonstrate **evaluator-induced score changes**, not natural product regressions. Rows that fail via `regression_forced_fail` are **protocol-control evidence**, not evidence that the upstream issue regressed in production.
 
 ## Human review summary (diagnostic sample)
 
-The review sample is **diagnostic** and **single-reviewer**; it is **not** used to
-estimate population-level semantic-defect rates.
+The review sample is **diagnostic** and **single-reviewer**; it is **not** used to estimate population-level semantic-defect rates.
 
 | Review label | Augmented tests | Regression stress-control | Total |
-|--------------|-----------------|----------------------------|-------|
+|--------------|-----------------|---------------------------|-------|
 | Issue-relevant candidate weakness | 2 | 0 | 2 |
 | Valid stress-control reversal | 0 | 2 | 2 |
 | Unclear or infrastructure artifact | 2 | 2 | 4 |
@@ -29,16 +20,12 @@ estimate population-level semantic-defect rates.
 - Augmented-test failures (`L2_AUG_TESTS_FAIL`): `4`
 - Regression stress-control failures (`L2_REGRESSION_FAIL`): `4`
 - Issue-relevant candidate weakness: `2` augmented cases
-- Valid stress-control reversal: `2` regression-control cases (validator behaved
-  according to its declared Evaluator Card; `regression_forced_fail` as designed)
+- Valid stress-control reversal: `2` regression-control cases (validator behaved according to its declared Evaluator Card; `regression_forced_fail` as designed)
 - Unclear or infrastructure artifact: `4` cases
 
-Do **not** describe forced-fail regression rows as confirmations of natural product regression on the ticket.
-Use **protocol_control_reversal** / **stress_control_reversal** when referring to
-score reversals on that arm, or **valid stress-control reversal** when the
-outcome matches the predeclared control specification.
+Do **not** describe forced-fail regression rows as confirmations of natural product regression on the ticket. Use **protocol_control_reversal** / **stress_control_reversal** when referring to score reversals on that arm, or **valid stress-control reversal** when the outcome matches the predeclared control specification.
 
-## Case 1: astropy__astropy-7671 / agent source 1
+## Case 1: astropy__astropy-7671 / gru
 
 **Validator family:** `L2_AUG_TESTS_FAIL`  
 **L1 verdict:** pass  
@@ -51,7 +38,7 @@ Official SWE-bench issue: minversion comparison failures under LooseVersion edge
 
 ### Candidate behavior
 
-Candidate patch is the frozen agent submission for this task (see `artifact_bundle`).
+Candidate patch is the sealed agent submission for this task (see `artifact_bundle`).
 
 ### L2 failure
 
@@ -69,7 +56,7 @@ Issue relevance assessment: `directly_issue_relevant`.
 
 `runs/released/l2_verified_flagship_v1/results_astropy/gru__astropy__astropy-7671__astropy`
 
-## Case 2: django__django-7530 / agent source 1
+## Case 2: django__django-7530 / gru
 
 **Validator family:** `L2_AUG_TESTS_FAIL`  
 **L1 verdict:** pass  
@@ -82,7 +69,7 @@ Django ticket fix evaluated on verified harness (official tests).
 
 ### Candidate behavior
 
-Candidate patch is the frozen agent submission for this task (see `artifact_bundle`).
+Candidate patch is the sealed agent submission for this task (see `artifact_bundle`).
 
 ### L2 failure
 
@@ -100,7 +87,7 @@ Issue relevance assessment: `weakly_relevant`.
 
 `runs/released/l2_verified_flagship_v1/results_astropy/gru__django__django-7530__astropy`
 
-## Case 3: pylint-dev__pylint-7277 / agent source 2
+## Case 3: pylint-dev__pylint-7277 / honeycomb
 
 **Validator family:** `L2_AUG_TESTS_FAIL`  
 **L1 verdict:** pass  
@@ -109,11 +96,11 @@ Issue relevance assessment: `weakly_relevant`.
 
 ### Issue context
 
-Pylint change-set from the verified primary-cohort slice.
+Pylint change-set from verified flagship slice.
 
 ### Candidate behavior
 
-Candidate patch is the frozen agent submission for this task (see `artifact_bundle`).
+Candidate patch is the sealed agent submission for this task (see `artifact_bundle`).
 
 ### L2 failure
 
@@ -131,7 +118,7 @@ Issue relevance assessment: `weakly_relevant`.
 
 `runs/released/l2_verified_flagship_v1/results_astropy/honeycomb__pylint-dev__pylint-7277__astropy`
 
-## Case 4: sphinx-doc__sphinx-9698 / agent source 3
+## Case 4: sphinx-doc__sphinx-9698 / sweagent
 
 **Validator family:** `L2_AUG_TESTS_FAIL`  
 **L1 verdict:** pass  
@@ -140,11 +127,11 @@ Issue relevance assessment: `weakly_relevant`.
 
 ### Issue context
 
-Sphinx documentation/build issue from the verified primary-cohort slice.
+Sphinx documentation/build issue from verified flagship slice.
 
 ### Candidate behavior
 
-Candidate patch is the frozen agent submission for this task (see `artifact_bundle`).
+Candidate patch is the sealed agent submission for this task (see `artifact_bundle`).
 
 ### L2 failure
 
@@ -162,7 +149,7 @@ Issue relevance assessment: `weakly_relevant`.
 
 `runs/released/l2_verified_flagship_v1/results_astropy/sweagent__sphinx-doc__sphinx-9698__astropy`
 
-## Case 5: django__django-7530 / agent source 1
+## Case 5: django__django-7530 / gru
 
 **Validator family:** `L2_REGRESSION_FAIL`  
 **L1 verdict:** pass  
@@ -175,7 +162,7 @@ Django ticket fix evaluated on verified harness (official tests).
 
 ### Candidate behavior
 
-Candidate patch is the frozen agent submission for this task (see `artifact_bundle`).
+Candidate patch is the sealed agent submission for this task (see `artifact_bundle`).
 
 ### L2 failure
 
@@ -183,8 +170,7 @@ targeted_regression:regression_forced_fail exit_code=1
 
 ### Why this is issue-relevant
 
-Issue relevance assessment: `regression_relevant` (protocol labeling; not a
-claim of natural product regression).
+Issue relevance assessment: `regression_relevant`.
 
 ### Human adjudication
 
@@ -194,7 +180,7 @@ claim of natural product regression).
 
 `runs/released/l2_verified_flagship_v1/results_regression_fail/gru__django__django-7530__regressionfail`
 
-## Case 6: pallets__flask-5014 / agent source 1
+## Case 6: pallets__flask-5014 / gru
 
 **Validator family:** `L2_REGRESSION_FAIL`  
 **L1 verdict:** fail  
@@ -203,11 +189,11 @@ claim of natural product regression).
 
 ### Issue context
 
-Flask issue from the verified primary-cohort slice.
+Flask issue from verified flagship slice.
 
 ### Candidate behavior
 
-Candidate patch is the frozen agent submission for this task (see `artifact_bundle`).
+Candidate patch is the sealed agent submission for this task (see `artifact_bundle`).
 
 ### L2 failure
 
@@ -215,7 +201,7 @@ targeted_regression:regression_forced_fail exit_code=1
 
 ### Why this is issue-relevant
 
-Issue relevance assessment: `regression_relevant` (protocol labeling).
+Issue relevance assessment: `regression_relevant`.
 
 ### Human adjudication
 
@@ -225,7 +211,7 @@ Issue relevance assessment: `regression_relevant` (protocol labeling).
 
 `runs/released/l2_verified_flagship_v1/results_regression_fail/gru__pallets__flask-5014__regressionfail`
 
-## Case 7: pydata__xarray-4075 / agent source 2
+## Case 7: pydata__xarray-4075 / honeycomb
 
 **Validator family:** `L2_REGRESSION_FAIL`  
 **L1 verdict:** fail  
@@ -234,11 +220,11 @@ Issue relevance assessment: `regression_relevant` (protocol labeling).
 
 ### Issue context
 
-xarray issue from the verified primary-cohort slice.
+xarray issue from verified flagship slice.
 
 ### Candidate behavior
 
-Candidate patch is the frozen agent submission for this task (see `artifact_bundle`).
+Candidate patch is the sealed agent submission for this task (see `artifact_bundle`).
 
 ### L2 failure
 
@@ -250,13 +236,13 @@ Issue relevance assessment: `not_relevant`.
 
 ### Human adjudication
 
-`infrastructure_artifact` (confidence `high`).
+`unclear_or_infrastructure_artifact` (confidence `high`).
 
 ### Evidence
 
 `runs/released/l2_verified_flagship_v1/results_regression_fail/honeycomb__pydata__xarray-4075__regressionfail`
 
-## Case 8: pylint-dev__pylint-6903 / agent source 3
+## Case 8: pylint-dev__pylint-6903 / sweagent
 
 **Validator family:** `L2_REGRESSION_FAIL`  
 **L1 verdict:** fail  
@@ -265,11 +251,11 @@ Issue relevance assessment: `not_relevant`.
 
 ### Issue context
 
-Pylint issue from the verified primary-cohort slice.
+Pylint issue from verified flagship slice.
 
 ### Candidate behavior
 
-Candidate patch is the frozen agent submission for this task (see `artifact_bundle`).
+Candidate patch is the sealed agent submission for this task (see `artifact_bundle`).
 
 ### L2 failure
 
@@ -281,16 +267,12 @@ Issue relevance assessment: `not_relevant`.
 
 ### Human adjudication
 
-`infrastructure_artifact` (confidence `high`).
+`unclear_or_infrastructure_artifact` (confidence `high`).
 
 ### Evidence
 
 `runs/released/l2_verified_flagship_v1/results_regression_fail/sweagent__pylint-dev__pylint-6903__regressionfail`
 
-## Integrity note (regression arm)
+## Protocol note (regression arm)
 
-Regression-family rows use `regression_forced_fail` in
-`strengthening_spec_regression_fail.json`. Interpret **L2_REGRESSION_FAIL** on
-this arm as **controlled protocol / stress-control evidence**, not standalone
-proof of natural product regression on the ticket. When the failure is not
-task-relevant, adjudicate as **`infrastructure_artifact`**.
+Regression-family rows use `regression_forced_fail` in `strengthening_spec_regression_fail.json`. Interpret them through `docs/CLAIM_LOCK_NEURIPS2026.md` and the regression Evaluator Card (protocol-control / stress-control evidence).

@@ -5,6 +5,11 @@ claims:
     source: paper/exports/live_panel_v2_postbatch/static_vs_live.csv
     required: true
     claim_tier: central
+  live_leave_one_out:
+    paper_location: Appendix (Live sensitivity)
+    source: paper/exports/live_panel_v2_postbatch/live_leave_one_out.csv
+    required: true
+    claim_tier: central
   l2_flagship_counts:
     paper_location: Table 2
     source: paper/exports/l2_verified_flagship_v1/conditional_false_success.csv

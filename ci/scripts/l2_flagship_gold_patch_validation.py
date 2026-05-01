@@ -141,6 +141,57 @@ def _clean_previous_results() -> None:
             shutil.rmtree(p)
 
 
+def _level_from_eval_result(path: Path) -> dict[str, str]:
+    data = _load_json(path)
+    return {
+        "status": str(data.get("status", "")).lower(),
+        "primary_reason": str(data.get("primary_reason", "")),
+    }
+
+
+def _synthesize_gold_batch_entries(arm_dir: Path) -> list[dict[str, Any]]:
+    """Rebuild minimal ``batch_summary`` entries when only bundle leaves exist."""
+    entries_out: list[dict[str, Any]] = []
+    if not arm_dir.is_dir():
+        return entries_out
+    for bundle_dir in sorted(p for p in arm_dir.iterdir() if p.is_dir()):
+        l0p = bundle_dir / "official_results.json"
+        l1p = bundle_dir / "l1_trusted_rerun_results.json"
+        l2p = bundle_dir / "strengthened_results.json"
+        if not (l0p.is_file() and l1p.is_file() and l2p.is_file()):
+            continue
+        l2_data = _load_json(l2p)
+        task_id = str(l2_data.get("task_id", "") or _load_json(l0p).get("task_id", ""))
+        if not task_id:
+            continue
+        cr_path = bundle_dir / "candidate_resolution.json"
+        cand_rel = ""
+        if cr_path.is_file():
+            cr = _load_json(cr_path)
+            pref = cr.get("patch_ref", "")
+            if isinstance(pref, str) and pref.strip():
+                cand_rel = (
+                    f"runs/released/l2_verified_flagship_v1/gold_patch_results/"
+                    f"{pref.replace(chr(92), '/')}"
+                )
+        entries_out.append(
+            {
+                "bundle_hash": _bundle_hash(bundle_dir),
+                "bundle_name": bundle_dir.name,
+                "candidate_path": cand_rel,
+                "entry_id": bundle_dir.name,
+                "levels": {
+                    "l0": _level_from_eval_result(l0p),
+                    "l1": _level_from_eval_result(l1p),
+                    "l2": _level_from_eval_result(l2p),
+                },
+                "status": "ok",
+                "task_path": f"benchmarks/verified/manifests/{task_id}.json",
+            }
+        )
+    return entries_out
+
+
 def _candidate_id(task_id: str, family: str, patch_sha: str) -> str:
     return str(uuid.uuid5(NAMESPACE, f"gold_patch|{task_id}|{family}|{patch_sha}"))
 
@@ -184,7 +235,6 @@ def _build_panel_rows(
     family: str,
 ) -> list[PanelRow]:
     rows: list[PanelRow] = []
-    suffix = "__astropy" if family == "astropy" else "__regressionfail"
     for task_id in task_ids:
         if task_id not in cache_rows:
             raise SystemExit(f"missing {task_id} in {VERIFIED_CACHE}")
@@ -299,14 +349,14 @@ def _l2_reason_family(l2_reason: str) -> str:
     return l2_reason or ""
 
 
-def _rows_from_summary(
-    summary_path: Path,
+def _rows_from_batch_entries(  # noqa: PLR0912
+    entries_raw: list[Any],
+    arm_dir: Path,
     semantic_family: str,
     profile: str,
 ) -> list[dict[str, Any]]:
-    summary = _load_json(summary_path)
     rows: list[dict[str, Any]] = []
-    for entry in summary.get("entries", []):
+    for entry in entries_raw:
         if not isinstance(entry, dict):
             continue
         levels = entry.get("levels", {})
@@ -314,7 +364,7 @@ def _rows_from_summary(
             levels = {}
         task_path = Path(str(entry.get("task_path", "")))
         bundle_name = str(entry.get("bundle_name", ""))
-        bundle_dir = summary_path.parent / bundle_name
+        bundle_dir = arm_dir / bundle_name
         rel_bundle = str(bundle_dir.relative_to(REPO_ROOT)).replace("\\", "/")
         l0 = levels.get("l0", {}) if isinstance(levels.get("l0", {}), dict) else {}
         l1 = levels.get("l1", {}) if isinstance(levels.get("l1", {}), dict) else {}
@@ -385,6 +435,31 @@ def _rows_from_summary(
         )
     rows.sort(key=lambda r: (r["task_id"], r["validator_family"]))
     return rows
+
+
+def _rows_from_summary(
+    summary_path: Path,
+    semantic_family: str,
+    profile: str,
+) -> list[dict[str, Any]]:
+    summary = _load_json(summary_path)
+    raw = summary.get("entries", [])
+    entries_list = raw if isinstance(raw, list) else []
+    return _rows_from_batch_entries(
+        entries_list, summary_path.parent, semantic_family, profile
+    )
+
+
+def _rows_for_gold_arm(
+    arm_dir: Path,
+    semantic_family: str,
+    profile: str,
+) -> list[dict[str, Any]]:
+    summary_path = arm_dir / "batch_summary.json"
+    if summary_path.is_file():
+        return _rows_from_summary(summary_path, semantic_family, profile)
+    synthesized = _synthesize_gold_batch_entries(arm_dir)
+    return _rows_from_batch_entries(synthesized, arm_dir, semantic_family, profile)
 
 
 def _summarize_by_l2_family(
@@ -599,8 +674,9 @@ Regenerate:
 
 ```bash
 python ci/scripts/l2_flagship_gold_patch_validation.py --jobs 1
-python ci/scripts/l2_flagship_gold_patch_validation.py --strict-flagship-specs --jobs 1  # diagnostic
+python ci/scripts/l2_flagship_gold_patch_validation.py --strict-flagship-specs --jobs 1
 ```
+(diagnostic strict replay)
 """
     readme.parent.mkdir(parents=True, exist_ok=True)
     readme.write_text(body, encoding="utf-8")
@@ -616,7 +692,11 @@ def main() -> int:
     parser.add_argument(
         "--no-clean",
         action="store_true",
-        help="Do not delete prior results_astropy/results_regressionfail.",
+        help=(
+            "Do not delete prior results_astropy/results_regressionfail before "
+            "a full evaluate run (ignored when combined with --skip-evaluate, "
+            "which never cleans)."
+        ),
     )
     parser.add_argument("--timeout-secs", type=int, default=1800)
     parser.add_argument("--short-timeout-secs", type=int, default=300)
@@ -642,7 +722,7 @@ def main() -> int:
         eval_config = (REPO_ROOT / eval_config).resolve()
 
     _ensure_dirs()
-    if not args.no_clean:
+    if not args.no_clean and not args.skip_evaluate:
         _clean_previous_results()
 
     profile = (
@@ -689,18 +769,29 @@ def main() -> int:
             eval_config,
         )
 
-    aug_rows = _rows_from_summary(
-        GOLD_RESULTS_ASTROPY / "batch_summary.json",
+    aug_rows = _rows_for_gold_arm(
+        GOLD_RESULTS_ASTROPY,
         "augmented_unit_tests",
         profile,
     )
-    reg_rows = _rows_from_summary(
-        GOLD_RESULTS_REGRESSION / "batch_summary.json",
+    reg_rows = _rows_for_gold_arm(
+        GOLD_RESULTS_REGRESSION,
         "targeted_regression",
         profile,
     )
     export_rows = aug_rows + reg_rows
     export_rows.sort(key=lambda r: (r["task_id"], r["validator_family"]))
+    if args.skip_evaluate:
+        expected_rows = len(task_ids) * 2
+        if len(export_rows) != expected_rows:
+            raise SystemExit(
+                f"refusing to write gold exports: --skip-evaluate produced "
+                f"{len(export_rows)} rows (expected {expected_rows} for "
+                f"{len(task_ids)} tasks across both arms). Restore bundle trees "
+                "under gold_patch_results/results_astropy/ and "
+                "gold_patch_results/results_regressionfail/, or run a full "
+                "evaluate batch without --skip-evaluate."
+            )
     _write_outputs(export_rows, profile)
 
     print(

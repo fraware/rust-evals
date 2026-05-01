@@ -120,7 +120,10 @@ def _load_failures_index() -> dict[str, dict[str, Any]]:
 
 
 def _gold_lookup() -> dict[tuple[str, str], str]:
-    """Keys: (task_id, gold_csv_family) where gold_csv_family is augmented_unit_tests or targeted_regression."""
+    """Keys: (task_id, gold_csv_family).
+
+    ``gold_csv_family`` is ``augmented_unit_tests`` or ``targeted_regression``.
+    """
     lookup: dict[tuple[str, str], str] = {}
     if not GOLD_VALIDATION_CSV.is_file():
         return lookup
@@ -168,10 +171,16 @@ CURATED_ENTRY_IDS: tuple[str, ...] = (
 )
 
 # Human adjudication keyed by entry_id (reviewer-facing).
+# Labels must stay aligned with ``docs/CLAIM_LOCK_NEURIPS2026.md`` / claim-lock
+# prose: never emit deprecated ``true_positive`` tokens into ``docs/*.md``.
+LABEL_ISSUE_WEAKNESS = "issue_relevant_candidate_weakness"
+LABEL_STRESS_REVERSAL = "valid_stress_control_reversal"
+LABEL_UNCLEAR_INFRA = "unclear_or_infrastructure_artifact"
+
 ADJ: dict[str, dict[str, str]] = {
     "gru__astropy__astropy-7671__astropy": {
         "issue_relevance": "directly_issue_relevant",
-        "human_label": "true_positive",
+        "human_label": LABEL_ISSUE_WEAKNESS,
         "confidence": "high",
         "reviewer_notes": (
             "Augmented pytest under -W error trips on the same repo as the "
@@ -181,7 +190,7 @@ ADJ: dict[str, dict[str, str]] = {
     },
     "gru__django__django-7530__astropy": {
         "issue_relevance": "weakly_relevant",
-        "human_label": "unclear",
+        "human_label": LABEL_UNCLEAR_INFRA,
         "confidence": "medium",
         "reviewer_notes": (
             "Augmented selector targets Astropy modeling tests; on Django "
@@ -190,7 +199,7 @@ ADJ: dict[str, dict[str, str]] = {
     },
     "honeycomb__pylint-dev__pylint-7277__astropy": {
         "issue_relevance": "weakly_relevant",
-        "human_label": "unclear",
+        "human_label": LABEL_UNCLEAR_INFRA,
         "confidence": "medium",
         "reviewer_notes": (
             "Same cross-repo augmented command limitation; treat as "
@@ -199,7 +208,7 @@ ADJ: dict[str, dict[str, str]] = {
     },
     "sweagent__sphinx-doc__sphinx-9698__astropy": {
         "issue_relevance": "weakly_relevant",
-        "human_label": "true_positive",
+        "human_label": LABEL_ISSUE_WEAKNESS,
         "confidence": "medium",
         "reviewer_notes": (
             "Warnings-as-errors stress surfaces fragility beyond official "
@@ -208,29 +217,28 @@ ADJ: dict[str, dict[str, str]] = {
     },
     "gru__django__django-7530__regressionfail": {
         "issue_relevance": "regression_relevant",
-        "human_label": "true_positive",
+        "human_label": LABEL_STRESS_REVERSAL,
         "confidence": "medium",
         "reviewer_notes": (
-            "Operational definition for flagship v1: `true_positive` means the "
-            "sealed bundle correctly records an L2_REGRESSION_FAIL outcome on "
-            "the regression validator path (here `regression_forced_fail`). "
-            "This documents comparator behavior of the L2 gate, not a claim "
-            "that the agent patch regressed product behavior."
+            "Valid stress-control reversal: sealed bundle records "
+            "L2_REGRESSION_FAIL on the regression arm including "
+            "`regression_forced_fail` as predeclared in the Evaluator Card. "
+            "This documents evaluator behavior, not a natural product "
+            "regression on the ticket."
         ),
     },
     "gru__pallets__flask-5014__regressionfail": {
         "issue_relevance": "regression_relevant",
-        "human_label": "true_positive",
+        "human_label": LABEL_STRESS_REVERSAL,
         "confidence": "medium",
         "reviewer_notes": (
-            "Same operational definition as Case regression django-7530: "
-            "confirmed L2 regression-channel fail per harness, not semantic "
-            "regression adjudication."
+            "Same stress-control reading as regression django-7530: harness "
+            "protocol signal, not semantic regression adjudication."
         ),
     },
     "honeycomb__pydata__xarray-4075__regressionfail": {
         "issue_relevance": "not_relevant",
-        "human_label": "infrastructure_artifact",
+        "human_label": LABEL_UNCLEAR_INFRA,
         "confidence": "high",
         "reviewer_notes": (
             "Forced-fail regression subcheck; comparator protocol, not patch "
@@ -239,7 +247,7 @@ ADJ: dict[str, dict[str, str]] = {
     },
     "sweagent__pylint-dev__pylint-6903__regressionfail": {
         "issue_relevance": "not_relevant",
-        "human_label": "infrastructure_artifact",
+        "human_label": LABEL_UNCLEAR_INFRA,
         "confidence": "high",
         "reviewer_notes": (
             "Forced-fail regression subcheck; protocol artifact only."
@@ -283,7 +291,6 @@ def _build_review_rows() -> list[dict[str, Any]]:
         bundle_name = str(entry.get("bundle_name", ""))
         bundle_dir = _bundle_dir_for_entry(eid, bundle_name)
         tid = _task_id(entry)
-        vf = _family_from_entry_id(eid)
         pr = str(l2.get("primary_reason", ""))
         adj = ADJ.get(eid, {})
         gps = _gold_pass_display(tid, eid, gold)
@@ -371,44 +378,88 @@ def _write_review_outputs(rows: list[dict[str, Any]]) -> None:
     )
 
 
-def _write_case_studies(rows: list[dict[str, Any]]) -> None:
+def _write_case_studies(rows: list[dict[str, Any]]) -> None:  # noqa: PLR0915
     aug = sum(1 for r in rows if r["validator_family"] == "L2_AUG_TESTS_FAIL")
     reg = sum(1 for r in rows if r["validator_family"] == "L2_REGRESSION_FAIL")
-    tp = sum(1 for r in rows if r["human_label"] == "true_positive")
-    tp_aug = sum(
-        1
-        for r in rows
-        if r["human_label"] == "true_positive"
-        and r["validator_family"] == "L2_AUG_TESTS_FAIL"
-    )
-    tp_reg = sum(
-        1
-        for r in rows
-        if r["human_label"] == "true_positive"
-        and r["validator_family"] == "L2_REGRESSION_FAIL"
-    )
+
+    def _count_arm(label: str, vf: str) -> int:
+        return sum(
+            1
+            for r in rows
+            if r["human_label"] == label and r["validator_family"] == vf
+        )
+
+    n_issue_aug = _count_arm(LABEL_ISSUE_WEAKNESS, "L2_AUG_TESTS_FAIL")
+    n_issue_reg = _count_arm(LABEL_ISSUE_WEAKNESS, "L2_REGRESSION_FAIL")
+    n_stress_aug = _count_arm(LABEL_STRESS_REVERSAL, "L2_AUG_TESTS_FAIL")
+    n_stress_reg = _count_arm(LABEL_STRESS_REVERSAL, "L2_REGRESSION_FAIL")
+    n_unclear_aug = _count_arm(LABEL_UNCLEAR_INFRA, "L2_AUG_TESTS_FAIL")
+    n_unclear_reg = _count_arm(LABEL_UNCLEAR_INFRA, "L2_REGRESSION_FAIL")
+
     lines: list[str] = []
-    lines.append("# L2 failure case studies (flagship v1)")
+    lines.append("# L2 failure case studies (L2 flagship primary cohort v1)")
     lines.append("")
     lines.append(
-        "Human adjudication sample from sealed "
+        "Human adjudication sample from frozen run results at "
         "`runs/released/l2_verified_flagship_v1/results/batch_summary.json` "
-        "with gold-patch context from "
+        "with reference-patch context from "
         "`paper/exports/l2_verified_flagship_v1/gold_patch_validation.csv` "
         "when available."
+    )
+    lines.append("")
+    lines.append(
+        "The **regression stress-control arm** is a **negative-control / protocol** "
+        "arm. Its reversals demonstrate **evaluator-induced score changes**, not "
+        "natural product regressions. Rows that fail via `regression_forced_fail` "
+        "are **protocol-control evidence**, not evidence that the upstream issue "
+        "regressed in production."
+    )
+    lines.append("")
+    lines.append("## Human review summary (diagnostic sample)")
+    lines.append("")
+    lines.append(
+        "The review sample is **diagnostic** and **single-reviewer**; it is **not** "
+        "used to estimate population-level semantic-defect rates."
+    )
+    lines.append("")
+    lines.append("| Review label | Augmented tests | Regression stress-control | Total |")
+    lines.append("|--------------|-----------------|---------------------------|-------|")
+    lines.append(
+        f"| Issue-relevant candidate weakness | {n_issue_aug} | {n_issue_reg} | "
+        f"{n_issue_aug + n_issue_reg} |"
+    )
+    lines.append(
+        f"| Valid stress-control reversal | {n_stress_aug} | {n_stress_reg} | "
+        f"{n_stress_aug + n_stress_reg} |"
+    )
+    lines.append(
+        f"| Unclear or infrastructure artifact | {n_unclear_aug} | {n_unclear_reg} | "
+        f"{n_unclear_aug + n_unclear_reg} |"
     )
     lines.append("")
     lines.append("## Sample composition")
     lines.append("")
     lines.append(f"- Total reviewed: `{len(rows)}`")
-    lines.append(f"- `L2_AUG_TESTS_FAIL`: `{aug}`")
-    lines.append(f"- `L2_REGRESSION_FAIL`: `{reg}`")
-    lines.append(f"- Labels `true_positive` (all): `{tp}`")
+    lines.append(f"- Augmented-test failures (`L2_AUG_TESTS_FAIL`): `{aug}`")
+    lines.append(f"- Regression stress-control failures (`L2_REGRESSION_FAIL`): `{reg}`")
     lines.append(
-        f"- `true_positive` in augmented channel: `{tp_aug}`; "
-        f"in regression channel: `{tp_reg}` "
-        "(regression TP uses an operational gate-faithfulness definition; "
-        "see Integrity note)."
+        f"- Issue-relevant candidate weakness: `{n_issue_aug}` augmented cases"
+    )
+    lines.append(
+        f"- Valid stress-control reversal: `{n_stress_reg}` regression-control cases "
+        "(validator behaved according to its declared Evaluator Card; "
+        "`regression_forced_fail` as designed)"
+    )
+    lines.append(
+        f"- Unclear or infrastructure artifact: `{n_unclear_aug + n_unclear_reg}` cases"
+    )
+    lines.append("")
+    lines.append(
+        "Do **not** describe forced-fail regression rows as confirmations of natural "
+        "product regression on the ticket. Use **protocol_control_reversal** / "
+        "**stress_control_reversal** when referring to score reversals on that arm, "
+        "or **valid stress-control reversal** when the outcome matches the "
+        "predeclared control specification."
     )
     lines.append("")
     for i, row in enumerate(rows, start=1):
@@ -454,12 +505,13 @@ def _write_case_studies(rows: list[dict[str, Any]]) -> None:
         lines.append("")
         lines.append(f"`{row['artifact_bundle']}`")
         lines.append("")
-    lines.append("## Integrity note")
+    lines.append("## Protocol note (regression arm)")
     lines.append("")
     lines.append(
         "Regression-family rows use `regression_forced_fail` in "
-        "`strengthening_spec_regression_fail.json`; adjudicate as "
-        "`infrastructure_artifact`, not semantic regression."
+        "`strengthening_spec_regression_fail.json`. Interpret them through "
+        "`docs/CLAIM_LOCK_NEURIPS2026.md` and the regression Evaluator Card "
+        "(protocol-control / stress-control evidence)."
     )
     OUT_CASE_STUDIES.write_text("\n".join(lines) + "\n", encoding="utf-8")
 

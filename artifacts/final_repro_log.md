@@ -148,6 +148,16 @@ feasibility analysis.
 python ci/scripts/l2_flagship_gold_patch_validation.py --jobs 2
 ```
 
+To **re-export** CSV/JSON summaries from an existing sealed tree without
+re-running containers, pass `--skip-evaluate`. That mode **does not delete**
+prior bundle trees (unlike a full evaluate run). It refuses to overwrite exports
+unless it can reconstruct **both arms** for all flagship tasks (expect
+`2 × N_task` rows); missing `batch_summary.json` files are OK when bundle
+leaves exist under `gold_patch_results/results_astropy/` and
+`gold_patch_results/results_regressionfail/`. If the regression arm directory is
+empty in your checkout, run the full ` --jobs 2` command once on a machine with
+the evaluator runtime.
+
 ## Lean (optional, L4)
 
 From the operational runbook / proof-subset policy:

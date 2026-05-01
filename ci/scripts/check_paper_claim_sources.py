@@ -59,16 +59,28 @@ def _yaml_sync_failures(root: Path, json_cfg: dict[str, Any]) -> list[str]:
 
 def _doc_guards(root: Path) -> list[str]:
     """Reject deprecated adjudication tokens that invited regression-arm overclaim."""
+    failures: list[str] = []
     case_path = root / "docs" / "l2_failure_case_studies.md"
-    if not case_path.is_file():
-        return []
-    text = case_path.read_text(encoding="utf-8")
-    if "true_positive" in text:
-        return [
-            "docs/l2_failure_case_studies.md must not contain token true_positive "
-            "(use stress-control / protocol-control labels)"
-        ]
-    return []
+    if case_path.is_file():
+        text = case_path.read_text(encoding="utf-8")
+        if "true_positive" in text:
+            failures.append(
+                "docs/l2_failure_case_studies.md must not contain token true_positive "
+                "(use stress-control / protocol-control labels)"
+            )
+    proto = root / "docs" / "l2_selection_protocol.md"
+    if proto.is_file():
+        ptext = proto.read_text(encoding="utf-8")
+        if "regression_forced_fail" not in ptext:
+            failures.append(
+                "docs/l2_selection_protocol.md must mention regression_forced_fail "
+                "(protocol-control interpretation)"
+            )
+        if "validator-focused" not in ptext:
+            failures.append(
+                "docs/l2_selection_protocol.md must keep validator-focused/diagnostic framing"
+            )
+    return failures
 
 
 def _claim_failures(
@@ -101,7 +113,11 @@ def _claim_failures(
         return out
 
     live_prefix = headline_live.rstrip("/") + "/" if headline_live else ""
-    if name == "live_static_counts" and live_prefix and not norm.startswith(live_prefix):
+    if (
+        name in {"live_static_counts", "live_leave_one_out"}
+        and live_prefix
+        and not norm.startswith(live_prefix)
+    ):
         out.append(f"claim {name}: central Live source must live under {headline_live}/")
 
     l2_prefix = headline_l2.rstrip("/") + "/" if headline_l2 else ""
