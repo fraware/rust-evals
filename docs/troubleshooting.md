@@ -31,6 +31,10 @@
   - Verify bundle integrity: `eval-ladder verify run-dir --run-dir <path>`
   - Confirm identical evaluator config and strengthening spec paths.
 
+- **`verify run-dir` on a demo finds nothing or wrong bundles**
+  - Demo output is under `<out>/bundles` (for example `runs/demo/bundles`), not
+    the demo root directory alone.
+
 - **Paper exports missing expected tables**
   - Re-run: `eval-ladder analyze paper-export --run-dir <run> --out-dir <export>`
   - Ensure the run includes the levels needed for the requested analysis.

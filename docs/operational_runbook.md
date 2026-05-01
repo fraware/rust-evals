@@ -348,6 +348,11 @@ paper's analysis tables. All subcommands are pure - they never re-run
 a candidate - and every `*_results.json` in every bundle is treated as
 authoritative.
 
+Examples below use `runs/released/agent_panel_v1/results/` as a compact **frozen**
+directory so commands fit on one line. For **paper-facing** reruns, set `--run-dir`
+(and matching `--out-dir` parents) to the released surfaces named in `README.md`
+and `docs/submission_checklist.md` (for example Live v2, L2 flagship, Rust proof).
+
 ### Input resolution
 
 Every `analyze` subcommand accepts a single `--run-dir` argument. The
@@ -466,6 +471,12 @@ Publication gate commands for the evidence tranches (strict vs
 `eval-ladder evaluate batch` drives the full L0-L4 pipeline over a
 panel JSONL, producing one sealed evidence bundle per entry plus a
 deterministic `batch_summary.json` at the root of `--out`.
+
+The **full panel drive** recipe below uses `runs/released/agent_panel_v1/` as a
+small frozen **CLI illustration**. NeurIPS headline panels and optimization
+outputs live under paths documented in `README.md` (Core workflows) and
+`docs/submission_checklist.md`. Swap `--input` / `--out` / `--run-dir` to match
+the panel you are reproducing.
 
 ### Panel schema
 
