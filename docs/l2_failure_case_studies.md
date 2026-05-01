@@ -15,7 +15,7 @@ production.
 ## Human review summary (diagnostic sample)
 
 The review sample is **diagnostic** and **single-reviewer**; it is **not** used to
-estimate population-level true-positive rates.
+estimate population-level semantic-defect rates.
 
 | Review label | Augmented tests | Regression stress-control | Total |
 |--------------|-----------------|----------------------------|-------|
@@ -33,7 +33,7 @@ estimate population-level true-positive rates.
   according to its declared Evaluator Card; `regression_forced_fail` as designed)
 - Unclear or infrastructure artifact: `4` cases
 
-Do **not** describe forced-fail regression rows as semantic “true positives.”
+Do **not** describe forced-fail regression rows as confirmations of natural product regression on the ticket.
 Use **protocol_control_reversal** / **stress_control_reversal** when referring to
 score reversals on that arm, or **valid stress-control reversal** when the
 outcome matches the predeclared control specification.

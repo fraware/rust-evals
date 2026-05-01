@@ -11,8 +11,9 @@ task panel for three public agent sources.
 
 ## scientific_question
 
-How much do static-anchor pass rates overstate observed live outcomes under
-fixed candidates and the same evaluator stack?
+This is a **diagnostic provenance-sensitivity panel**: under fixed candidates,
+how much do static-anchor pass rates diverge from observed live outcomes on the
+same evaluator stack (not a general live robustness estimator)?
 
 ## applicability_domain
 

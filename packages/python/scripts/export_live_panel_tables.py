@@ -55,6 +55,90 @@ def _surface_for_task(
     return ("unknown", "", "")
 
 
+def _emit_live_integrity_exports(
+    repo_root: Path,
+    run_dir: Path,
+    out_dir: Path,
+    summary: dict[str, Any],
+    per_task: list[dict[str, Any]],
+) -> tuple[Path, Path]:
+    """Batch integrity JSON + live rows with invalid official verdicts."""
+    try:
+        run_rel = run_dir.resolve().relative_to(repo_root.resolve()).as_posix()
+    except ValueError:
+        run_rel = run_dir.resolve().as_posix()
+
+    integ_path = out_dir / "live_integrity_summary.json"
+    integ_path.write_text(
+        json.dumps(
+            {
+                "batch_summary_note": (
+                    "ok_entries / invalid_entries count bundle rows whose batch "
+                    "entry status is ok vs invalid; L0/L1 invalid verdicts inside "
+                    "an ok bundle are documented in per-task CSV rows."
+                ),
+                "evaluator_version": summary.get("evaluator_version"),
+                "invalid_entries": summary.get("invalid_entries"),
+                "levels": summary.get("levels"),
+                "ok_entries": summary.get("ok_entries"),
+                "schema_version": summary.get("schema_version"),
+                "source_batch_summary": f"{run_rel}/batch_summary.json",
+                "total_entries": summary.get("total_entries"),
+                "verify_command": (
+                    "target/release/eval-ladder verify run-dir "
+                    f"--run-dir {run_rel}"
+                ),
+            },
+            indent=2,
+            sort_keys=True,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+    degraded = [
+        r
+        for r in per_task
+        if r.get("benchmark_surface") == "live"
+        and (
+            str(r.get("status_L1", "")).lower() == "invalid"
+            or str(r.get("status_L0", "")).lower() == "invalid"
+        )
+    ]
+    deg_path = out_dir / "live_rows_L0_or_L1_invalid.csv"
+    deg_fields = [
+        "agent_id",
+        "task_id",
+        "status_L0",
+        "status_L1",
+        "primary_reason_L0",
+        "primary_reason_L1",
+        "bundle_path",
+        "note",
+    ]
+    with deg_path.open("w", encoding="utf-8", newline="") as f:
+        dw = csv.DictWriter(f, fieldnames=deg_fields)
+        dw.writeheader()
+        for r in degraded:
+            dw.writerow(
+                {
+                    "agent_id": r.get("agent_id", ""),
+                    "task_id": r.get("task_id", ""),
+                    "status_L0": r.get("status_L0", ""),
+                    "status_L1": r.get("status_L1", ""),
+                    "primary_reason_L0": r.get("primary_reason_L0", ""),
+                    "primary_reason_L1": r.get("primary_reason_L1", ""),
+                    "bundle_path": r.get("bundle_path", ""),
+                    "note": (
+                        "Live row with official invalid verdict; excluded from "
+                        "informative pass-rate comparisons unless methodology "
+                        "explicitly maps invalid to a scored outcome."
+                    ),
+                }
+            )
+    return integ_path, deg_path
+
+
 def _candidate_id(bundle_dir: Path) -> str:
     cr = bundle_dir / "candidate_resolution.json"
     if cr.is_file():
@@ -68,7 +152,7 @@ def _candidate_id(bundle_dir: Path) -> str:
     return ""
 
 
-def export_live_tables(
+def export_live_tables(  # noqa: PLR0912, PLR0915
     repo_root: Path,
     run_dir: Path,
     out_dir: Path,
@@ -144,6 +228,10 @@ def export_live_tables(
         w.writeheader()
         for row in per_task:
             w.writerow({k: row.get(k, "") for k in fields_pt})
+
+    integ_path, deg_path = _emit_live_integrity_exports(
+        repo_root, run_dir, out_dir, summary, per_task
+    )
 
     static_rows = [r for r in per_task if r["benchmark_surface"] == "static_anchor"]
     live_rows = [r for r in per_task if r["benchmark_surface"] == "live"]
@@ -331,7 +419,7 @@ def export_live_tables(
         lc = ""
         slo = row["live_ci_low"]
         shi = row["live_ci_high"]
-        if slo == slo and shi == shi:
+        if not math.isnan(slo) and not math.isnan(shi):
             lc = f"[{slo:.3f},{shi:.3f}]"
         tex_lines.append(
             f"{row['agent_id']} & "
@@ -343,6 +431,8 @@ def export_live_tables(
     live_tex.write_text("\n".join(tex_lines), encoding="utf-8")
 
     return {
+        "live_integrity_summary_json": str(integ_path.relative_to(repo_root)),
+        "live_rows_invalid_csv": str(deg_path.relative_to(repo_root)),
         "per_task_csv": str(pt_path.relative_to(repo_root)),
         "live_leave_one_out_csv": str(loo_path.relative_to(repo_root)),
         "live_panel_summary_with_ci_csv": str(ci_path.relative_to(repo_root)),

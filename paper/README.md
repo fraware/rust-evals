@@ -7,7 +7,9 @@ This directory contains paper-facing exports and table artifacts used by the
 
 - **Claim lock:** `docs/CLAIM_LOCK_NEURIPS2026.md`
 - **Per-claim artifact map:** `paper/exports/CLAIM_SOURCE_MAP.md`
-- **Machine-readable claim wiring:** `paper/paper_claim_sources.json` (checked by
+- **Manuscript structure (title/abstract/results):** `paper/MANUSCRIPT_GUIDE_NEURIPS2026.md`
+- **Machine-readable claim wiring:** `paper/paper_claim_sources.json` and
+  `paper/paper_claim_sources.yaml` (must match; checked by
   `python ci/scripts/check_paper_claim_sources.py`)
 - **Evaluator Cards:** `paper/exports/evaluator_cards/` (see `*.yaml` and `*.md`)
 

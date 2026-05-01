@@ -9,8 +9,17 @@ Internal wiring for CI: `paper/paper_claim_sources.json` and
 
 | Role | Path |
 |------|------|
+| Released panel | `runs/released/live_panel_v2/` |
 | Sealed bundles | `runs/released/live_panel_v2/results_opt/` |
 | Paper export | `paper/exports/live_panel_v2_postbatch/` |
+
+Transparency exports (regenerated with `export_live_panel_tables.py` / `just reproduce-paper-tables`):
+
+- `live_panel_summary_with_ci.csv` — static/live numerators, denominators, Wilson intervals.
+- `live_leave_one_out.csv` — leave-one-out sensitivity (also via `ci/scripts/live_panel_leave_one_out.py`).
+- `live_integrity_summary.json` — `batch_summary.json` integrity fields + verify command.
+- `live_rows_L0_or_L1_invalid.csv` — live tasks whose official verdict is `invalid` at L0/L1.
+- `per_task_live_outcomes.csv` — full per-task provenance table.
 
 Gate:
 
@@ -37,6 +46,11 @@ rates can overstate observed live outcomes.
 |------|------|
 | Sealed bundles | `runs/released/l2_verified_flagship_v1/results/` |
 | Paper export | `paper/exports/l2_verified_flagship_v1/` |
+
+Arm-separated headline table (CSV + TeX):
+
+- `paper/exports/l2_verified_flagship_v1/l2_flagship_arm_breakdown.csv`
+- `paper/tables/l2_flagship_arm_breakdown.tex`
 
 Gate:
 

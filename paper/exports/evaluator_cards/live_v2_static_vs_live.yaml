@@ -3,8 +3,9 @@ purpose: >-
   Diagnostic static-anchor vs live provenance comparison on a small overlapping
   task panel for three public agent sources.
 scientific_question: >-
-  How much do static-anchor pass rates overstate observed live outcomes under
-  fixed candidates and the same evaluator stack?
+  Diagnostic provenance sensitivity: under fixed candidates, how much do
+  static-anchor pass rates diverge from observed live outcomes on the same
+  evaluator stack (not a general live-performance estimator)?
 applicability_domain: >-
   Sealed bundles under runs/released/live_panel_v2/results_opt; agents gru,
   honeycomb, sweagent; tasks drawn from overlapping verified-anchor and live

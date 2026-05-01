@@ -17,7 +17,7 @@ Fill **Status** during release closure (for example `ok`, `fail`, `skipped`, dat
 | Rust proof release gate | `python ci/scripts/check_evidence_quality.py --gate-profile release rust-proof --run-dir runs/released/rust_proof_subset_v1/results_seal` | yes |  |
 | Verified feasibility report | `python ci/scripts/analyze_strict_feasibility.py` | yes |  |
 | Gold validation | `python ci/scripts/l2_flagship_gold_patch_validation.py --jobs 2` | yes |  |
-| Claim-source check | `python ci/scripts/check_paper_claim_sources.py` | yes |  |
+| Claim-source check | `python ci/scripts/check_paper_claim_sources.py` (JSON + YAML mirror) | yes |  |
 | Secret scan | Maintainer grep / custom script (see `artifacts/final_repro_log.md`) | yes |  |
 
 ## Verified feasibility summary (inventory frontier)

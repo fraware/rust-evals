@@ -110,7 +110,7 @@ def _gold_family_stats(gold_csv: Path) -> dict[str, dict[str, float | int]]:
             out[fam]["n_tested"] += 1
             if st == "pass":
                 out[fam]["n_pass"] += 1
-    for k, v in out.items():
+    for _k, v in out.items():
         n = int(v["n_tested"])
         p = int(v["n_pass"])
         v["rate"] = (p / n) if n else float("nan")
@@ -121,6 +121,80 @@ def _fmt_rate(x: float) -> str:
     if math.isnan(x):
         return "nan"
     return f"{x:.3f}"
+
+
+def _l2_arm(entry_id: str) -> str:
+    """Classifier for merged flagship rows (suffix matches bundle arm)."""
+    if entry_id.endswith("__regressionfail"):
+        return "regression_stress_control"
+    if entry_id.endswith("__astropy"):
+        return "augmented_tests"
+    return "unknown"
+
+
+def _arm_breakdown_rows(entries: list[dict[str, Any]]) -> list[dict[str, str]]:
+    """Rows aligned with the paper's arm-separated headline table."""
+    arms = ("augmented_tests", "regression_stress_control")
+    rows_out: list[dict[str, str]] = []
+    for arm in arms:
+        sub = [
+            e
+            for e in entries
+            if isinstance(e, dict) and _l2_arm(str(e.get("entry_id", ""))) == arm
+        ]
+        n_ent = len(sub)
+        l1_pass = [e for e in sub if _status(e.get("levels", {}), "l1") == "pass"]
+        n_l1 = len(l1_pass)
+        l1_l2f = sum(
+            1
+            for e in l1_pass
+            if _status(e.get("levels", {}), "l2") == "fail"
+        )
+        if arm == "augmented_tests":
+            interp = (
+                "Issue-relevant diagnostic; reviewed human-adjudication sample mixed "
+                "(see docs/l2_failure_case_studies.md)."
+            )
+        else:
+            interp = (
+                "Negative-control / protocol signal (regression_forced_fail); "
+                "not natural product-regression evidence."
+            )
+        rows_out.append(
+            {
+                "evaluator_arm": arm,
+                "entries": str(n_ent),
+                "l1_pass_entries": str(n_l1),
+                "l1_pass_l2_fail": str(l1_l2f),
+                "interpretation": interp,
+            }
+        )
+    total_ent = len(entries)
+    total_l1 = sum(
+        1
+        for e in entries
+        if isinstance(e, dict) and _status(e.get("levels", {}), "l1") == "pass"
+    )
+    total_l1_l2f = sum(
+        1
+        for e in entries
+        if isinstance(e, dict)
+        and _status(e.get("levels", {}), "l1") == "pass"
+        and _status(e.get("levels", {}), "l2") == "fail"
+    )
+    rows_out.append(
+        {
+            "evaluator_arm": "total",
+            "entries": str(total_ent),
+            "l1_pass_entries": str(total_l1),
+            "l1_pass_l2_fail": str(total_l1_l2f),
+            "interpretation": (
+                "Evaluator sensitivity cohort; not a population bug-prevalence "
+                "estimate."
+            ),
+        }
+    )
+    return rows_out
 
 
 def _latex_escape(s: str) -> str:
@@ -140,15 +214,13 @@ def _write_tex(
     summary: dict[str, Any],
     gold_stats: dict[str, dict[str, float | int]],
     taxonomy_rows: list[dict[str, str]],
+    arm_rows: list[dict[str, str]],
 ) -> None:
     tex_dir.mkdir(parents=True, exist_ok=True)
     entries = summary.get("entries", [])
     total = int(summary.get("total_entries", len(entries)))
-    l1_pass = sum(
+    l1_pass_n = sum(
         1 for e in entries if _status(e.get("levels", {}), "l1") == "pass"
-    )
-    l2_fail = sum(
-        1 for e in entries if _status(e.get("levels", {}), "l2") == "fail"
     )
     l1p_l2f = sum(
         1
@@ -164,13 +236,41 @@ def _write_tex(
         "Metric & Value \\\\\n"
         "\\hline\n"
         f"Total sealed entries & {total} \\\\\n"
-        f"L1-passing candidates & {l1_pass} \\\\\n"
-        f"L2 failures & {l2_fail} \\\\\n"
-        f"L1-pass and L2-fail & {l1p_l2f} \\\\\n"
+        f"L1-passing candidates & {l1_pass_n} \\\\\n"
+        f"L2 fail $\\mid$ L1 pass (headline gate) & {l1p_l2f} \\\\\n"
+        "\\hline\n"
+        "\\multicolumn{2}{l}{\\footnotesize "
+        "Raw L2 fail counts among L1-fail rows are omitted here; "
+        "see conditional\\_false\\_success exports.} \\\\\n"
         "\\hline\n"
         "\\end{tabular}\n",
         encoding="utf-8",
     )
+
+    arm_tex = tex_dir / "l2_flagship_arm_breakdown.tex"
+    short_interp = {
+        "augmented_tests": "Augmented-test diagnostic (issue relevance varies).",
+        "regression_stress_control": "Stress-control protocol (forced-fail hook).",
+        "total": "Merged cohort; sensitivity not prevalence.",
+    }
+    alines = [
+        "\\begin{tabular}{lrrrl}",
+        "\\hline",
+        "Arm & Entries & L1-pass & L1-pass $\\rightarrow$ L2-fail & Interpretation \\\\",
+        "\\hline",
+    ]
+    for row in arm_rows:
+        if str(row.get("evaluator_arm")) == "total":
+            alines.append("\\hline")
+        arm_key = str(row.get("evaluator_arm", ""))
+        arm_label = arm_key.replace("_", "\\_")
+        interp = _latex_escape(short_interp.get(arm_key, ""))
+        alines.append(
+            f"{arm_label} & {row.get('entries','')} & {row.get('l1_pass_entries','')} & "
+            f"{row.get('l1_pass_l2_fail','')} & {interp} \\\\"
+        )
+    alines.extend(["\\hline", "\\end{tabular}", ""])
+    arm_tex.write_text("\n".join(alines), encoding="utf-8")
 
     tax_lines = [
         "\\begin{tabular}{lrr}",
@@ -241,15 +341,36 @@ def export_l2_tables(
         with taxonomy_csv.open(encoding="utf-8", newline="") as h:
             taxonomy_rows = list(csv.DictReader(h))
 
-    _write_tex(tex_dir, summary, gold_stats, taxonomy_rows)
+    arm_rows = _arm_breakdown_rows([e for e in entries if isinstance(e, dict)])
+    arm_csv = out_dir / "l2_flagship_arm_breakdown.csv"
+    with arm_csv.open("w", encoding="utf-8", newline="") as h:
+        w = csv.DictWriter(
+            h,
+            fieldnames=[
+                "evaluator_arm",
+                "entries",
+                "l1_pass_entries",
+                "l1_pass_l2_fail",
+                "interpretation",
+            ],
+        )
+        w.writeheader()
+        for row in arm_rows:
+            w.writerow(row)
+
+    _write_tex(tex_dir, summary, gold_stats, taxonomy_rows, arm_rows)
 
     return {
         "conditional_false_success_csv": str(
             (out_dir / "conditional_false_success.csv").relative_to(repo_root)
         ),
+        "l2_flagship_arm_breakdown_csv": str(arm_csv.relative_to(repo_root)),
         "tex": {
             "l2_flagship_summary": str(
                 (tex_dir / "l2_flagship_summary.tex").relative_to(repo_root)
+            ),
+            "l2_flagship_arm_breakdown": str(
+                (tex_dir / "l2_flagship_arm_breakdown.tex").relative_to(repo_root)
             ),
             "l2_failure_families": str(
                 (tex_dir / "l2_failure_families.tex").relative_to(repo_root)

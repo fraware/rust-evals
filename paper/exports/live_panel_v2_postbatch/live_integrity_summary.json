@@ -1,0 +1,14 @@
+{
+  "batch_summary_note": "ok_entries / invalid_entries count bundle rows whose batch entry status is ok vs invalid; L0/L1 invalid verdicts inside an ok bundle are documented in per-task CSV rows.",
+  "evaluator_version": "0.1.0",
+  "invalid_entries": 0,
+  "levels": [
+    "L0",
+    "L1"
+  ],
+  "ok_entries": 31,
+  "schema_version": 1,
+  "source_batch_summary": "runs/released/live_panel_v2/results_opt/batch_summary.json",
+  "total_entries": 31,
+  "verify_command": "target/release/eval-ladder verify run-dir --run-dir runs/released/live_panel_v2/results_opt"
+}

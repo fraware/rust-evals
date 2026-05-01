@@ -104,6 +104,12 @@ Current report: `paper/exports/strict_feasibility_report.json`.
   further progress requires adding new L1-stable task families and/or new
   candidate rows, not additional reruns of the same panel mix.
 
+**Paper wording (Verified frontier):** The evaluator is capable of running the
+comparison, but the **public candidate inventory** in the frozen artifact does
+not support a strict three-agent Verified comparison under our predeclared
+threshold. This is evidence-gated reporting (inventory-bound frontier), not an
+evaluator-runtime failure claim.
+
 ## Live comparative (`check_evidence_quality live`)
 
 - **v2 panel (asymmetric live patches):** `runs/released/live_panel_v2/`.
@@ -218,6 +224,11 @@ python ci/scripts/check_evidence_quality.py rust-proof \
 - Therefore publication-threshold Rust semantic minima are not currently met on natural
   evidence. The synthetic paper-semantics replay remains a mechanism test only,
   not a substitute for headline empirical claims.
+
+**Paper wording (Rust frontier):** The Rust proof subset demonstrates that
+task-specific semantic obligations can be attached and checked, but the current
+real sealed manifest does not yet provide natural L3-pass/L4-fail separations.
+Avoid claiming “L4 reveals semantic overstatement” from natural sealed rows alone.
 
 **Release (structural seal on full ladder output):**
 

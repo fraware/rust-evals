@@ -105,11 +105,19 @@ Observed: all three returned `"ok": true` for this workspace snapshot.
 
 ## Claim-source checker
 
+Requires dev extras (`pip install -e ".[dev]"`) so `PyYAML` is available for the
+YAML mirror check.
+
 ```bash
 python ci/scripts/check_paper_claim_sources.py
 ```
 
 Observed: `check_paper_claim_sources: OK`.
+
+Canonical wiring:
+
+- `paper/paper_claim_sources.json` (machine-readable)
+- `paper/paper_claim_sources.yaml` (editor mirror; must match JSON byte-for-byte after canonicalisation)
 
 ## Live leave-one-out appendix CSV
 

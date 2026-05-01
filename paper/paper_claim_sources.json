@@ -13,6 +13,12 @@
       "required": true,
       "claim_tier": "central"
     },
+    "l2_flagship_arm_breakdown": {
+      "paper_location": "Table 2 (arms)",
+      "source": "paper/exports/l2_verified_flagship_v1/l2_flagship_arm_breakdown.csv",
+      "required": true,
+      "claim_tier": "central"
+    },
     "l2_gold_validation": {
       "paper_location": "Table 3",
       "source": "paper/exports/l2_verified_flagship_v1/gold_patch_validation_summary.json",

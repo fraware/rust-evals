@@ -66,7 +66,7 @@ def _run_py(repo_root: Path, rel_script: Path, argv: list[str]) -> None:
 def _run_eval_ladder(repo_root: Path, bin_path: Path, run_dir: Path, out_dir: Path) -> None:
     if not bin_path.is_file():
         raise FileNotFoundError(
-            f"release CLI missing: {bin_path} (run `cargo build -p eval-ladder --release` "
+            f"release CLI missing: {bin_path} (run `cargo build -p eval-ladder-cli --release` "
             "or set --eval-ladder-bin)"
         )
     subprocess.run(
@@ -142,6 +142,10 @@ def main() -> int:
     tex_dir = repo_root / "paper/tables"
 
     _run_eval_ladder(repo_root, bin_path.resolve(), live_run, live_out)
+    # Merged L2 `results/` contains `batch_summary.json` but no per-bundle
+    # subdirectories, so `analyze paper-export` yields empty analysis inputs.
+    # `export_l2_flagship_tables.py` (run below) rebuilds cohort CSV/TeX from the
+    # merged summary; keep that step immediately after this export.
     _run_eval_ladder(repo_root, bin_path.resolve(), l2_run, l2_out)
     _run_eval_ladder(repo_root, bin_path.resolve(), rust_seal_run, rust_out)
 
