@@ -5,7 +5,7 @@ submission freeze, independent of manuscript authoring.
 
 ## Tag
 
-- **`v0.1.4-neurips2026-ed`** — annotated lightweight tag at the commit that carries
+- **`v0.1.4-neurips2026-ed`** — annotated tag at the commit that carries
   closed validation matrix rows and checklist updates for NeurIPS 2026 E&D.
 
 After pushing the tag, confirm **`release-tag.yml`** is green on that ref (same practice
