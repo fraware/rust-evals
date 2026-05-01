@@ -24,7 +24,10 @@ Choose one mode per submission.
 
 **Required artifacts:**
 
-- [ ] Executable repository at the tagged release commit. Tag pending.
+- [x] Executable repository at the tagged release commit. Engineering freeze tag:
+      ``v0.1.4-neurips2026-ed`` (see ``paper/exports/release/NEURIPS2026_ED_RELEASE.md``).
+      After ``git push origin v0.1.4-neurips2026-ed``, confirm ``release-tag.yml`` is
+      green on that ref.
 - [x] Documented CLI with worked examples in `docs/operational_runbook.md`.
 - [x] Evidence bundles for a released panel under `runs/released/`.
       `runs/released/rust_pilot_v1/results/` is frozen and
@@ -84,8 +87,12 @@ Choose one mode per submission.
 - [x] `cargo clippy -D warnings` clean.
 - [x] `cargo fmt --check` clean.
 - [x] `cargo test` passes for all crates.
-- [x] `mypy` clean on `packages/python`.
-- [x] `ruff check` clean on `packages/python`.
+- [x] `mypy` clean on the typed paths in root ``pyproject.toml``
+      (``packages/python/benchmark_compat/src`` and ``ci/scripts``).
+- [ ] `ruff check packages/python` clean (tier-2 scope). As of the NeurIPS closure pass,
+      this fails with issues concentrated under ``packages/python/scripts/``; see
+      ``paper/exports/release/final_validation_matrix.md``. ``ruff check ci/scripts``
+      is clean.
 - [x] `cargo deny check` and `cargo audit` show no high-severity issues.
       Configured via `deny.toml` and `just deny` / `just audit`; re-run clean
       on 2026-04-25 (deny: warnings only for unused license allow-list entries
@@ -153,9 +160,12 @@ Choose one mode per submission.
       `delta` without crashing and scores ties only on rows with live data.
       Regression coverage in `tests/python/test_evidence_cli_scripts.py`.
 - [x] Verified / Live / L2 / Rust **release-profile** gates passing on the
-      canonical paths documented in ``docs/evidence_empirical_status.md``
-      (``--gate-profile release`` on ``results_opt``, ``paper/exports/live_panel_v1_postbatch``,
-      ``runs/released/l2_verified_merged_v1/results``, ``rust_proof_subset_v1/results_seal``).
+      NeurIPS freeze paths documented in ``docs/evidence_empirical_status.md``
+      (Live v2 postbatch export ``paper/exports/live_panel_v2_postbatch`` from
+      ``runs/released/live_panel_v2/results_opt``; L2 flagship merged run-dir
+      ``runs/released/l2_verified_flagship_v1/results``; Rust proof seal
+      ``runs/released/rust_proof_subset_v1/results_seal`` with ``--gate-profile release``
+      where applicable).
 - [ ] Verified **publication-threshold** primary-cohort gate (default CLI: low harness error,
       distinct agent vectors). Still failing on the frozen batches; offline
       bound in ``paper/exports/strict_feasibility_report.json`` shows current
@@ -173,3 +183,9 @@ Choose one mode per submission.
       Real-manifest frozen output currently has ``l3_pass_l4_fail=0`` and
       ``all_level_pass=0`` (see ``paper/exports/strict_feasibility_report.json``).
       Release profile matches tier-1 structural semantics on ``results_seal``.
+
+## Plan §15 — Anonymity and packaging
+
+NeurIPS E&D is **single-blind**. Choosing an anonymized tarball versus pointing reviewers
+at the public repository is an **author policy** decision; engineering ships the tagged
+code snapshot and documentation only. See ``paper/exports/release/NEURIPS2026_ED_RELEASE.md``.

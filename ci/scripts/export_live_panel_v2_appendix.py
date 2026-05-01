@@ -115,8 +115,8 @@ def _compute_sensitivity(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
                 passes = sum(1 for r in subset if r["status_L1"] == "pass")
                 rate = passes / denom
             loo_rates[leave_out] = rate
-        min_task = min(loo_rates, key=loo_rates.get)
-        max_task = max(loo_rates, key=loo_rates.get)
+        min_task = min(loo_rates, key=lambda k: loo_rates[k])
+        max_task = max(loo_rates, key=lambda k: loo_rates[k])
         out.append(
             {
                 "agent_id": agent_id,
