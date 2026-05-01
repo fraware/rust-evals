@@ -46,17 +46,26 @@ validation, and `write_release_artifact_manifest.py --require-all-files`.
 ## Public API confirmation (this repository)
 
 For `fraware/rust-evals`, the GitHub REST API is readable without a token for
-workflow metadata. As of the last check, `release-tag.yml` completed
-successfully for the shipped tags below. After pushing `v0.1.4-neurips2026-ed`,
-list runs (`gh run list --workflow=release-tag.yml`), open the run for that tag,
-and paste the run URL into the table.
+workflow metadata. Summary table for shipped tags:
 
 | Tag | Run | Conclusion |
 |-----|-----|------------|
 | `v0.1.0` | [24924543926](https://github.com/fraware/rust-evals/actions/runs/24924543926) | `success` |
 | `v0.1.1` | [24924758322](https://github.com/fraware/rust-evals/actions/runs/24924758322) | `success` |
-| `v0.1.4-neurips2026-ed` | *(add Actions URL after push)* | *(pending)* |
+| `v0.1.4-neurips2026-ed` | [25215248316](https://github.com/fraware/rust-evals/actions/runs/25215248316) | `success` |
 
 List endpoint (same data `gh run list` would show):
 
 `https://api.github.com/repos/fraware/rust-evals/actions/workflows/release-tag.yml/runs?per_page=10`
+
+## v0.1.4-neurips2026-ed
+
+- **Tag:** `v0.1.4-neurips2026-ed`
+- **Commit (workflow head SHA):** `513781c0b5ed31deb01d6b0f4e1834dc2d8552e5`
+- **Workflow:** `release-tag.yml`
+- **Status:** success
+- **Run URL:** https://github.com/fraware/rust-evals/actions/runs/25215248316
+- **Checked:** 2026-05-03
+
+Note: `main` may advance beyond this commit after later merges; the tag continues to point at the
+annotated release object used for the NeurIPS engineering freeze CI run above.

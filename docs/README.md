@@ -11,7 +11,7 @@ are relative to the repository root.
 | [`architecture.md`](architecture.md) | Crate graph, responsibilities, and major data flows. |
 | [`artifact_spec.md`](artifact_spec.md) | Evidence bundles, manifests, and analysis outputs. |
 | [`benchmark_support.md`](benchmark_support.md) | Verified, Live, and Rust benchmark adapters and ingest. |
-| [`proof_subset_policy.md`](proof_subset_policy.md) | Proof-subset selection rubric, governance, **Lean sketch fidelity** obligation table, and batching notes. |
+| [`proof_subset_policy.md`](proof_subset_policy.md) | Proof-subset governance; **Lean sketch fidelity** obligation table; batching notes. |
 | [`operational_runbook.md`](operational_runbook.md) | CLI recipes, batch drives, verification, and CI alignment. |
 | [`public_terminology.md`](public_terminology.md) | Public-facing terminology and naming policy for documentation. |
 | [`getting_started.md`](getting_started.md) | First-run setup, demo execution, and table regeneration path. |

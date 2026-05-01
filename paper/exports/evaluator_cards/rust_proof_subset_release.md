@@ -67,6 +67,16 @@ Passing L4 does not prove informal completeness beyond the encoded obligation.
 Reference obligations are part of the proof-subset policy; distinct from SWE
 Python gold-patch CSV protocols.
 
+## Row-count note
+
+The paper’s Rust proof-subset frontier claim is sourced from
+`paper/exports/strict_feasibility_report.json`, which reports the real sealed
+proof-subset manifest at the task/obligation-entry level. Some paper-export
+manifests may expose level-expanded or cumulative analysis rows. These expanded
+analysis rows are **not** the denominator for the manuscript’s frontier claim.
+The manuscript denominator is the real sealed proof-subset entry count reported
+in `strict_feasibility_report.json`.
+
 ## human_review
 
 Optional; natural sealed evidence currently shows no L3-pass/L4-fail separation

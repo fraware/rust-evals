@@ -24,21 +24,42 @@ Choose one mode per submission.
 
 **Required artifacts:**
 
-- [x] Executable repository at the tagged release commit. Engineering freeze tag:
-      ``v0.1.4-neurips2026-ed`` (see ``paper/exports/release/NEURIPS2026_ED_RELEASE.md``).
-      After ``git push origin v0.1.4-neurips2026-ed``, confirm ``release-tag.yml`` is
-      green on that ref.
-- [x] Documented CLI with worked examples in `docs/operational_runbook.md`.
-- [x] Evidence bundles for a released panel under `runs/released/`.
-      `runs/released/rust_pilot_v1/results/` is frozen and
-      `verify run-dir` clean (`1 ok / 0 invalid`).
-- [x] Paper-ready CSV/JSON exports under `paper/exports/`.
-      `paper/exports/rust_pilot_v1/` is generated from the frozen pilot
-      run-dir via `analyze paper-export`.
-- [x] `docs/scientific_scope.md` up to date with the claim and scope.
+- [x] Executable repository at the tagged release commit.
+      Engineering freeze tag: ``v0.1.4-neurips2026-ed``
+      (see ``paper/exports/release/NEURIPS2026_ED_RELEASE.md``).
+
+- [x] Documented CLI with worked examples in ``docs/operational_runbook.md``.
+
+- [x] Live v2 released bundles:
+      ``runs/released/live_panel_v2/results_opt/``
+
+- [x] L2 flagship released bundles:
+      ``runs/released/l2_verified_flagship_v1/results_astropy/``
+      ``runs/released/l2_verified_flagship_v1/results_regression_fail/``
+      merged analysis export:
+      ``runs/released/l2_verified_flagship_v1/results/``
+
+- [x] Rust proof-subset release seal:
+      ``runs/released/rust_proof_subset_v1/results_seal/``
+
+- [x] Paper-ready exports:
+      ``paper/exports/live_panel_v2_postbatch/``
+      ``paper/exports/l2_verified_flagship_v1/``
+      ``paper/exports/rust_proof_subset_v1_seal_release/``
+      ``paper/exports/strict_feasibility_report.json``
+
+- [x] Evaluator Cards:
+      ``paper/exports/evaluator_cards/live_v2_static_vs_live.md``
+      ``paper/exports/evaluator_cards/l2_augmented_tests.md``
+      ``paper/exports/evaluator_cards/l2_regression_stress_control.md``
+      ``paper/exports/evaluator_cards/verified_feasibility_frontier.md``
+      ``paper/exports/evaluator_cards/rust_proof_subset_release.md``
+
+- [x] ``docs/scientific_scope.md`` up to date with the claim and scope.
+
 - [x] Reproducibility fixtures runnable without downloading full benchmarks.
-      Milestone K ships `eval-ladder demo run` as the fifteen-minute
-      slice; pinned by `milestone_k_demo_runs_end_to_end`.
+      Milestone K ships ``eval-ladder demo run`` as the fifteen-minute
+      slice; pinned by ``milestone_k_demo_runs_end_to_end``.
 
 ### Mode 2 - Code + new proof-carrying subset
 
@@ -69,9 +90,10 @@ Choose one mode per submission.
       and the `analyze static-vs-live` / `analyze paper-export` CLIs
       (`static_vs_live.{csv,json}`). Paper-export manifest schema bumped
       to `2`.
-- [x] Rank instability reported with at least one rank correlation.
-      Milestone G emits Kendall tau-b between every pair of agent
-      leaderboards via `rank_stability.kendall_tau_b`.
+- [x] Rank-instability tooling available (Kendall tau-b between agent leaderboards via
+      ``rank_stability.kendall_tau_b`` in Milestone G outputs). This is **supporting
+      instrumentation / appendix material**, not a headline NeurIPS paper claim; central
+      empirical surfaces are Live v2 and L2 flagship per ``docs/scientific_scope.md``.
 - [x] False-success taxonomy reported at stable-code granularity.
       Milestone G emits `taxonomy.{csv,json}` keyed by
       `(benchmark, level, primary_reason)`.
@@ -102,10 +124,8 @@ Choose one mode per submission.
       (workflow ``release-tag.yml``; conclusions ``success`` on the Actions runs
       linked from ``docs/github_release_tag_ci_confirmation.md``, including the
       public REST list URL).
-- [ ] NeurIPS 2026 E&D freeze tag ``v0.1.4-neurips2026-ed``: after
-      ``git push origin v0.1.4-neurips2026-ed``, confirm ``release-tag.yml`` is
-      green on that ref (same workflow and confirmation steps as above). Add the
-      run URL to ``docs/github_release_tag_ci_confirmation.md``.
+- [x] NeurIPS 2026 E&D freeze tag ``v0.1.4-neurips2026-ed`` confirmed green on
+      ``release-tag.yml`` (see ``docs/github_release_tag_ci_confirmation.md``).
       Local manifest prep (no CI claim): ``paper/exports/release/v0.1.2/artifact_manifest.json``
       from ``write_release_artifact_manifest.py`` without ``--require-all-files``.
 
