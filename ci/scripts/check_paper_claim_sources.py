@@ -4,7 +4,8 @@
 Reads ``paper/paper_claim_sources.json`` (repo root). Asserts required sources
 exist, headline Live/L2 paths use the canonical v2 / flagship directories,
 forbidden legacy or synthetic headline paths are not referenced, and optional
-YAML mirror plus doc guards hold.
+YAML mirror plus doc guards hold (case studies, selection protocol,
+``scientific_scope`` Tier D phrases, gold-validation paper wording).
 """
 
 from __future__ import annotations
@@ -57,9 +58,41 @@ def _yaml_sync_failures(root: Path, json_cfg: dict[str, Any]) -> list[str]:
     return []
 
 
+# Lowercase substrings that must not appear in ``scientific_scope.md`` (Tier D-style overclaim).
+_SCIENTIFIC_SCOPE_FORBIDDEN_SUBSTRINGS: tuple[str, ...] = (
+    "overstate semantically justified issue resolution",
+    "eval-ladder proves patches semantically correct",
+    "the true semantic failure rate",
+    "all l2 failures are false successes",
+    "l3/l4 are central empirical results",
+)
+
+
 def _doc_guards(root: Path) -> list[str]:
     """Reject deprecated adjudication tokens that invited regression-arm overclaim."""
     failures: list[str] = []
+    scope_path = root / "docs" / "scientific_scope.md"
+    if scope_path.is_file():
+        lowered = scope_path.read_text(encoding="utf-8").lower()
+        for bad in _SCIENTIFIC_SCOPE_FORBIDDEN_SUBSTRINGS:
+            if bad in lowered:
+                failures.append(
+                    f"docs/scientific_scope.md must not contain forbidden phrase {bad!r} "
+                    "(see docs/CLAIM_LOCK_NEURIPS2026.md Tier D)"
+                )
+    gold_doc = root / "docs" / "l2_gold_patch_validation.md"
+    if gold_doc.is_file():
+        gtext = gold_doc.read_text(encoding="utf-8")
+        if "## Paper wording" not in gtext:
+            failures.append(
+                "docs/l2_gold_patch_validation.md must retain a '## Paper wording' section "
+                "(validator legitimacy framing)"
+            )
+        if "semantic defect" not in gtext.lower():
+            failures.append(
+                "docs/l2_gold_patch_validation.md must keep gold-vs-candidate semantics caveat "
+                "(e.g. not every candidate L2 failure is a semantic defect)"
+            )
     case_path = root / "docs" / "l2_failure_case_studies.md"
     if case_path.is_file():
         text = case_path.read_text(encoding="utf-8")

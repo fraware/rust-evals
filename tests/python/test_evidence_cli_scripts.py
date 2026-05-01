@@ -1362,3 +1362,8 @@ def test_write_l2_paper_export_manifest_row_count(tmp_path: Path, repo_root: Pat
 def test_secret_scan_release_passes_on_repo(repo_root: Path) -> None:
     proc = _run_script(repo_root, "ci/scripts/secret_scan_release.py", [])
     assert proc.returncode == 0, proc.stderr + proc.stdout
+
+
+def test_check_paper_claim_sources_passes_on_repo(repo_root: Path) -> None:
+    proc = _run_script(repo_root, "ci/scripts/check_paper_claim_sources.py", [])
+    assert proc.returncode == 0, proc.stderr + proc.stdout

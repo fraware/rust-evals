@@ -20,6 +20,11 @@ Fill **Status** during release closure (for example `ok`, `fail`, `skipped`, dat
 | Claim-source check | `python ci/scripts/check_paper_claim_sources.py` (JSON + YAML mirror) | yes |  |
 | Secret scan | `python ci/scripts/secret_scan_release.py` | yes |  |
 
+**Gold validation note:** `l2_flagship_gold_patch_validation.py --jobs 2` needs the
+release `eval-ladder` binary plus an OCI-capable runtime and both sealed arms
+under `gold_patch_results/` when regenerating exports; `--skip-evaluate` never
+deletes bundle trees but refuses partial row counts (see `artifacts/final_repro_log.md`).
+
 ## Verified feasibility summary (inventory frontier)
 
 | Quantity | Value |
