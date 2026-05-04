@@ -1,2 +1,0 @@
-Uncertainty intervals: Wilson score intervals (95%, z=1.96) for binomial proportions; nan ratio when static_pass_rate==0.
-batch_summary.schema_version=1 evaluator_version='0.1.0'

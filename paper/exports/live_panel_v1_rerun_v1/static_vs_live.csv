@@ -1,5 +1,0 @@
-"agent_id","level","static_passed","static_evaluated","static_pass_rate","live_passed","live_evaluated","live_pass_rate","delta","ratio"
-"gru","L0","6","15","0.400000","2","16","0.125000","-0.275000","0.312500"
-"gru","L1","6","15","0.400000","2","16","0.125000","-0.275000","0.312500"
-"sweagent","L0","0","0","","1","8","0.125000","",""
-"sweagent","L1","0","0","","1","8","0.125000","",""

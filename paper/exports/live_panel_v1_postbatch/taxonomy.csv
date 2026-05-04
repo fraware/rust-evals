@@ -1,5 +1,0 @@
-"benchmark_id","level","primary_reason","count"
-"swe_bench_verified","L0","L0_OFFICIAL_FAIL","9"
-"swe_bench_verified","L1","L1_HARNESS_ERROR","9"
-"swe_bench_live","L0","L0_OFFICIAL_FAIL","9"
-"swe_bench_live","L1","L1_HARNESS_ERROR","9"

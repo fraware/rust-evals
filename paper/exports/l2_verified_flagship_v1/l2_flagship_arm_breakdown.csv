@@ -1,4 +1,0 @@
-evaluator_arm,entries,l1_pass_entries,l1_pass_l2_fail,interpretation
-augmented_tests,33,12,12,Issue-relevant diagnostic; reviewed human-adjudication sample mixed (see docs/l2_failure_case_studies.md).
-regression_stress_control,33,12,12,Negative-control / protocol signal (regression_forced_fail); not natural product-regression evidence.
-total,66,24,24,Evaluator sensitivity cohort; not a population bug-prevalence estimate.

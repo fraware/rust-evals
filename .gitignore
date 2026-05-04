@@ -64,11 +64,9 @@ secrets/
 *.pem
 *.key
 
-# Paper build artifacts
-paper/build/
-paper/_minted-*
-paper/*.aux
-paper/*.log
-paper/*.out
-paper/*.bbl
-paper/*.blg
+# Local release / submission scratch (never commit)
+/CI_LOG.txt
+/*.tar.gz
+
+# Paper exports, tables, and manuscript-facing material (generate locally; do not commit)
+paper/
