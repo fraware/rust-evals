@@ -225,7 +225,7 @@ def main() -> int:  # noqa: PLR0915
     extra_exports = [
         repo_root / "paper/exports/reproduction_manifest.json",
         feas_out,
-        repo_root / "docs/l2_failure_case_studies.md",
+        repo_root / "docs/evidence_manual.md",
     ]
     output_paths.extend(extra_exports)
 

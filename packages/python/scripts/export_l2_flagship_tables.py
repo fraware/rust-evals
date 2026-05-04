@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Emit L2 flagship TeX snippets, paper CSV alignments, and conditional-false-success rows."""
+"""Emit L2 flagship TeX snippets, paper CSV alignments, and conditional reversal rows."""
 
 from __future__ import annotations
 
@@ -8,13 +8,24 @@ import csv
 import hashlib
 import json
 import math
+import shutil
 from pathlib import Path
 from typing import Any
 
-# Basenames emitted by `eval-ladder analyze paper-export` (manifest tracks these only).
+# All tracked files under the L2 paper export directory included in ``manifest.json``.
+# Includes Rust ``analyze paper-export`` siblings (canonical ``conditional_reversal`` plus
+# deprecated ``conditional_false_success`` byte-identical copies) and L2-only exports.
 _L2_PAPER_EXPORT_MANIFEST_PATHS: tuple[str, ...] = (
     "conditional_false_success.csv",
     "conditional_false_success.json",
+    "conditional_reversal.csv",
+    "conditional_reversal.json",
+    "l2_arm_breakdown.csv",
+    "l2_arm_breakdown.json",
+    "l2_claim_limits.json",
+    "l2_flagship_arm_breakdown.csv",
+    "l2_gold_validation.csv",
+    "l2_human_review_summary.csv",
     "rank_stability.csv",
     "rank_stability.json",
     "score_descent.csv",
@@ -92,7 +103,7 @@ def _status(levels: dict[str, Any], key: str) -> str:
     return str(d.get("status", "")).lower() if isinstance(d, dict) else ""
 
 
-def _rewrite_conditional_false_success(out_dir: Path, entries: list[dict[str, Any]]) -> None:
+def _rewrite_conditional_reversal(out_dir: Path, entries: list[dict[str, Any]]) -> None:
     pairs: list[tuple[str, str]] = [
         ("L0", "L1"),
         ("L1", "L2"),
@@ -123,28 +134,31 @@ def _rewrite_conditional_false_success(out_dir: Path, entries: list[dict[str, An
             }
         )
 
-    csv_path = out_dir / "conditional_false_success.csv"
-    with csv_path.open("w", encoding="utf-8", newline="") as h:
-        w = csv.writer(h, quoting=csv.QUOTE_ALL)
-        w.writerow(
-            ["level_from", "level_to", "n_passed_from", "n_failed_to", "rate"]
-        )
-        for r in rows:
+    def _write_pair(csv_name: str, json_name: str) -> None:
+        csv_path = out_dir / csv_name
+        with csv_path.open("w", encoding="utf-8", newline="") as h:
+            w = csv.writer(h, quoting=csv.QUOTE_ALL)
             w.writerow(
-                [
-                    r["level_from"],
-                    r["level_to"],
-                    str(r["n_passed_from"]),
-                    str(r["n_failed_to"]),
-                    "" if r["rate"] is None else f"{r['rate']:.6f}",
-                ]
+                ["level_from", "level_to", "n_passed_from", "n_failed_to", "rate"]
             )
+            for r in rows:
+                w.writerow(
+                    [
+                        r["level_from"],
+                        r["level_to"],
+                        str(r["n_passed_from"]),
+                        str(r["n_failed_to"]),
+                        "" if r["rate"] is None else f"{r['rate']:.6f}",
+                    ]
+                )
+        (out_dir / json_name).write_text(
+            json.dumps(rows, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
 
-    json_path = out_dir / "conditional_false_success.json"
-    json_path.write_text(
-        json.dumps(rows, indent=2, sort_keys=True) + "\n",
-        encoding="utf-8",
-    )
+    _write_pair("conditional_reversal.csv", "conditional_reversal.json")
+    # Deprecated on-disk alias (byte-identical); paper uses ``conditional_reversal`` only.
+    _write_pair("conditional_false_success.csv", "conditional_false_success.json")
 
 
 def _gold_family_stats(gold_csv: Path) -> dict[str, dict[str, float | int]]:
@@ -193,7 +207,11 @@ def _fmt_rate(x: float) -> str:
 
 
 def _l2_arm(entry_id: str) -> str:
-    """Classifier for merged flagship rows (suffix matches bundle arm)."""
+    """Classifier for merged flagship rows (suffix matches bundle arm).
+
+    Use only for the frozen merged ``batch_summary.json`` cohort; do not
+    re-infer arms from filenames for other paper tables.
+    """
     if entry_id.endswith("__regressionfail"):
         return "regression_stress_control"
     if entry_id.endswith("__astropy"):
@@ -202,7 +220,7 @@ def _l2_arm(entry_id: str) -> str:
 
 
 def _arm_breakdown_rows(entries: list[dict[str, Any]]) -> list[dict[str, str]]:
-    """Rows aligned with the paper's arm-separated headline table."""
+    """Rows for deprecated ``l2_flagship_arm_breakdown.csv`` (``evaluator_arm``)."""
     arms = ("augmented_tests", "regression_stress_control")
     rows_out: list[dict[str, str]] = []
     for arm in arms:
@@ -222,7 +240,7 @@ def _arm_breakdown_rows(entries: list[dict[str, Any]]) -> list[dict[str, str]]:
         if arm == "augmented_tests":
             interp = (
                 "Issue-relevant diagnostic; reviewed human-adjudication sample mixed "
-                "(see docs/l2_failure_case_studies.md)."
+                "(see docs/evidence_manual.md#l2-failure-case-studies-l2-flagship-primary-cohort-v1)."
             )
         else:
             interp = (
@@ -264,6 +282,132 @@ def _arm_breakdown_rows(entries: list[dict[str, Any]]) -> list[dict[str, str]]:
         }
     )
     return rows_out
+
+
+def _l2_arm_claim_rows(entries: list[dict[str, Any]]) -> list[dict[str, str]]:
+    """Paper-facing arm table with ``validator_arm`` and explicit claim bounds."""
+    arms = ("augmented_tests", "regression_stress_control")
+    rows_out: list[dict[str, str]] = []
+    for arm in arms:
+        sub = [
+            e
+            for e in entries
+            if isinstance(e, dict) and _l2_arm(str(e.get("entry_id", ""))) == arm
+        ]
+        n_ent = len(sub)
+        l1_pass = [e for e in sub if _status(e.get("levels", {}), "l1") == "pass"]
+        n_l1 = len(l1_pass)
+        l1_l2f = sum(
+            1
+            for e in l1_pass
+            if _status(e.get("levels", {}), "l2") == "fail"
+        )
+        if arm == "augmented_tests":
+            interp = "issue-relevant strengthened-validation diagnostic"
+            allowed = (
+                "Report augmented-test L1-pass/L2-fail counts as strengthened-validation "
+                "diagnostics with mixed human review context."
+            )
+            disallowed = (
+                "Treat augmented failures alone as definitive proof of incorrect "
+                "issue resolution without adjudication; pool with regression "
+                "stress-control without arm labels."
+            )
+        else:
+            interp = "negative-control protocol signal"
+            allowed = (
+                "Report regression stress-control reversals as evaluator/protocol-surface "
+                "evidence per the Evaluator Card."
+            )
+            disallowed = (
+                "Interpret stress-control reversals as natural product regressions on "
+                "the upstream ticket."
+            )
+        rows_out.append(
+            {
+                "validator_arm": arm,
+                "n_entries": str(n_ent),
+                "n_l1_pass_entries": str(n_l1),
+                "n_l1_pass_l2_fail": str(l1_l2f),
+                "interpretation": interp,
+                "allowed_claim": allowed,
+                "disallowed_claim": disallowed,
+            }
+        )
+    total_ent = len(entries)
+    total_l1 = sum(
+        1
+        for e in entries
+        if isinstance(e, dict) and _status(e.get("levels", {}), "l1") == "pass"
+    )
+    total_l1_l2f = sum(
+        1
+        for e in entries
+        if isinstance(e, dict)
+        and _status(e.get("levels", {}), "l1") == "pass"
+        and _status(e.get("levels", {}), "l2") == "fail"
+    )
+    rows_out.append(
+        {
+            "validator_arm": "total",
+            "n_entries": str(total_ent),
+            "n_l1_pass_entries": str(total_l1),
+            "n_l1_pass_l2_fail": str(total_l1_l2f),
+            "interpretation": "evaluator sensitivity; not bug prevalence",
+            "allowed_claim": (
+                "Use pooled totals only as denominator-aware evaluator sensitivity "
+                "for this frozen validator-focused slice."
+            ),
+            "disallowed_claim": (
+                "Estimate population bug prevalence; rank agents on pooled L2 "
+                "reversal rates without arm separation."
+            ),
+        }
+    )
+    return rows_out
+
+
+def _write_l2_arm_breakdown(out_dir: Path, rows: list[dict[str, str]]) -> None:
+    csv_path = out_dir / "l2_arm_breakdown.csv"
+    fields = [
+        "validator_arm",
+        "n_entries",
+        "n_l1_pass_entries",
+        "n_l1_pass_l2_fail",
+        "interpretation",
+        "allowed_claim",
+        "disallowed_claim",
+    ]
+    with csv_path.open("w", encoding="utf-8", newline="") as h:
+        w = csv.DictWriter(h, fieldnames=fields)
+        w.writeheader()
+        for row in rows:
+            w.writerow(row)
+    payload = [{k: row[k] for k in fields} for row in rows]
+    (out_dir / "l2_arm_breakdown.json").write_text(
+        json.dumps(payload, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+
+
+def _write_l2_claim_limits_slice(repo_root: Path, out_dir: Path) -> None:
+    src = repo_root / "paper" / "exports" / "claim_limits.json"
+    raw = json.loads(src.read_text(encoding="utf-8"))
+    if not isinstance(raw, list):
+        raise TypeError("claim_limits.json must be a list")
+    keep_ids = {
+        "l2_conditional_reversal",
+        "l2_augmented_tests",
+        "l2_regression_stress_control",
+        "l2_arm_breakdown_table",
+        "l2_gold_patch_validation",
+        "human_review_l2_sample",
+    }
+    out_list = [x for x in raw if isinstance(x, dict) and x.get("claim_id") in keep_ids]
+    (out_dir / "l2_claim_limits.json").write_text(
+        json.dumps(out_list, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
 
 
 def _latex_escape(s: str) -> str:
@@ -310,7 +454,7 @@ def _write_tex(
         "\\hline\n"
         "\\multicolumn{2}{l}{\\footnotesize "
         "Raw L2 fail counts among L1-fail rows are omitted here; "
-        "see conditional\\_false\\_success exports.} \\\\\n"
+        "see conditional\\_reversal exports.} \\\\\n"
         "\\hline\n"
         "\\end{tabular}\n",
         encoding="utf-8",
@@ -401,16 +545,20 @@ def export_l2_tables(
             f"unexpected batch_summary.schema_version={sv!r} (expected 1)"
         )
 
-    _rewrite_conditional_false_success(out_dir, [e for e in entries if isinstance(e, dict)])
+    dict_entries = [e for e in entries if isinstance(e, dict)]
+
+    _rewrite_conditional_reversal(out_dir, dict_entries)
 
     gold_stats = _gold_family_stats(gold_csv)
+    if gold_csv.is_file():
+        shutil.copy2(gold_csv, out_dir / "l2_gold_validation.csv")
 
     taxonomy_rows: list[dict[str, str]] = []
     if taxonomy_csv.is_file():
         with taxonomy_csv.open(encoding="utf-8", newline="") as h:
             taxonomy_rows = list(csv.DictReader(h))
 
-    arm_rows = _arm_breakdown_rows([e for e in entries if isinstance(e, dict)])
+    arm_rows = _arm_breakdown_rows(dict_entries)
     arm_csv = out_dir / "l2_flagship_arm_breakdown.csv"
     with arm_csv.open("w", encoding="utf-8", newline="") as h:
         w = csv.DictWriter(
@@ -427,9 +575,12 @@ def export_l2_tables(
         for row in arm_rows:
             w.writerow(row)
 
+    claim_rows = _l2_arm_claim_rows(dict_entries)
+    _write_l2_arm_breakdown(out_dir, claim_rows)
+    _write_l2_claim_limits_slice(repo_root, out_dir)
+
     _write_tex(tex_dir, summary, gold_stats, taxonomy_rows, arm_rows)
 
-    dict_entries = [e for e in entries if isinstance(e, dict)]
     _write_l2_paper_export_manifest(
         out_dir,
         input_row_count=len(dict_entries),
@@ -437,8 +588,11 @@ def export_l2_tables(
     )
 
     return {
-        "conditional_false_success_csv": str(
-            (out_dir / "conditional_false_success.csv").relative_to(repo_root)
+        "conditional_reversal_csv": str(
+            (out_dir / "conditional_reversal.csv").relative_to(repo_root)
+        ),
+        "l2_arm_breakdown_csv": str(
+            (out_dir / "l2_arm_breakdown.csv").relative_to(repo_root)
         ),
         "l2_flagship_arm_breakdown_csv": str(arm_csv.relative_to(repo_root)),
         "tex": {

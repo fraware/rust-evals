@@ -12,7 +12,7 @@ Outputs (see CI script):
 - ``paper/exports/l2_verified_flagship_v1/gold_patch_validation.json``
 - ``runs/released/l2_verified_flagship_v1/gold_patch_results/``
 
-Default strengthening profile is ``gold_mechanical`` (see ``docs/l2_gold_patch_validation.md``).
+Default strengthening profile is ``gold_mechanical`` (see ``docs/evidence_manual.md``).
 Pass ``--strict-flagship-specs`` for agent-matched diagnostics only.
 """
 
