@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "claims": {
+    "live_static_counts": {
+      "paper_location": "Table 1",
+      "source": "paper/exports/live_panel_v2_postbatch/static_vs_live.csv",
+      "required": true,
+      "claim_tier": "central",
+      "claim_limits_id": "live_v2_static_vs_live"
+    },
+    "live_leave_one_out": {
+      "paper_location": "Appendix (Live sensitivity)",
+      "source": "paper/exports/live_panel_v2_postbatch/live_leave_one_out.csv",
+      "required": true,
+      "claim_tier": "central",
+      "claim_limits_id": "live_v2_leave_one_out"
+    },
+    "l2_flagship_counts": {
+      "paper_location": "Table 2",
+      "source": "paper/exports/l2_verified_flagship_v1/conditional_reversal.csv",
+      "required": true,
+      "claim_tier": "central",
+      "claim_limits_id": "l2_conditional_reversal"
+    },
+    "l2_flagship_arm_breakdown": {
+      "paper_location": "Table 2 (arms)",
+      "source": "paper/exports/l2_verified_flagship_v1/l2_arm_breakdown.csv",
+      "required": true,
+      "claim_tier": "central",
+      "claim_limits_id": "l2_arm_breakdown_table"
+    },
+    "l2_gold_validation": {
+      "paper_location": "Table 3",
+      "source": "paper/exports/l2_verified_flagship_v1/gold_patch_validation_summary.json",
+      "required": true,
+      "claim_tier": "central",
+      "claim_limits_id": "l2_gold_patch_validation"
+    },
+    "verified_inventory_bound": {
+      "paper_location": "Evidence frontiers",
+      "source": "paper/exports/strict_feasibility_report.json",
+      "required": true,
+      "claim_tier": "frontier",
+      "json_pointer_metrics": "/verified",
+      "claim_limits_id": "verified_feasibility_inventory"
+    },
+    "rust_l4_frontier": {
+      "paper_location": "Evidence frontiers",
+      "source": "paper/exports/strict_feasibility_report.json",
+      "required": true,
+      "claim_tier": "frontier",
+      "json_pointer_metrics": "/rust_real_manifest",
+      "claim_limits_id": "rust_proof_subset_frontier"
+    }
+  },
+  "forbidden_headline_path_substrings": [
+    "l2_verified_merged_v1",
+    "live_panel_v1_postbatch",
+    "results_seal_paper_semantics",
+    "manifest_paper_semantics"
+  ],
+  "headline_live_export_dir": "paper/exports/live_panel_v2_postbatch",
+  "headline_l2_export_dir": "paper/exports/l2_verified_flagship_v1"
+}

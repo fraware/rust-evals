@@ -6,30 +6,24 @@ are relative to the repository root.
 | Document | Purpose |
 |----------|---------|
 | [`scientific_scope.md`](scientific_scope.md) | Paper claim, threats to validity, and literature mapping. |
-| [`CLAIM_LOCK_NEURIPS2026.md`](CLAIM_LOCK_NEURIPS2026.md) | NeurIPS 2026 allowed/prohibited claims vs frozen evidence tiers. |
+| [`paper_claim_sources.json`](paper_claim_sources.json) | Machine-readable headline claim to frozen export paths; YAML mirror [`paper_claim_sources.yaml`](paper_claim_sources.yaml). |
 | [`evaluation_ladder.md`](evaluation_ladder.md) | L0–L4 semantics, verdict codes, and level interactions. |
-| [`architecture.md`](architecture.md) | Crate graph, responsibilities, and major data flows. |
-| [`artifact_spec.md`](artifact_spec.md) | Evidence bundles, manifests, and analysis outputs. |
+| [`architecture.md`](architecture.md) | Crate graph, responsibilities, data flows, evidence bundles, and analysis outputs. |
 | [`benchmark_support.md`](benchmark_support.md) | Verified, Live, and Rust benchmark adapters and ingest. |
 | [`proof_subset_policy.md`](proof_subset_policy.md) | Proof-subset governance; **Lean sketch fidelity** obligation table; batching notes. |
-| [`operational_runbook.md`](operational_runbook.md) | CLI recipes, batch drives, verification, and CI alignment. |
+| [`evidence_manual.md`](evidence_manual.md) | Selection protocols, L2 gold validation and case studies, Rust paper-semantics replay, and operational runbook. |
 | [`public_terminology.md`](public_terminology.md) | Public-facing terminology and naming policy for documentation. |
 | [`getting_started.md`](getting_started.md) | First-run setup, demo execution, and table regeneration path. |
 | [`troubleshooting.md`](troubleshooting.md) | Common setup, runtime, and reproducibility failures with fixes. |
 | [`cli_reference.md`](cli_reference.md) | Command reference for core `eval-ladder` workflows. |
 | [`evidence_tranche_plan.md`](evidence_tranche_plan.md) | Evidence tranche execution plan and gate commands. |
 | [`evidence_empirical_status.md`](evidence_empirical_status.md) | Machine-checked gate outcomes (publication-threshold vs `--gate-profile release`). |
-| [`l2_selection_protocol.md`](l2_selection_protocol.md) | L2 primary-cohort construction, exclusions, validator arms. |
-| [`l2_failure_case_studies.md`](l2_failure_case_studies.md) | Eight-case L2 adjudication (augmented-test vs regression stress-control). |
-| [`l2_gold_patch_validation.md`](l2_gold_patch_validation.md) | Gold-patch replay for L2 legitimacy; profiles and limitations. |
 | [`submission_checklist.md`](submission_checklist.md) | Submission checklist, engineering readiness, and evidence gates. |
-| [`../paper/exports/release/final_validation_matrix.md`](../paper/exports/release/final_validation_matrix.md) | NeurIPS closure gate log (commands + Status). |
-| [`../paper/exports/release/NEURIPS2026_ED_RELEASE.md`](../paper/exports/release/NEURIPS2026_ED_RELEASE.md) | NeurIPS freeze tag pointer and anonymity note. |
-| [`../paper/exports/release/MANUSCRIPT_READY_SIGNOFF.md`](../paper/exports/release/MANUSCRIPT_READY_SIGNOFF.md) | Manuscript-ready engineering sign-off (GO / checklist). |
-| [`../paper/exports/release/gold_validation_export_only_log.md`](../paper/exports/release/gold_validation_export_only_log.md) | Gold validation closure log (frozen exports vs bundle dirs). |
+
+Release logs and paper-facing exports live under `paper/` when generated locally; that tree is gitignored in this repository.
 
 ## Start here
 
 1. Read [`getting_started.md`](getting_started.md) for local setup and a first successful run.
-2. Use [`operational_runbook.md`](operational_runbook.md) for production-like evaluation batches.
-3. Use [`artifact_spec.md`](artifact_spec.md) and [`evaluator_card_template.md`](evaluator_card_template.md) when interpreting released run outputs.
+2. Use [`evidence_manual.md`](evidence_manual.md#operational-runbook) for production-like evaluation batches.
+3. Use [`architecture.md`](architecture.md) and [`evaluator_card_template.md`](evaluator_card_template.md) when interpreting released run outputs.
