@@ -1,7 +1,7 @@
 # Empirical evidence gates (live status)
 
-**NeurIPS 2026 claim lock:** Authoritative allowed/prohibited claims for the
-submission package are listed in `docs/CLAIM_LOCK_NEURIPS2026.md`, with a
+**Publication claim discipline:** Authoritative allowed/prohibited claims for the
+submission package are summarized in `docs/scientific_scope.md`, with a
 per-surface source map in `paper/exports/CLAIM_SOURCE_MAP.md`.
 
 **Claim alignment:** L3 and L4 are real surfaces in the evaluator
@@ -12,10 +12,10 @@ broken-obligation **replays** are for **regression / mechanism** testing only
 and are **out of scope** for headline pass/fail statistics. This matches
 `README.md` and `docs/proof_subset_policy.md`.
 
-See also the [documentation index](README.md) for how this file fits next to
+See also the [documentation index](readme.md) for how this file fits next to
 the tranche plan and submission checklist.
 
-**NeurIPS 2026 engineering closure:** Per-gate commands and statuses are logged in
+**Publication engineering closure:** Per-gate commands and statuses are logged in
 [`paper/exports/release/final_validation_matrix.md`](../paper/exports/release/final_validation_matrix.md).
 Tag and workflow confirmation notes are in
 [`paper/exports/release/NEURIPS2026_ED_RELEASE.md`](../paper/exports/release/NEURIPS2026_ED_RELEASE.md).
@@ -219,7 +219,7 @@ the headline validator-legitimacy estimate.
   (see `ci/scripts/run_evidence_tier1_checks.py`).
 - **Seal directory:** `runs/released/rust_proof_subset_v1/results_seal/`
 - **Paper semantics replay (L3 pass / L4 fail exemplars + all-level pass):**
-  `docs/rust_proof_paper_semantics_replay.md` and
+  `docs/evidence_manual.md#rust-proof-subset-paper-semantics-l4-counterexample-replay` and
   `datasets/derived/proof_subset/manifest_paper_semantics_l4_counterexample.jsonl`
   with `just rust-proof-batch-seal-paper-semantics` writing to a **separate**
   `--out` directory (do not overwrite `results_seal`).
@@ -274,7 +274,7 @@ python ci/scripts/write_release_artifact_manifest.py \
   --out paper/exports/release/v0.1.2/artifact_manifest.json
 ```
 
-NeurIPS 2026 E&D engineering freeze is tagged **`v0.1.4-neurips2026-ed`**
+The publication engineering-freeze tag is **`v0.1.4-neurips2026-ed`**
 (see `paper/exports/release/NEURIPS2026_ED_RELEASE.md`). Pushing any new `v*.*.*`
-tag still requires a green `.github/workflows/release-tag.yml` run on GitHub; see
-`docs/github_release_tag_ci_confirmation.md`.
+tag still requires a green `.github/workflows/release-tag.yml` run; confirm with
+`gh run list --workflow=release-tag.yml` or the Actions UI for your fork.

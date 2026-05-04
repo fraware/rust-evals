@@ -34,7 +34,7 @@ Three consequences follow from this premise:
 |                      packages/rust/cli/bin/eval-ladder                  |
 +-------------------+-------------+--------------------+------------------+
                     |             |                    |
-             ingest |    evaluate |              analyze|   prove-subset
+             ingest |    evaluate |             analyze|       prove-subset
                     v             v                    v             v
          +---------------+  +-----------+        +----------+   +---------+
          |   benchmarks  |  |  runner   |        | analysis |   |  lean   |
@@ -79,7 +79,7 @@ Three consequences follow from this premise:
 | `eval-ladder-benchmarks`            | Adapter traits and per-benchmark modules (`verified`, `live`, `rust_native`).  | `core`, `runner`.                               |
 | `eval-ladder-strengthening`         | L2 composable validators (tests, differential, regression, property fuzz).     | `core`, `runner`, `traces`.                     |
 | `eval-ladder-lean`                  | L4 obligation manifest + `LeanChecker`. Emits `proof_results.json`.            | `core`, `traces`, `runner`.                     |
-| `eval-ladder-analysis`              | Score descent, conditional false success, rank stability, taxonomy, static-vs-live, paper export. Pure functions over bundles. | `core`, `evidence`.           |
+| `eval-ladder-analysis`              | Score descent, conditional reversal, rank stability, taxonomy, static-vs-live, paper export. Pure functions over bundles. | `core`, `evidence`.           |
 | `eval-ladder-cli`                   | Entrypoint `eval-ladder`. Config loading. Subcommand dispatch. Hosts the `evaluate`, `prove-subset`, `analyze`, `verify`, and `demo` commands. | all of the above.             |
 
 `core` is deliberately dependency-light; it has no runtime concerns and no
@@ -118,7 +118,7 @@ This is enforced by:
 If any of these is violated the evaluator must emit a policy violation rather
 than a success.
 
-## L0/L1 runner (Milestone C)
+## L0/L1 runner
 
 The runner crate (`eval-ladder-runner`) ships the deterministic L0/L1
 pipeline. Its internal structure mirrors the data flow and is the
@@ -129,7 +129,8 @@ canonical reference for anyone adding L2-L4 stages.
                  |
                  v
    +-------------+--------------+
-   | EvaluationPipeline (orchestrator)
+   |  EvaluationPipeline        |
+   |     (orchestrator)         |
    |                            |
    |  Clock  ------------------->  trace timestamps + bundle created_at
    |  RunIdentity (UUIDv5) ----->  run_id + bundle_id
@@ -184,7 +185,7 @@ The acceptance invariant - two reruns with identical inputs and
 `bundle_hash` - is pinned by
 `packages/rust/runner/tests/pipeline_acceptance.rs`.
 
-## L2 strengthening (Milestone D)
+## L2 strengthening
 
 Higher ladder rungs plug into the L0/L1 pipeline through a single
 trait, `eval_ladder_runner::LevelExtension`. The runner crate stays
@@ -255,7 +256,7 @@ Key abstractions:
   - `DifferentialBehaviorCheck` - prepares a second workspace with
     the oracle patch, runs each observable in both, compares chosen
     streams; any divergence -> `L2_DIFF_BEHAVIOR`.
-  - `PropertyFuzzCheck` - scheduled for Milestone D+; currently
+  - `PropertyFuzzCheck` - scheduled for a future release; currently
     emits `NotApplicable`.
 - **Aggregation**. The L2 aggregate `EvaluationResult` passes iff every
   enabled validator's verdict is `Pass` or `NotApplicable`. The first
@@ -265,11 +266,11 @@ Key abstractions:
   in `strengthening_report.json` so analysis can attribute L2 drops to
   specific augmented tests or observables.
 
-The Milestone D acceptance invariants - "one fixture candidate passes
+The L2 strengthening acceptance invariants - "one fixture candidate passes
 L0 but fails L2" and "L2 reruns are deterministic" - are pinned by
 `packages/rust/strengthening/tests/milestone_d_acceptance.rs`.
 
-## L3 policy (Milestone E)
+## L3 policy
 
 L3 reuses the same `LevelExtension` seam as L2. The
 `eval-ladder-policy` crate implements `L3Extension`, which runs after
@@ -343,11 +344,11 @@ Key abstractions:
   `--- a/X / +++ b/Y` fallbacks; ignores `/dev/null` sentinels;
   preserves first-seen order for stable reports.
 
-The Milestone E acceptance invariants - "one fixture candidate passes
+The L3 policy acceptance invariants - "one fixture candidate passes
 L0, L1, and L2 but fails L3" and "L3 reruns are deterministic" - are
 pinned by `packages/rust/policy/tests/milestone_e_acceptance.rs`.
 
-## L4 proof subset (Milestone F)
+## L4 proof subset
 
 L4 reuses the same `LevelExtension` seam as L2 and L3. The
 `eval-ladder-lean` crate implements `L4Extension`, which runs after
@@ -409,7 +410,7 @@ Key abstractions:
   `proof_checker.command args...` with `cwd = lean_root` and parses
   a single `LeanCheckOutcome` JSON from stdout. The in-tree
   `ScriptedChecker` is a deterministic test double used by the
-  Milestone F acceptance tests (and available to anyone who wants to
+  L4 acceptance tests (and available to anyone who wants to
   audit L4 bundle hashing without a Lean toolchain).
 - **`LeanCheckOutcome`**. Three-valued status (`Valid` / `Invalid`
   / `NotApplicable`) plus a stable uppercase `code`, a free-form
@@ -427,20 +428,20 @@ Key abstractions:
   harness errors, or `L4_OBLIGATION_NOT_APPLICABLE` when the
   manifest has no entry for the task.
 
-The Milestone F acceptance invariants - "L4 Valid / Invalid /
+The L4 acceptance invariants - "L4 Valid / Invalid /
 NotApplicable matrix under a scripted checker" and "L4 reruns are
 deterministic" - are pinned by
 `packages/rust/lean/tests/milestone_f_acceptance.rs`. An opt-in
 integration test (`#[ignore]`) exercises the real `lake` binary
 against the seeded fixture obligation.
 
-## Paper pipeline (Milestone G)
+## Paper export pipeline
 
-Milestone G is the only stage that reads across multiple candidates
-at once. It takes a run directory produced by Milestones C-F
+This stage is the only one that reads across multiple candidates
+at once. It takes a run directory produced by the evaluation pipeline
 (one sealed evidence bundle per candidate), projects it into a flat
 `AnalysisInput`, and materializes the paper-ready tables
-(Milestones G and L).
+(aggregated exports and static-vs-live).
 
 ```
      runs/<panel>/results/
@@ -464,7 +465,7 @@ at once. It takes a run directory produced by Milestones C-F
              +---+----+---------------+-----------+-------------+--------------+
              v        v                    v           v             v
       score_descent   conditional_false    rank_      taxonomy_    static_vs_live
-             |        _success             stability  counts       (Milestone L)
+             |        _success             stability  counts       (static-vs-live)
              |          |                   |           |             |
              +---+------+------+------------+-----+-----+------+------+
                  |             |                  |            |
@@ -477,10 +478,10 @@ at once. It takes a run directory produced by Milestones C-F
                  v
      paper/exports/<panel>/
        score_descent.csv + .json
-       conditional_false_success.csv + .json
+       conditional_reversal.csv + .json (+ deprecated conditional_false_success.* aliases)
        rank_stability.csv + .json
        taxonomy.csv + .json
-       static_vs_live.csv + .json           (Milestone L)
+       static_vs_live.csv + .json           (static-vs-live)
        manifest.json  (SHA-256 of every sibling; audit-stable)
 ```
 
@@ -498,31 +499,31 @@ Key abstractions:
   ladder-index, primary_reason)` so the downstream tables are
   deterministic for any fixed input directory.
 - **Pure analysis functions**. `score_descent`,
-  `conditional_false_success`, `rank_stability::kendall_tau_b`, and
+  `conditional_reversal`, `rank_stability::kendall_tau_b`, and
   `taxonomy_counts` are free functions over `&AnalysisInput`. They
   are intentionally stateless so the paper pipeline is trivially
   re-runnable in CI without reproducing the runner.
 - **`paper_export::write_paper_exports`**. Materializes every table
-  (score descent, conditional false success, rank stability,
+  (score descent, conditional reversal, rank stability,
   taxonomy, and static-vs-live) into CSV and canonical JSON, then
   emits `manifest.json` containing `{path, sha256, bytes}` for every
   emitted file plus `schema_version`, `evaluator_version`, and
   `input_row_count`. This is the single audit surface that
   downstream tooling (paper builds, CI drift detection) hashes.
-  `PAPER_EXPORT_SCHEMA_VERSION` is `3` (`2` from Milestone L's
+  `PAPER_EXPORT_SCHEMA_VERSION` is `3` (`2` after adding
   static-vs-live files, then `3` for explicit `analysis_mode`
   provenance in `manifest.json`).
   `static_vs_live` pair.
 
-The Milestone G acceptance invariants - "bundles load into a
+The paper-export acceptance invariants - "bundles load into a
 deterministic `AnalysisInput`", "rerunning `write_paper_exports` over
 the same input produces byte-identical files and manifest", and "the
 headline `P(fail L2 | pass L1)` finding is visible end-to-end" - are
 pinned by `packages/rust/analysis/tests/milestone_g_acceptance.rs`.
 
-### Static-vs-live comparison (Milestone L)
+### Static-vs-live comparison
 
-Milestone L is a pure analysis extension: it does not touch the
+Static-vs-live analysis is a pure extension: it does not touch the
 bundle loader, evidence model, or runner. It adds
 `static_vs_live::static_vs_live(&AnalysisInput) -> Vec<StaticVsLiveRow>`,
 a fifth paper-export pair (`static_vs_live.{csv,json}`), and a
@@ -556,11 +557,11 @@ Acceptance invariants - "static-vs-live rows are deterministic",
 are pinned by
 `packages/rust/analysis/tests/milestone_l_acceptance.rs`.
 
-## Batch evaluation (Milestone H)
+## Batch evaluation
 
-Milestone H is the CLI-level orchestrator that drives the pipeline
+Batch evaluation is the CLI-level orchestrator that drives the pipeline
 over a panel of candidates in one invocation. It does *not* extend
-the evidence model; it only sequences Milestone C-F runs and emits
+the evidence model; it only sequences L0–L4 pipeline runs and emits
 one extra artifact (`batch_summary.json`).
 
 ```
@@ -620,13 +621,13 @@ Key abstractions:
   Wall-clock `started_at`/`finished_at` fields are omitted under
   `--deterministic-clock` so the whole batch is byte-stable.
 
-The Milestone H acceptance invariants - "bundles are written per
+The batch evaluation acceptance invariants - "bundles are written per
 entry", "one bad entry does not abort the batch", and "rerunning the
 batch produces byte-identical summary content and bundle hashes" -
-are pinned by the `milestone_h_*` tests in
+are pinned by the batch acceptance tests in
 `packages/rust/cli/src/commands/batch.rs`.
 
-## Python compat layer (Milestone I)
+## Python compatibility layer
 
 The Python compat layer lives under `packages/python/benchmark_compat/`
 and is the only sanctioned place where non-Rust code touches evaluator
@@ -691,15 +692,15 @@ Key modules:
   for fail-fast ingestion.
 
 Cross-language determinism is pinned by
-`tests/integration/tests/python_round_trip.rs::`
-`milestone_i_python_emitted_benchmark_task_deserializes_in_rust`:
+`tests/integration/tests/python_round_trip.rs` (integration test
+`milestone_i_python_emitted_benchmark_task_deserializes_in_rust`):
 the Rust side deserializes the Python-emitted bytes into the Rust
 `BenchmarkTask` struct, re-emits via `canonical_json`, and asserts
 the bytes match on both sides.
 
-## Bundle and trace verification (Milestone J)
+## Bundle and trace verification
 
-Milestone J ships `eval-ladder verify`, the single command reviewers
+`eval-ladder verify` is the single command reviewers
 use to answer "are these artifacts the ones the evaluator actually
 produced?". The CLI is a thin dispatcher over two library surfaces
 that already existed in the workspace but were never exposed as a
@@ -742,14 +743,14 @@ Key design points:
 
 - **Stable error codes** (`VERIFY_FILE_DIGEST_MISMATCH`,
   `VERIFY_BUNDLE_DIGEST_MISMATCH`, `VERIFY_TRACE_CHAIN_BROKEN`, ...).
-  See `docs/operational_runbook.md#stable-error-codes` for the
+  See `docs/evidence_manual.md#stable-error-codes` for the
   complete list. Downstream scripts match on these codes instead of
   human-readable messages.
 - **Canonical report**. `VerifyReport` is serialized via
   `canonical_json`; rows are sorted by `bundle_name`; absolute
   `run_dir` / `bundle_dir` strings are the only non-deterministic
   fields (tempdir / operator paths) and are normalized out by the
-  Milestone J acceptance test.
+  The verify acceptance test.
 - **Resilience**. By default a single bad bundle never aborts the
   run; every row is still written to the report. `--fail-fast`
   opts into short-circuit CI mode.
@@ -758,14 +759,14 @@ Key design points:
   into stable codes and aggregates rows into a deterministic
   report.
 
-Milestone J acceptance invariants live in
+Verify acceptance invariants live in
 `packages/rust/cli/src/commands/verify.rs::tests::milestone_j_*`:
 clean bundles pass, tampering a single file flips exactly one row
 to `invalid` while leaving its neighbours untouched, and two runs
 against byte-identical inputs produce byte-identical reports after
 tempdir normalization.
 
-## Reproducibility demo (Milestone K)
+## Reproducibility demo
 
 `eval-ladder demo run` is an orchestrator, not a new layer. It
 composes the existing public library surfaces in-process so that a
@@ -793,7 +794,7 @@ full end-to-end story:
     write_paper_exports(AnalysisInput, paper/)    [analysis::paper_export]
                |
                v
-     paper/score_descent.{csv,json}, conditional_false_success.*,
+     paper/score_descent.{csv,json}, conditional_reversal.* (+ legacy aliases),
      rank_stability.*, taxonomy.*, manifest.json
                |
                v
@@ -807,7 +808,7 @@ Design constraints:
 
 - **No subprocess spawns.** Every step calls the canonical
   library entry point directly; any future change to those
-  surfaces fails `milestone_k_*` immediately.
+  surfaces fails demo acceptance tests immediately.
 - **No upstream data.** Task manifests, candidates, patches, and
   workspaces are synthesized from a pinned namespace UUID and a
   fixed wall clock (`2025-01-01T00:00:00Z`).
@@ -816,7 +817,7 @@ Design constraints:
   identical verify-report content (modulo tempdir paths, which are
   normalized out in the acceptance test).
 
-Milestone K is pinned by `milestone_k_demo_runs_end_to_end` (all
+The demo workflow is pinned by `milestone_k_demo_runs_end_to_end` (all
 bundles ok, every paper table present, verify report all-green)
 and `milestone_k_demo_is_byte_deterministic_across_runs` (bundle
 hashes and report content match byte-for-byte across reruns).

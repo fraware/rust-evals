@@ -2,8 +2,7 @@
 
 This document records the scientific posture of `eval-ladder`. It is the
 reference for reviewers and should be cited by the paper. See also
-[`README.md`](../README.md) for the full documentation map, the NeurIPS claim
-lock in [`CLAIM_LOCK_NEURIPS2026.md`](CLAIM_LOCK_NEURIPS2026.md), and
+[`README.md`](../README.md) for the full documentation map and
 [`evidence_empirical_status.md`](evidence_empirical_status.md) for machine-checked
 gates.
 
@@ -44,7 +43,7 @@ CLI and signed evidence bundles).
 
 ### Dataset posture (submission: Mode 1)
 
-For the NeurIPS 2026 E&D submission this repository adopts **Mode 1: code-only
+For the publication submission cycle this repository adopts **Mode 1: code-only
 audit submission** (see `docs/submission_checklist.md`):
 
 - Audit **only existing public datasets** at bootstrap (SWE-Bench Verified,
@@ -114,8 +113,8 @@ Frozen panels, exports, and gate outcomes are summarized in
 `ci/scripts/analyze_strict_feasibility.py`).
 
 The repository includes end-to-end pilot and flagship bundles; **headline
-empirical claims** in the NeurIPS package are locked to Tier A/B in
-`docs/CLAIM_LOCK_NEURIPS2026.md`.
+empirical claims** in the publication package are locked to Tier A/B in
+`paper/exports/CLAIM_SOURCE_MAP.md`.
 
 ## Non-goals
 

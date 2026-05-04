@@ -1,6 +1,6 @@
 # Evaluation ladder
 
-Documentation index: [`README.md`](README.md).
+Documentation index: [`readme.md`](readme.md).
 
 The evaluation ladder defines five evaluator levels, L0 through L4. Each level
 has a precise definition, a set of inputs, a set of checks, and a stable code
@@ -21,8 +21,9 @@ verbatim, then normalize to `pass | fail | invalid`.
 **Failure reasons.** One of `L0_OFFICIAL_FAIL`, `L0_OFFICIAL_INVALID`,
 `L0_OFFICIAL_TIMEOUT`, `L0_OFFICIAL_MISSING_ARTIFACT`.
 
-**Scientific role.** Defines the reference point. Nothing above L0 is a
-replacement; each higher level is a tightening.
+**Scientific role.** Defines the reference point. Higher levels answer
+different measurement questions than L0. They may be stricter, but they are
+not universal ground truth.
 
 ## L1 - Trusted rerun
 
@@ -54,7 +55,7 @@ the official scorer.
 
 **Inputs.** A composable set of validators configured via a per-task
 `StrengtheningSpec` JSON (see `packages/rust/strengthening/src/spec.rs`
-and `docs/operational_runbook.md`). The global
+and `docs/evidence_manual.md`). The global
 `configs/strengthening/*.toml` selects which validator families run;
 the per-task spec declares the exact commands.
 
@@ -101,7 +102,7 @@ process.
 
 **Inputs.** A declarative policy loaded from a TOML file under
 `configs/policy/` (see `packages/rust/policy` and
-`docs/artifact_spec.md`).
+`docs/architecture.md`).
 
 **Implementation.** L3 plugs into the runner's `EvaluationPipeline`
 as a `LevelExtension` implemented by `eval_ladder_policy::L3Extension`.
@@ -196,14 +197,19 @@ of audit-stable tables:
 
 - **Score descent** - `passed / evaluated` by level, stratified by
   benchmark and by agent.
-- **Conditional false success** -
+- **Conditional reversal** -
   `P(fail L_{k+1} | pass L_k)` for every adjacent level pair. This is
-  the quantitative expression of "the ladder overstates pass rate".
+  the quantitative expression of evaluator-conditioned score movement
+  between adjacent rungs.
 - **Rank stability** - Kendall tau-b between every pair of agent
   leaderboards (one per level).
 - **Taxonomy** - counts of every stable `primary_reason` that appears
   on `fail` rows, grouped by `(benchmark, level, code)`.
 - **Static vs live** (Milestone L; see the dedicated section below).
+
+A reversal at a higher rung is **not** automatically proof of an incorrect patch
+for the ticket. Reserve strong overclaim language only for rows where separate
+evidence (for example issue-relevance review or oracle validation) supports it.
 
 `eval-ladder analyze paper-export --run-dir <dir> --out-dir <dir>`
 emits all tables as CSV (RFC 4180, six-digit floats) and canonical
@@ -259,7 +265,7 @@ Driving the entire ladder across a panel of candidates is
 `eval-ladder evaluate batch`:
 
 The paths below use **`agent_panel_v1`** as a compact **CLI illustration** (small frozen
-panel). NeurIPS headline surfaces and frozen paths are listed in `README.md` and
+panel). Headline empirical surfaces and frozen paths are listed in `README.md` and
 `docs/submission_checklist.md` (Live v2, L2 flagship, Rust proof seal, and cohort-specific
 Verified directories).
 
@@ -316,7 +322,7 @@ operator-facing binary with three modes - `bundle`, `trace`,
 bundle flips exactly one row to `invalid` without polluting the
 others, and two runs against identical inputs produce byte-
 identical reports (pinned by `milestone_j_*` acceptance tests). See
-`docs/operational_runbook.md#bundle-and-trace-verification-milestone-j`
+`docs/evidence_manual.md#bundle-and-trace-verification-milestone-j`
 for CLI recipes and exit semantics.
 
 ## Reproducibility demo (Milestone K)
@@ -331,5 +337,5 @@ the full pipeline uses, so any future change to the evaluator's
 contract trips `milestone_k_*` on the first offending commit.
 Two runs with identical arguments produce byte-identical
 `bundle_hash` and `verify_report.json` content. See
-`docs/operational_runbook.md#reproducibility-demo-milestone-k` for
+`docs/evidence_manual.md#reproducibility-demo-milestone-k` for
 invocation, output layout, and the determinism contract.

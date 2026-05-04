@@ -37,5 +37,5 @@ Primary export locations:
 ## Next steps
 
 - Use `docs/cli_reference.md` for command-level workflows.
-- Use `docs/operational_runbook.md` for longer batch execution and optimization.
+- Use `docs/evidence_manual.md` for longer batch execution and optimization.
 - Use `docs/troubleshooting.md` if setup or runtime checks fail.

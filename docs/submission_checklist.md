@@ -1,7 +1,7 @@
 # Submission checklist
 
 Target venue: configurable; this checklist is kept venue-agnostic for reuse.
-Supporting technical docs are indexed in [`README.md`](README.md).
+Supporting technical docs are indexed in [`readme.md`](readme.md).
 
 Key dates:
 
@@ -28,7 +28,7 @@ Choose one mode per submission.
       Engineering freeze tag: ``v0.1.4-neurips2026-ed``
       (see ``paper/exports/release/NEURIPS2026_ED_RELEASE.md``).
 
-- [x] Documented CLI with worked examples in ``docs/operational_runbook.md``.
+- [x] Documented CLI with worked examples in ``docs/evidence_manual.md``.
 
 - [x] Live v2 released bundles:
       ``runs/released/live_panel_v2/results_opt/``
@@ -92,13 +92,13 @@ Choose one mode per submission.
       to `2`.
 - [x] Rank-instability tooling available (Kendall tau-b between agent leaderboards via
       ``rank_stability.kendall_tau_b`` in Milestone G outputs). This is **supporting
-      instrumentation / appendix material**, not a headline NeurIPS paper claim; central
+      instrumentation / appendix material**, not a headline manuscript claim; central
       empirical surfaces are Live v2 and L2 flagship per ``docs/scientific_scope.md``.
 - [x] False-success taxonomy reported at stable-code granularity.
       Milestone G emits `taxonomy.{csv,json}` keyed by
       `(benchmark, level, primary_reason)`.
-- [x] Conditional false-success rate reported per level transition.
-      Milestone G emits `conditional_false_success.{csv,json}` for
+- [x] Conditional reversal rate reported per level transition.
+      Milestone G emits `conditional_reversal.{csv,json}` for
       every adjacent level pair.
 - [x] Per-benchmark and per-agent breakdowns reported. Milestone G's
       `score_descent` stratifies by both dimensions.
@@ -121,11 +121,10 @@ Choose one mode per submission.
       specification. Pinned by `just validate-schemas` /
       `eval-ladder schema validate`.
 - [x] Tier 3 CI has passed on tagged commits for ``v0.1.0`` and ``v0.1.1``
-      (workflow ``release-tag.yml``; conclusions ``success`` on the Actions runs
-      linked from ``docs/github_release_tag_ci_confirmation.md``, including the
-      public REST list URL).
-- [x] NeurIPS 2026 E&D freeze tag ``v0.1.4-neurips2026-ed`` confirmed green on
-      ``release-tag.yml`` (see ``docs/github_release_tag_ci_confirmation.md``).
+      (workflow ``release-tag.yml``; conclusions ``success``; see
+      ``gh run list --workflow=release-tag.yml`` or the Actions UI for how to confirm runs).
+- [x] Publication engineering-freeze tag ``v0.1.4-neurips2026-ed`` confirmed green on
+      ``release-tag.yml`` (confirm with ``gh`` or the Actions UI).
       Local manifest prep (no CI claim): ``paper/exports/release/v0.1.2/artifact_manifest.json``
       from ``write_release_artifact_manifest.py`` without ``--require-all-files``.
 
@@ -133,42 +132,42 @@ Choose one mode per submission.
 
 - [x] README quick-start works on a fresh machine.
 - [x] Runbook walks through a complete batch evaluation (Milestone H
-      recipe in `docs/operational_runbook.md#batch-evaluation-milestone-h`).
+      recipe in `docs/evidence_manual.md#batch-evaluation-milestone-h`).
 - [x] Evidence bundles are hash-verifiable with a shipped command
       (`eval-ladder verify run-dir --run-dir runs/released`; see
-      `docs/operational_runbook.md#bundle-and-trace-verification-milestone-j`).
+      `docs/evidence_manual.md#bundle-and-trace-verification-milestone-j`).
 - [x] Paper exports are regenerable from a single `analyze` invocation
       (`eval-ladder analyze paper-export --run-dir ... --out-dir ...`).
 - [x] The smallest reproducible slice runs in under fifteen minutes on a
       developer machine
       (`eval-ladder demo run --out runs/demo --tasks 2`; see
-      `docs/operational_runbook.md#reproducibility-demo-milestone-k`).
+      `docs/evidence_manual.md#reproducibility-demo-milestone-k`).
 
 ## Evidence tranche quality gates
 
 - [x] Machine-checkable gate script for empirical tranche quality:
       `ci/scripts/check_evidence_quality.py`.
-- [x] Paper claim wiring vs frozen exports (NeurIPS claim lock):
-      `paper/paper_claim_sources.json` and `ci/scripts/check_paper_claim_sources.py`
+- [x] Paper claim wiring vs frozen exports (publication claim lock):
+      `docs/paper_claim_sources.json` and `ci/scripts/check_paper_claim_sources.py`
       (invoked from `ci/scripts/run_evidence_tier1_checks.py`).
 - [x] L1 harness-error clustering for triage:
       `ci/scripts/triage_l1_harness_errors.py` (see evidence tranche plan).
 - [x] Preflight of ``official_test_entrypoint`` selectors vs materialized
       workspaces: `ci/scripts/preflight_verified_selectors.py` (also enforced in
-      tier-1 CI on the ``l0l1_pass_hunt_v1`` panel).
+      fast evidence CI on the ``l0l1_pass_hunt_v1`` panel).
 - [x] Repo-wide Verified manifest entrypoint audit:
-      `ci/scripts/audit_verified_manifest_entrypoints.py` (tier-1 CI, all 500
+      `ci/scripts/audit_verified_manifest_entrypoints.py` (fast evidence CI, all 500
       manifests, count pinned with ``--expect-manifest-count 500``).
 - [x] Contract tests for pytest selector parsing:
       `tests/python/test_verified_pytest_targets.py` (tier-2 ``pytest``).
-- [x] Subprocess CLI tests for preflight, audit, diagnose, triage, tier-1 runner,
+- [x] Subprocess CLI tests for preflight, audit, diagnose, triage, evidence-gate runner,
       upstream-resolved panel filter (``--help`` contract), release manifest
       writer (including ``--require-all-files``), all ``check_evidence_quality``
       modes, and **failure paths** (exit code 2 / ``ok: false``) so gates cannot
       silently weaken: `tests/python/test_evidence_cli_scripts.py`.
 - [x] Strict ``mypy`` on ``packages/python/benchmark_compat/src`` and
       ``ci/scripts`` (tier-2 ``mypy``; paths listed in root ``pyproject.toml``).
-- [x] Tier-1 evidence checks (local and ``ci-tier1-fast``):
+- [x] Fast evidence checks (local and ``ci-tier1-fast``):
       `ci/scripts/run_evidence_tier1_checks.py`.
 - [x] Optional strict exit for batch diagnostics:
       `ci/scripts/diagnose_batch_summary.py --fail-on-warnings`.
@@ -183,7 +182,7 @@ Choose one mode per submission.
       `delta` without crashing and scores ties only on rows with live data.
       Regression coverage in `tests/python/test_evidence_cli_scripts.py`.
 - [x] Verified / Live / L2 / Rust **release-profile** gates passing on the
-      NeurIPS freeze paths documented in ``docs/evidence_empirical_status.md``
+      publication freeze paths documented in ``docs/evidence_empirical_status.md``
       (Live v2 postbatch export ``paper/exports/live_panel_v2_postbatch`` from
       ``runs/released/live_panel_v2/results_opt``; L2 flagship merged run-dir
       ``runs/released/l2_verified_flagship_v1/results``; Rust proof seal
@@ -205,10 +204,21 @@ Choose one mode per submission.
       (``--min-l3-pass-l4-fail 2 --min-all-level-pass 1`` on a full ladder out).
       Real-manifest frozen output currently has ``l3_pass_l4_fail=0`` and
       ``all_level_pass=0`` (see ``paper/exports/strict_feasibility_report.json``).
-      Release profile matches tier-1 structural semantics on ``results_seal``.
+      Release profile matches structural rust-proof semantics on ``results_seal``.
 
-## Plan §15 — Anonymity and packaging
+## Plan §15 — Optional anonymized code bundle
 
-NeurIPS E&D is **single-blind**. Choosing an anonymized tarball versus pointing reviewers
-at the public repository is an **author policy** decision; engineering ships the tagged
-code snapshot and documentation only. See ``paper/exports/release/NEURIPS2026_ED_RELEASE.md``.
+Some venues require an anonymized code archive instead of (or in addition to) a public
+repository link. See ``paper/exports/release/NEURIPS2026_ED_RELEASE.md`` for the
+engineering-freeze pointer and ``ci/scripts/build_anonymous_submission_bundle.py`` for
+optional packaging.
+
+- If you ship an anonymized tarball, include **sanitized** local command transcripts
+  (for example ``CI_LOG.txt``) when the venue allows; do **not** embed public workflow URLs
+  that identify non-anonymous repositories. Sanitize paths in transcripts to ``<artifact-root>/...``.
+- After the final ``.tar.gz`` passes ``verify_anonymous_bundle_scrub.py``, write the digest
+  with ``sha256sum`` / ``Get-FileHash`` into ``build/ANON_BUNDLE_SHA256.txt`` and run
+  ``python ci/scripts/write_release_manifest.py --archive <path-to-your-archive.tar.gz>``.
+  **Do not** embed the tarball SHA inside files that ship **inside** the tarball.
+- The bundle builder sanitizes the staged tree and fails closed if scrub patterns still match;
+  always re-run ``verify_anonymous_bundle_scrub.py`` on the packaged artifact.

@@ -117,7 +117,7 @@ Current pass/fail status for all four empirical gates is summarized in
 ``docs/evidence_empirical_status.md``.
 
 For long Docker batches, use the wall-clock checklist and ``just`` recipes in
-``docs/operational_runbook.md`` (Milestone H, “Wall-clock optimizations”). Prefer
+``docs/evidence_manual.md`` (Milestone H, “Wall-clock optimizations”). Prefer
 ``just …-prewarmed`` recipes (for example ``verified-batch-optimized-prewarmed``) so
 image pulls run before ``evaluate batch``, or run
 ``python ci/scripts/prewarm_panel_images.py --panel …`` manually.
