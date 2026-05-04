@@ -6,7 +6,7 @@ Gold **headline** validation (default) uses ``configs/evaluator/default.toml``,
 ``strengthening_spec_gold_mechanical.json``: both L2 sub-validators are trivial
 exit-0 smoke checks so developer patches that pass L0/L1 can defensibly **pass
 L2** without conflating cross-repo Astropy selectors or ``regression_forced_fail``
-with gold quality (see ``docs/l2_gold_patch_validation.md``).
+with gold quality (see ``docs/evidence_manual.md``).
 
 Pass ``--strict-flagship-specs`` to replay the **same** strengthening JSON files
 as the sealed agent arms (Astropy pytest aug path + regression forced-fail).

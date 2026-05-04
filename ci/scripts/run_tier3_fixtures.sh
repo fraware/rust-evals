@@ -7,7 +7,7 @@
 # fixtures library. This script intentionally avoids downloading full
 # benchmark assets; Tier 3 is about surface coverage, not full replay.
 #
-# See docs/operational_runbook.md for the release-time heavy-replay workflow
+# See docs/evidence_manual.md for the release-time heavy-replay workflow
 # that is driven by `just` outside of CI.
 
 set -Eeuo pipefail

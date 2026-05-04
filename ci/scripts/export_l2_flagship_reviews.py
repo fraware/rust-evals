@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import csv
 import json
+import re
 from pathlib import Path
 from typing import Any
 
@@ -15,10 +16,37 @@ OUT_DIR = REPO_ROOT / "paper" / "exports" / "l2_verified_flagship_v1"
 OUT_TAXONOMY = OUT_DIR / "l2_failure_taxonomy.csv"
 OUT_REVIEW = OUT_DIR / "l2_failure_review.csv"
 OUT_REVIEW_JSON = OUT_DIR / "l2_failure_review.json"
-OUT_CASE_STUDIES = REPO_ROOT / "docs" / "l2_failure_case_studies.md"
+OUT_HUMAN_SUMMARY = OUT_DIR / "l2_human_review_summary.csv"
+_EVIDENCE_MANUAL = REPO_ROOT / "docs" / "evidence_manual.md"
+_MARK_BEGIN = "<!-- BEGIN_EXPORT_L2_CASE_STUDIES -->\n"
+_MARK_END = "<!-- END_EXPORT_L2_CASE_STUDIES -->\n"
 RESULTS_ASTROPY_DIR = RUN_ROOT / "results_astropy"
 RESULTS_REG_DIR = RUN_ROOT / "results_regression_fail"
 GOLD_VALIDATION_CSV = OUT_DIR / "gold_patch_validation.csv"
+
+
+def _bump_markdown_headings(md: str, add: int) -> str:
+    """Increase each markdown heading depth by ``add`` (line starts only; skips fenced code)."""
+    out: list[str] = []
+    fence: str | None = None
+    for line in md.splitlines():
+        stripped = line.lstrip()
+        if fence:
+            if stripped.startswith(fence):
+                fence = None
+            out.append(line)
+            continue
+        if stripped.startswith("```"):
+            fence = stripped[:3]
+            out.append(line)
+            continue
+        m = re.match(r"^(#+)\s", line)
+        if m:
+            hashes = m.group(1)
+            if len(hashes) + add <= 6:
+                line = ("#" * (len(hashes) + add)) + line[len(hashes) :]
+        out.append(line)
+    return "\n".join(out)
 
 
 def _load_json(path: Path) -> dict[str, Any]:
@@ -171,7 +199,7 @@ CURATED_ENTRY_IDS: tuple[str, ...] = (
 )
 
 # Human adjudication keyed by entry_id (reviewer-facing).
-# Labels must stay aligned with ``docs/CLAIM_LOCK_NEURIPS2026.md`` / claim-lock
+# Labels must stay aligned with ``docs/scientific_scope.md`` / claim discipline
 # prose: never emit deprecated ``true_positive`` tokens into ``docs/*.md``.
 LABEL_ISSUE_WEAKNESS = "issue_relevant_candidate_weakness"
 LABEL_STRESS_REVERSAL = "valid_stress_control_reversal"
@@ -350,6 +378,69 @@ def _write_taxonomy_from_summary() -> None:
             )
 
 
+def _validator_arm_from_family(vf: str) -> str:
+    if vf == "L2_AUG_TESTS_FAIL":
+        return "augmented_tests"
+    if vf == "L2_REGRESSION_FAIL":
+        return "regression_stress_control"
+    return "unknown"
+
+
+def _write_human_review_summary(rows: list[dict[str, Any]]) -> None:
+    """Aggregate curated human adjudication rows for paper exports."""
+    total = len(rows)
+    by_arm: dict[str, int] = {"augmented_tests": 0, "regression_stress_control": 0}
+    by_label_arm: dict[tuple[str, str], int] = {}
+    for r in rows:
+        arm = _validator_arm_from_family(str(r.get("validator_family", "")))
+        if arm in by_arm:
+            by_arm[arm] += 1
+        label = str(r.get("human_label", ""))
+        by_label_arm[(label, arm)] = by_label_arm.get((label, arm), 0) + 1
+
+    out_rows: list[dict[str, str]] = [
+        {
+            "metric": "curated_reviewed_rows",
+            "validator_arm": "all",
+            "value": str(total),
+            "notes": "Fixed diagnostic sample (CURATED_ENTRY_IDS); not a prevalence draw.",
+        },
+        {
+            "metric": "rows_augmented_tests_arm",
+            "validator_arm": "augmented_tests",
+            "value": str(by_arm["augmented_tests"]),
+            "notes": "Subset of curated failures on augmented-test bundles.",
+        },
+        {
+            "metric": "rows_regression_stress_control_arm",
+            "validator_arm": "regression_stress_control",
+            "value": str(by_arm["regression_stress_control"]),
+            "notes": "Subset on regression stress-control bundles (protocol surface).",
+        },
+    ]
+    for label in sorted({k[0] for k in by_label_arm}):
+        for arm in ("augmented_tests", "regression_stress_control"):
+            n = by_label_arm.get((label, arm), 0)
+            if n:
+                out_rows.append(
+                    {
+                        "metric": f"count_label_{label}",
+                        "validator_arm": arm,
+                        "value": str(n),
+                        "notes": "",
+                    }
+                )
+
+    with OUT_HUMAN_SUMMARY.open("w", encoding="utf-8", newline="") as h:
+        w = csv.DictWriter(
+            h,
+            fieldnames=["metric", "validator_arm", "value", "notes"],
+        )
+        w.writeheader()
+        for row in out_rows:
+            w.writerow(row)
+
+
 def _write_review_outputs(rows: list[dict[str, Any]]) -> None:
     fields = [
         "task_id",
@@ -510,10 +601,27 @@ def _write_case_studies(rows: list[dict[str, Any]]) -> None:  # noqa: PLR0915
     lines.append(
         "Regression-family rows use `regression_forced_fail` in "
         "`strengthening_spec_regression_fail.json`. Interpret them through "
-        "`docs/CLAIM_LOCK_NEURIPS2026.md` and the regression Evaluator Card "
+        "`docs/scientific_scope.md` and the regression Evaluator Card "
         "(protocol-control / stress-control evidence)."
     )
-    OUT_CASE_STUDIES.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    standalone = "\n".join(lines) + "\n"
+    body_lines = standalone.splitlines()
+    if not body_lines or not body_lines[0].startswith("#"):
+        raise RuntimeError("internal: case studies must start with H1")
+    body_only = "\n".join(body_lines[1:]).lstrip("\n")
+    inner = _bump_markdown_headings(body_only, 1).rstrip() + "\n"
+    text = _EVIDENCE_MANUAL.read_text(encoding="utf-8")
+    if _MARK_BEGIN not in text or _MARK_END not in text:
+        raise RuntimeError(
+            "docs/evidence_manual.md is missing BEGIN/END EXPORT_L2_CASE_STUDIES markers"
+        )
+    pre, rest = text.split(_MARK_BEGIN, 1)
+    _old, post = rest.split(_MARK_END, 1)
+    _EVIDENCE_MANUAL.write_text(
+        pre + _MARK_BEGIN + inner + _MARK_END + post,
+        encoding="utf-8",
+        newline="\n",
+    )
 
 
 def main() -> int:
@@ -521,6 +629,7 @@ def main() -> int:
     _write_taxonomy_from_summary()
     rows = _build_review_rows()
     _write_review_outputs(rows)
+    _write_human_review_summary(rows)
     _write_case_studies(rows)
     print(
         json.dumps(
@@ -528,7 +637,8 @@ def main() -> int:
                 "taxonomy_csv": str(OUT_TAXONOMY),
                 "review_csv": str(OUT_REVIEW),
                 "review_json": str(OUT_REVIEW_JSON),
-                "case_studies": str(OUT_CASE_STUDIES),
+                "human_review_summary_csv": str(OUT_HUMAN_SUMMARY),
+                "case_studies": f"{_EVIDENCE_MANUAL} (spliced between export markers)",
                 "sample_total": len(rows),
             },
             indent=2,

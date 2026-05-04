@@ -71,7 +71,7 @@ lean-build:
     cd packages/lean/EvalLadder && lake build
 
 # ---------------------------------------------------------------------------
-# CI tiers (see docs/operational_runbook.md)
+# CI tiers (see docs/evidence_manual.md)
 # ---------------------------------------------------------------------------
 
 ci-tier1: fmt-check clippy test validate-schemas
@@ -96,7 +96,7 @@ eval-ladder-cli-release:
     cargo build -q -p eval-ladder-cli --release
 
 # ---------------------------------------------------------------------------
-# Long-batch wall-clock helpers (see docs/operational_runbook.md § Milestone H)
+# Long-batch wall-clock helpers (see docs/evidence_manual.md § Milestone H)
 # ---------------------------------------------------------------------------
 #
 # Batch recipes depend on `eval-ladder-cli-release` and invoke `{{eval-ladder-bin}}`

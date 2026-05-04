@@ -127,11 +127,7 @@ def _scan_text(rel_posix: str, text: str) -> tuple[list[str], list[str]]:
     for tok in IDENT_TOKENS:
         if tok in text:
             errors.append(f"{rel_posix}: substring {tok!r}")
-    rel_norm = rel_posix.replace("\\", "/")
-    if (
-        "fraware" in text.lower()
-        and "github_release_tag_ci_confirmation" not in rel_norm
-    ):
+    if "fraware" in text.lower():
         warnings.append(
             f"{rel_posix}: contains 'fraware' "
             "(often a GitHub org slug; remove if building an anonymized archive)"

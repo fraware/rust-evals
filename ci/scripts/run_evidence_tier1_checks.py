@@ -11,17 +11,23 @@ Execute from the repository root::
 
     python ci/scripts/run_evidence_tier1_checks.py
 
+After building the anonymous tree, re-run against the **staged** artifact (same
+checks; scripts resolve paths from the staged copy)::
+
+    python ci/scripts/run_evidence_tier1_checks.py --staged-root build/eval-ladder-anon-stage
+
 Exit code: first failing subprocess return code, or 0 if all succeed.
 """
 
 from __future__ import annotations
 
+import argparse
 import subprocess
 import sys
 from pathlib import Path
 
 
-def _repo_root() -> Path:
+def _default_repo_root() -> Path:
     return Path(__file__).resolve().parents[2]
 
 
@@ -35,13 +41,49 @@ def _run(argv: list[str], *, cwd: Path) -> int:
 
 
 def main() -> int:
-    root = _repo_root()
+    p = argparse.ArgumentParser(description=__doc__)
+    p.add_argument(
+        "--staged-root",
+        type=Path,
+        default=None,
+        help="Repository root of the staged anonymous tree (e.g. build/eval-ladder-anon-stage).",
+    )
+    args = p.parse_args()
+    root = args.staged_root.resolve() if args.staged_root else _default_repo_root()
+    if not (root / "ci" / "scripts").is_dir():
+        print(
+            f"run_evidence_tier1_checks: missing {root / 'ci' / 'scripts'} "
+            "(pass a complete staged tree)",
+            file=sys.stderr,
+        )
+        return 2
+
     steps: list[tuple[str, list[str]]] = [
         ("compileall ci/scripts", ["-m", "compileall", "-q", "ci/scripts"]),
         (
             "paper claim sources",
             [
                 str(root / "ci/scripts/check_paper_claim_sources.py"),
+            ],
+        ),
+        (
+            "claim limits",
+            [
+                str(root / "ci/scripts/check_claim_limits.py"),
+            ],
+        ),
+        (
+            "L2 arm separation",
+            [
+                str(root / "ci/scripts/check_l2_arm_separation.py"),
+                "--export-dir",
+                str(root / "paper" / "exports" / "l2_verified_flagship_v1"),
+            ],
+        ),
+        (
+            "reviewer-facing reversal wording",
+            [
+                str(root / "ci/scripts/check_reviewer_false_success_language.py"),
             ],
         ),
         (

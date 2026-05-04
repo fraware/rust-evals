@@ -4,7 +4,7 @@ on:
   workflow_dispatch: {}
   schedule:
     # Weekly on Mondays at 04:17 UTC. Heavy tier is opt-in by design; see
-    # docs/operational_runbook.md for the rationale.
+    # docs/evidence_manual.md for the rationale.
     - cron: "17 4 * * 1"
 
 permissions:

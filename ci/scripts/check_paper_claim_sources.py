@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Validate paper claim sources against frozen exports (NeurIPS claim lock).
 
-Reads ``paper/paper_claim_sources.json`` (repo root). Asserts required sources
+Reads ``docs/paper_claim_sources.json`` (repo root). Asserts required sources
 exist, headline Live/L2 paths use the canonical v2 / flagship directories,
 forbidden legacy or synthetic headline paths are not referenced, and optional
 YAML mirror plus doc guards hold (case studies, selection protocol,
@@ -41,10 +41,13 @@ def _canonical_payload(obj: Any) -> dict[str, Any]:
     return cast(dict[str, Any], json.loads(json.dumps(obj, sort_keys=True)))
 
 
-def _yaml_sync_failures(root: Path, json_cfg: dict[str, Any]) -> list[str]:
-    yaml_path = root / "paper" / "paper_claim_sources.yaml"
+def _yaml_sync_failures(cfg_path: Path, json_cfg: dict[str, Any]) -> list[str]:
+    yaml_path = cfg_path.with_suffix(".yaml")
     if not yaml_path.is_file():
-        return ["missing paper/paper_claim_sources.yaml (mirror of JSON for editors)"]
+        return [
+            f"missing {yaml_path.as_posix()} (mirror of JSON for editors; "
+            "expected next to paper_claim_sources.json)"
+        ]
     if yaml_module is None:  # pragma: no cover - optional dependency
         return [
             "PyYAML not installed; install dev deps "
@@ -52,9 +55,12 @@ def _yaml_sync_failures(root: Path, json_cfg: dict[str, Any]) -> list[str]:
         ]
     loaded = yaml_module.safe_load(yaml_path.read_text(encoding="utf-8"))
     if not isinstance(loaded, dict):
-        return ["paper/paper_claim_sources.yaml top-level must be a mapping"]
+        return [f"{yaml_path.as_posix()} top-level must be a mapping"]
     if _canonical_payload(loaded) != _canonical_payload(json_cfg):
-        return ["paper/paper_claim_sources.yaml does not match paper/paper_claim_sources.json"]
+        return [
+            f"{yaml_path.as_posix()} does not match {cfg_path.as_posix()} "
+            "(canonical JSON payload)"
+        ]
     return []
 
 
@@ -78,41 +84,49 @@ def _doc_guards(root: Path) -> list[str]:
             if bad in lowered:
                 failures.append(
                     f"docs/scientific_scope.md must not contain forbidden phrase {bad!r} "
-                    "(see docs/CLAIM_LOCK_NEURIPS2026.md Tier D)"
+                    "(see docs/scientific_scope.md Tier D)"
                 )
-    gold_doc = root / "docs" / "l2_gold_patch_validation.md"
-    if gold_doc.is_file():
-        gtext = gold_doc.read_text(encoding="utf-8")
-        if "## Paper wording" not in gtext:
-            failures.append(
-                "docs/l2_gold_patch_validation.md must retain a '## Paper wording' section "
-                "(validator legitimacy framing)"
-            )
-        if "semantic defect" not in gtext.lower():
-            failures.append(
-                "docs/l2_gold_patch_validation.md must keep gold-vs-candidate semantics caveat "
-                "(e.g. not every candidate L2 failure is a semantic defect)"
-            )
-    case_path = root / "docs" / "l2_failure_case_studies.md"
-    if case_path.is_file():
-        text = case_path.read_text(encoding="utf-8")
-        if "true_positive" in text:
-            failures.append(
-                "docs/l2_failure_case_studies.md must not contain token true_positive "
-                "(use stress-control / protocol-control labels)"
-            )
-    proto = root / "docs" / "l2_selection_protocol.md"
-    if proto.is_file():
-        ptext = proto.read_text(encoding="utf-8")
-        if "regression_forced_fail" not in ptext:
-            failures.append(
-                "docs/l2_selection_protocol.md must mention regression_forced_fail "
-                "(protocol-control interpretation)"
-            )
-        if "validator-focused" not in ptext:
-            failures.append(
-                "docs/l2_selection_protocol.md must keep validator-focused/diagnostic framing"
-            )
+    manual = root / "docs" / "evidence_manual.md"
+    if not manual.is_file():
+        failures.append("missing docs/evidence_manual.md (consolidated protocols + runbook)")
+        return failures
+    mtext = manual.read_text(encoding="utf-8")
+    if "## Paper wording" not in mtext:
+        failures.append(
+            "docs/evidence_manual.md must retain a '## Paper wording' section "
+            "(validator legitimacy framing)"
+        )
+    if "semantic defect" not in mtext.lower():
+        failures.append(
+            "docs/evidence_manual.md must keep gold-vs-candidate semantics caveat "
+            "(e.g. not every candidate L2 failure is a semantic defect)"
+        )
+    if "true_positive" in mtext:
+        failures.append(
+            "docs/evidence_manual.md must not contain token true_positive "
+            "(use stress-control / protocol-control labels)"
+        )
+    if "regression_forced_fail" not in mtext:
+        failures.append(
+            "docs/evidence_manual.md must mention regression_forced_fail "
+            "(protocol-control interpretation)"
+        )
+    if "validator-focused" not in mtext:
+        failures.append(
+            "docs/evidence_manual.md must keep validator-focused/diagnostic framing"
+        )
+    for nd in (
+        "static_anchor_selection_rule",
+        "missing_candidate_policy",
+        "freeze_commit_or_hash",
+        "strict_feasibility_report.json",
+        "Population",
+        "Allowed",
+        "manifest.jsonl",
+        "results_seal",
+    ):
+        if nd not in mtext:
+            failures.append(f"docs/evidence_manual.md must contain substring {nd!r}")
     return failures
 
 
@@ -175,7 +189,7 @@ def main() -> int:
     p.add_argument(
         "--map",
         type=Path,
-        default=root / "paper" / "paper_claim_sources.json",
+        default=root / "docs" / "paper_claim_sources.json",
         help="Path to paper_claim_sources.json",
     )
     args = p.parse_args()
@@ -197,7 +211,7 @@ def main() -> int:
     headline_l2 = str(cfg.get("headline_l2_export_dir", "")).replace("\\", "/")
 
     failures: list[str] = []
-    failures.extend(_yaml_sync_failures(root, cfg))
+    failures.extend(_yaml_sync_failures(cfg_path, cfg))
     failures.extend(_doc_guards(root))
 
     frontier_claims = {"verified_inventory_bound", "rust_l4_frontier"}
