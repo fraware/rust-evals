@@ -11,8 +11,9 @@
 
 ## Reviewer quick path
 
-This artifact supports the NeurIPS 2026 E&D submission:
-**Eval-Ladder: Evaluator-Conditioned Measurement for Repository-Level Coding-Agent Benchmarks.**
+This repository accompanies the research paper **Eval-Ladder: Evaluator-Conditioned
+Measurement for Repository-Level Coding-Agent Benchmarks** and ships frozen evidence
+exports for independent verification.
 
 The artifact evaluates **fixed candidate patches**. It does **not** generate patches.
 
@@ -24,6 +25,10 @@ The artifact evaluates **fixed candidate patches**. It does **not** generate pat
 2. **L2 flagship** diagnostic:
    - `runs/released/l2_verified_flagship_v1/results/`
    - `paper/exports/l2_verified_flagship_v1/`
+
+The regression stress-control arm is a negative-control protocol surface.
+Its reversals demonstrate that evaluator-induced score changes are surfaced
+and labeled. They must not be interpreted as natural product regressions.
 
 **Evidence-frontier surfaces**
 
@@ -40,10 +45,11 @@ cargo run --bin eval-ladder -- schema validate
 cargo run --bin eval-ladder -- demo run --out runs/demo --tasks 2
 ```
 
-**Claim discipline:** `docs/CLAIM_LOCK_NEURIPS2026.md`, `paper/exports/CLAIM_SOURCE_MAP.md`, and `ci/scripts/check_paper_claim_sources.py`.
+**Claim discipline:** `docs/paper_claim_sources.json` (machine-readable map; YAML mirror alongside), `paper/exports/CLAIM_SOURCE_MAP.md` when present, `docs/scientific_scope.md`, and `ci/scripts/check_paper_claim_sources.py`.
 
 **Engineering closure:** `paper/exports/release/final_validation_matrix.md` (gate log) and
-`paper/exports/release/MANUSCRIPT_READY_SIGNOFF.md` (manuscript-ready sign-off).
+`paper/exports/release/MANUSCRIPT_READY_SIGNOFF.md` (manuscript-ready sign-off). Confirm
+green `release-tag.yml` runs with `gh run list --workflow=release-tag.yml` or the GitHub Actions UI.
 
 ### What this artifact does not claim
 
@@ -112,7 +118,7 @@ eval-ladder ingest rust --manifest configs/evaluator/rust.toml
 
 ### Evaluate a batch
 
-Example using the **frozen Live v2** panel (headline NeurIPS comparative surface):
+Example using the **frozen Live v2** panel (headline comparative surface in the paper):
 
 ```bash
 eval-ladder evaluate batch \
@@ -125,7 +131,7 @@ eval-ladder evaluate batch \
 ```
 
 Verified-style and Rust panels use different `--input` paths (for example
-`runs/released/agent_panel_v3_r1/`); see `docs/operational_runbook.md`.
+`runs/released/agent_panel_v3_r1/`); see `docs/evidence_manual.md`.
 
 ### Analyze and export
 
@@ -144,7 +150,7 @@ eval-ladder verify run-dir --run-dir runs/released/live_panel_v2/results_opt
 ### Older tutorial panels
 
 Smaller frozen panels (for example `runs/released/agent_panel_v1/`) remain in-tree for
-regression tests and long-form examples in `docs/operational_runbook.md`. For **Verified
+regression tests and long-form examples in `docs/evidence_manual.md`. For **Verified
 flagship**, **batch optimization**, and **Rust proof** recipes, follow Milestone H there rather
 than assuming `agent_panel_v1` paths.
 
@@ -179,11 +185,11 @@ Start here:
 
 ## Documentation guide
 
-- Docs index: [`docs/README.md`](docs/README.md)
+- Docs index: [`docs/readme.md`](docs/readme.md)
 - Claim source map: [`paper/exports/CLAIM_SOURCE_MAP.md`](paper/exports/CLAIM_SOURCE_MAP.md)
 - Getting started: [`docs/getting_started.md`](docs/getting_started.md)
-- Operational runbook: [`docs/operational_runbook.md`](docs/operational_runbook.md)
-- Artifact model: [`docs/artifact_spec.md`](docs/artifact_spec.md)
+- Evidence manual (protocols + operations): [`docs/evidence_manual.md`](docs/evidence_manual.md)
+- Artifact model: [`docs/architecture.md`](docs/architecture.md) (bundles, manifests, analysis)
 - Public terminology: [`docs/public_terminology.md`](docs/public_terminology.md)
 - Submission/release checklist: [`docs/submission_checklist.md`](docs/submission_checklist.md)
 

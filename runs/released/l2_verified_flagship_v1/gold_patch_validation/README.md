@@ -34,4 +34,4 @@ Exports are written to:
 
 Manual inspection notes:
 
-- `docs/l2_gold_patch_validation.md`
+- `docs/evidence_manual.md` (L2 reference patch validation section)

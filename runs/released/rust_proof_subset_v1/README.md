@@ -93,7 +93,7 @@ Then `verify run-dir` and `analyze paper-export` as for other released panels.
 For two controlled **L3 pass / L4 fail** exemplars plus unchanged rows for an
 **all-level pass** story, replay with
 `datasets/derived/proof_subset/manifest_paper_semantics_l4_counterexample.jsonl`
-(see `docs/rust_proof_paper_semantics_replay.md` and
+(see `docs/evidence_manual.md#rust-proof-subset-paper-semantics-l4-counterexample-replay` and
 `just rust-proof-batch-seal-paper-semantics`). Use a fresh `--out` directory so
 the audit `results_seal` tree is not overwritten.
 

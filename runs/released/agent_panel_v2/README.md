@@ -26,7 +26,7 @@ provenance as `omitted_no_patch_on_s3` and omitted from `panel.jsonl`.
 
 Same pattern as v1: Docker-backed `evaluate batch` with
 `configs/evaluator/verified.toml`, then `verify run-dir` and analysis CLIs
-(`score-descent`, `rank-stability`, `conditional-false-success`, `taxonomy`,
+(`score-descent`, `rank-stability`, `conditional-reversal`, `taxonomy`,
 `paper-export`).
 
 ```powershell

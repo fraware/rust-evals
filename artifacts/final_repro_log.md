@@ -1,4 +1,4 @@
-# Final reproduction log (NeurIPS 2026 closure)
+# Final reproduction log (publication engineering closure)
 
 Commands were executed from the repository root on a Windows 10 developer host
 (2026-05-01). Adjust paths for `eval-ladder.exe` vs `eval-ladder` on Unix.
@@ -21,7 +21,7 @@ Python environment (per `pyproject.toml` / operational runbook):
 python -m pip install -e ".[dev]"
 ```
 
-## 5.2 Tier CI
+## 5.2 Repository CI smoke (`just ci-tier1` / `just ci-tier2`)
 
 ```bash
 just ci-tier1
@@ -116,8 +116,8 @@ Observed: `check_paper_claim_sources: OK`.
 
 Canonical wiring:
 
-- `paper/paper_claim_sources.json` (machine-readable)
-- `paper/paper_claim_sources.yaml` (editor mirror; must match JSON byte-for-byte after canonicalisation)
+- `docs/paper_claim_sources.json` (machine-readable)
+- `docs/paper_claim_sources.yaml` (editor mirror; must match JSON byte-for-byte after canonicalisation)
 
 ## Live leave-one-out appendix CSV
 
