@@ -12,7 +12,7 @@
 //!
 //! - [`score_descent::score_descent`] - pass rate by level, per benchmark,
 //!   per agent.
-//! - [`score_descent::conditional_false_success`] -
+//! - [`score_descent::conditional_reversal`] -
 //!   `P(fail at L_{k+1} | pass at L_k)`.
 //! - [`rank_stability::rank_stability`] - pairwise rank correlation between
 //!   agent leaderboards at each level (Kendall tau).

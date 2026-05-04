@@ -2,7 +2,7 @@
 //!
 //! The integrity of evidence bundles and trace hash chains rests on the
 //! canonical JSON function. The rules are exactly as documented in
-//! `docs/artifact_spec.md`:
+//! `docs/architecture.md`:
 //!
 //! - UTF-8 encoding, no BOM.
 //! - Unix newlines (`\n`).

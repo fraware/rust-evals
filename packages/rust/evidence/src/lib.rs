@@ -8,7 +8,7 @@
 //! and byte length, plus a `bundle_hash` computed over the canonical JSON of
 //! the index with `bundle_hash` itself elided.
 //!
-//! Mandatory members are listed in `docs/artifact_spec.md` and enforced by
+//! Mandatory members are listed in `docs/architecture.md` and enforced by
 //! [`BundleBuilder::finalize`].
 #![deny(missing_docs)]
 #![deny(unsafe_code)]

@@ -1,4 +1,4 @@
-//! Score descent and conditional false-success metrics.
+//! Score descent and conditional reversal metrics.
 
 use std::collections::BTreeMap;
 
@@ -102,9 +102,9 @@ pub fn score_descent(input: &AnalysisInput, mode: AnalysisMode) -> Vec<ScoreDesc
         .collect()
 }
 
-/// Row of the conditional false-success table.
+/// Row of the conditional reversal table `P(fail at L_{k+1} | pass at L_k)`.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct ConditionalFalseSuccessRow {
+pub struct ConditionalReversalRow {
     /// Lower level.
     pub level_from: EvaluationLevel,
     /// Higher level.
@@ -117,22 +117,22 @@ pub struct ConditionalFalseSuccessRow {
     pub rate: Option<f64>,
 }
 
-/// Conditional false-success rate `P(fail at L_{k+1} | pass at L_k)` for
-/// every adjacent pair of levels.
+/// Conditional reversal rate `P(fail at L_{k+1} | pass at L_k)` for every
+/// adjacent pair of levels.
 ///
 /// Pairs are formed from each candidate's per-level verdicts. Levels missing
 /// for a candidate are ignored; `NotApplicable` is treated as "no verdict".
 #[must_use]
-pub fn conditional_false_success(input: &AnalysisInput) -> Vec<ConditionalFalseSuccessRow> {
-    conditional_false_success_with_mode(input, AnalysisMode::Raw)
+pub fn conditional_reversal(input: &AnalysisInput) -> Vec<ConditionalReversalRow> {
+    conditional_reversal_with_mode(input, AnalysisMode::Raw)
 }
 
-/// Conditional false-success rate under the requested [`AnalysisMode`].
+/// Conditional reversal rate under the requested [`AnalysisMode`].
 #[must_use]
-pub fn conditional_false_success_with_mode(
+pub fn conditional_reversal_with_mode(
     input: &AnalysisInput,
     mode: AnalysisMode,
-) -> Vec<ConditionalFalseSuccessRow> {
+) -> Vec<ConditionalReversalRow> {
     let input = project_analysis_mode(input, mode);
     // Group by candidate.
     let mut per_candidate: BTreeMap<
@@ -189,7 +189,7 @@ pub fn conditional_false_success_with_mode(
                 let r = n_failed_to as f64 / n_passed_from as f64;
                 Some(r)
             };
-            ConditionalFalseSuccessRow {
+            ConditionalReversalRow {
                 level_from: lo,
                 level_to: hi,
                 n_passed_from,
@@ -263,7 +263,7 @@ mod tests {
     }
 
     #[test]
-    fn conditional_false_success_detects_l2_drop() {
+    fn conditional_reversal_detects_l2_drop() {
         let c1 = CandidateId::new_v4();
         let c2 = CandidateId::new_v4();
         let c3 = CandidateId::new_v4();
@@ -312,7 +312,7 @@ mod tests {
             ),
         ];
         let input = AnalysisInput { rows };
-        let table = conditional_false_success_with_mode(&input, AnalysisMode::Raw);
+        let table = conditional_reversal_with_mode(&input, AnalysisMode::Raw);
         let l1_l2 = table
             .iter()
             .find(|r| {
@@ -384,7 +384,7 @@ mod tests {
     }
 
     #[test]
-    fn cumulative_conditional_false_success_uses_projected_rows() {
+    fn cumulative_conditional_reversal_uses_projected_rows() {
         let c = CandidateId::new_v4();
         let rows = vec![
             row(
@@ -417,8 +417,8 @@ mod tests {
             ),
         ];
         let input = AnalysisInput { rows };
-        let raw = conditional_false_success_with_mode(&input, AnalysisMode::Raw);
-        let cum = conditional_false_success_with_mode(&input, AnalysisMode::Cumulative);
+        let raw = conditional_reversal_with_mode(&input, AnalysisMode::Raw);
+        let cum = conditional_reversal_with_mode(&input, AnalysisMode::Cumulative);
         let raw_l3_l4 = raw
             .iter()
             .find(|r| {

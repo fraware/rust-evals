@@ -11,7 +11,7 @@
 //!    CSV/JSON bodies and a byte-identical `manifest.json`. This
 //!    carries forward the Milestone C determinism invariant from
 //!    evidence bundles into the paper pipeline.
-//! 3. `milestone_g_conditional_false_success_sees_l2_drop` - the
+//! 3. `milestone_g_conditional_reversal_sees_l2_drop` - the
 //!    headline scientific finding ("L2 strengthening collapses a
 //!    fraction of L1 passes") shows up in the shipped paper tables,
 //!    end-to-end.
@@ -27,7 +27,7 @@ use chrono::{TimeZone, Utc};
 use eval_ladder_analysis::{
     load_bundle_dir,
     paper_export::{write_paper_exports, PaperExportManifest},
-    score_descent::conditional_false_success_with_mode,
+    score_descent::conditional_reversal_with_mode,
     AnalysisMode, LoadOptions, CANDIDATE_RESOLUTION_FILE,
 };
 use eval_ladder_core::{
@@ -308,10 +308,10 @@ fn milestone_g_paper_export_is_deterministic() {
 }
 
 #[test]
-fn milestone_g_conditional_false_success_sees_l2_drop() {
+fn milestone_g_conditional_reversal_sees_l2_drop() {
     let run = seed_run_dir();
     let input = load_bundle_dir(run.path(), &LoadOptions::default()).unwrap();
-    let table = conditional_false_success_with_mode(&input, AnalysisMode::Raw);
+    let table = conditional_reversal_with_mode(&input, AnalysisMode::Raw);
     let l1_l2 = table
         .iter()
         .find(|r| {

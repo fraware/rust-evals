@@ -5,7 +5,8 @@
 //! contract:
 //!
 //! - `score_descent.csv` / `.json`
-//! - `conditional_false_success.csv` / `.json`
+//! - `conditional_reversal.csv` / `.json` (canonical)
+//! - `conditional_false_success.csv` / `.json` (deprecated byte-identical alias)
 //! - `rank_stability.csv` / `.json`
 //! - `taxonomy.csv` / `.json`
 //! - `static_vs_live.csv` / `.json` (Milestone L)
@@ -32,7 +33,7 @@ use thiserror::Error;
 use crate::csv::write_table;
 use crate::input::{AnalysisInput, AnalysisMode};
 use crate::rank_stability::{rank_stability, RankStabilityRow};
-use crate::score_descent::{self, score_descent, ConditionalFalseSuccessRow, ScoreDescentRow};
+use crate::score_descent::{self, score_descent, ConditionalReversalRow, ScoreDescentRow};
 use crate::static_vs_live::{static_vs_live, StaticVsLiveRow};
 use crate::taxonomy::{taxonomy_counts, TaxonomyRow};
 
@@ -47,8 +48,12 @@ pub const PAPER_EXPORT_SCHEMA_VERSION: u32 = 3;
 /// Output file names.
 const SCORE_DESCENT_CSV: &str = "score_descent.csv";
 const SCORE_DESCENT_JSON: &str = "score_descent.json";
-const CONDITIONAL_CSV: &str = "conditional_false_success.csv";
-const CONDITIONAL_JSON: &str = "conditional_false_success.json";
+const CONDITIONAL_REVERSAL_CSV: &str = "conditional_reversal.csv";
+const CONDITIONAL_REVERSAL_JSON: &str = "conditional_reversal.json";
+/// Deprecated alias; byte-identical to [`CONDITIONAL_REVERSAL_CSV`].
+const CONDITIONAL_LEGACY_CSV: &str = "conditional_false_success.csv";
+/// Deprecated alias; byte-identical to [`CONDITIONAL_REVERSAL_JSON`].
+const CONDITIONAL_LEGACY_JSON: &str = "conditional_false_success.json";
 const RANK_STABILITY_CSV: &str = "rank_stability.csv";
 const RANK_STABILITY_JSON: &str = "rank_stability.json";
 const TAXONOMY_CSV: &str = "taxonomy.csv";
@@ -161,12 +166,12 @@ pub fn write_paper_exports(
         },
     )?);
 
-    // Conditional false-success rate.
-    let cfs_rows = score_descent::conditional_false_success_with_mode(input, mode);
-    pairs.push(write_csv_and_json(
+    // Conditional reversal (canonical filenames) + legacy deprecated aliases.
+    let cfs_rows = score_descent::conditional_reversal_with_mode(input, mode);
+    let reversal_pair = write_csv_and_json(
         out_dir,
-        CONDITIONAL_CSV,
-        CONDITIONAL_JSON,
+        CONDITIONAL_REVERSAL_CSV,
+        CONDITIONAL_REVERSAL_JSON,
         &[
             "level_from",
             "level_to",
@@ -175,7 +180,7 @@ pub fn write_paper_exports(
             "rate",
         ],
         &cfs_rows,
-        |r: &ConditionalFalseSuccessRow| {
+        |r: &ConditionalReversalRow| {
             vec![
                 r.level_from.short_code().to_owned(),
                 r.level_to.short_code().to_owned(),
@@ -184,7 +189,28 @@ pub fn write_paper_exports(
                 format_optional_f64(r.rate),
             ]
         },
-    )?);
+    )?;
+    let rev_csv_path = out_dir.join(CONDITIONAL_REVERSAL_CSV);
+    let rev_json_path = out_dir.join(CONDITIONAL_REVERSAL_JSON);
+    let conditional_csv_bytes = fs::read(&rev_csv_path).map_err(|e| PaperExportError::Io {
+        path: rev_csv_path.clone(),
+        source: e,
+    })?;
+    let conditional_json_bytes = fs::read(&rev_json_path).map_err(|e| PaperExportError::Io {
+        path: rev_json_path.clone(),
+        source: e,
+    })?;
+    let legacy_csv_path = out_dir.join(CONDITIONAL_LEGACY_CSV);
+    let legacy_json_path = out_dir.join(CONDITIONAL_LEGACY_JSON);
+    fs::write(&legacy_csv_path, &conditional_csv_bytes).map_err(|e| PaperExportError::Io {
+        path: legacy_csv_path,
+        source: e,
+    })?;
+    fs::write(&legacy_json_path, &conditional_json_bytes).map_err(|e| PaperExportError::Io {
+        path: legacy_json_path,
+        source: e,
+    })?;
+    pairs.push(reversal_pair);
 
     // Rank stability.
     let rank_rows = rank_stability(input, mode);
@@ -261,6 +287,16 @@ pub fn write_paper_exports(
         .into_iter()
         .flat_map(PaperExportPair::into_iter)
         .collect();
+    files.push(PaperExport {
+        path: CONDITIONAL_LEGACY_CSV.to_owned(),
+        sha256: digest(&conditional_csv_bytes),
+        bytes: u64::try_from(conditional_csv_bytes.len()).unwrap_or(u64::MAX),
+    });
+    files.push(PaperExport {
+        path: CONDITIONAL_LEGACY_JSON.to_owned(),
+        sha256: digest(&conditional_json_bytes),
+        bytes: u64::try_from(conditional_json_bytes.len()).unwrap_or(u64::MAX),
+    });
     files.sort_by(|a, b| a.path.cmp(&b.path));
 
     let row_count = u64::try_from(input.rows.len()).unwrap_or(u64::MAX);
@@ -410,8 +446,10 @@ mod tests {
         for f in [
             SCORE_DESCENT_CSV,
             SCORE_DESCENT_JSON,
-            CONDITIONAL_CSV,
-            CONDITIONAL_JSON,
+            CONDITIONAL_LEGACY_CSV,
+            CONDITIONAL_LEGACY_JSON,
+            CONDITIONAL_REVERSAL_CSV,
+            CONDITIONAL_REVERSAL_JSON,
             RANK_STABILITY_CSV,
             RANK_STABILITY_JSON,
             TAXONOMY_CSV,

@@ -27,8 +27,9 @@ use eval_ladder_analysis::{
 pub enum AnalyzeCmd {
     /// Pass rate by level, stratified by benchmark and agent.
     ScoreDescent(AnalyzeArgs),
-    /// Conditional false-success rate `P(fail L_{k+1} | pass L_k)`.
-    ConditionalFalseSuccess(AnalyzeArgs),
+    /// Conditional reversal rate `P(fail L_{k+1} | pass L_k)`.
+    #[command(alias = "conditional-false-success")]
+    ConditionalReversal(AnalyzeArgs),
     /// Kendall tau-b between agent leaderboards at every pair of levels.
     RankStability(AnalyzeArgs),
     /// Aggregated false-success taxonomy.
@@ -101,7 +102,7 @@ impl From<CliAnalysisMode> for AnalysisMode {
 pub fn run(cmd: AnalyzeCmd) -> Result<()> {
     match cmd {
         AnalyzeCmd::ScoreDescent(args) => run_score_descent(args),
-        AnalyzeCmd::ConditionalFalseSuccess(args) => run_conditional_false_success(args),
+        AnalyzeCmd::ConditionalReversal(args) => run_conditional_reversal(args),
         AnalyzeCmd::RankStability(args) => run_rank_stability(args),
         AnalyzeCmd::Taxonomy(args) => run_taxonomy(args),
         AnalyzeCmd::StaticVsLive(args) => run_static_vs_live(args),
@@ -181,10 +182,10 @@ fn run_score_descent(args: AnalyzeArgs) -> Result<()> {
     write_output(&args, header, &rows, &serde_json::to_value(&table)?)
 }
 
-fn run_conditional_false_success(args: AnalyzeArgs) -> Result<()> {
+fn run_conditional_reversal(args: AnalyzeArgs) -> Result<()> {
     let input = load_input(&args.run_dir)?;
     let mode: AnalysisMode = args.analysis_mode.into();
-    let table = score_descent::conditional_false_success_with_mode(&input, mode);
+    let table = score_descent::conditional_reversal_with_mode(&input, mode);
     let header = &[
         "level_from",
         "level_to",
